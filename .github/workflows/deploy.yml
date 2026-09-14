@@ -34,15 +34,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Debug OIDC token
-        run: |
-          TOKEN=$(curl -sLS "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=sts.amazonaws.com" \
-            -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" | jq -r '.value')
-          PAYLOAD=$(echo "$TOKEN" | cut -d. -f2)
-          PAD=$(( (4 - ${#PAYLOAD} % 4) % 4 ))
-          PAYLOAD="$PAYLOAD$(printf '=%.0s' $(seq 1 $PAD))"
-          echo "$PAYLOAD" | tr '_-' '/+' | base64 -d | jq '{sub, aud, iss, repository, ref}'
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:

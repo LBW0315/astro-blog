@@ -13,9 +13,9 @@ const posts = (await getCollection('blog')).sort(
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={`記事一覧 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
 			main {
 				width: 960px;
@@ -56,7 +56,7 @@ const posts = (await getCollection('blog')).sort(
 			.title {
 				margin: 0;
 				color: rgb(var(--black));
-				line-height: 1;
+				line-height: 1.35;
 			}
 			.date {
 				margin: 0;
@@ -89,6 +89,7 @@ const posts = (await getCollection('blog')).sort(
 	<body>
 		<Header />
 		<main>
+			<h1 class="sr-only">記事一覧</h1>
 			<section>
 				<ul>
 					{

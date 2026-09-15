@@ -17,7 +17,9 @@
 		0 16px 32px rgba(var(--gray), 33%);
 }
 body {
-	font-family: var(--font-atkinson);
+	font-family:
+		'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'YuGothic', Meiryo,
+		var(--font-atkinson), sans-serif;
 	margin: 0;
 	padding: 0;
 	text-align: left;
@@ -28,6 +30,9 @@ body {
 	color: rgb(var(--gray-dark));
 	font-size: 20px;
 	line-height: 1.7;
+	font-kerning: normal;
+	line-break: strict;
+	word-break: normal;
 }
 main {
 	width: 720px;
@@ -43,7 +48,8 @@ h5,
 h6 {
 	margin: 0 0 0.5rem 0;
 	color: rgb(var(--black));
-	line-height: 1.2;
+	line-height: 1.35;
+	letter-spacing: 0.02em;
 }
 h1 {
 	font-size: 3.052em;

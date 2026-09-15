@@ -1,23 +1,23 @@
-# Astro Starter Kit: Blog
+# Astroスターターキット：ブログ
 
 ```sh
 npm create astro@latest -- --template blog
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+> 🧑‍🚀 **Astroに慣れていますか？** このファイルは削除して構いません。制作を楽しんでください！
 
-Features:
+主な機能：
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+- ✅ カスタマイズしやすい最小限のスタイル
+- ✅ Lighthouseで高いパフォーマンス
+- ✅ 正規URLとOpen Graphに対応したSEO設定
+- ✅ サイトマップ対応
+- ✅ RSSフィード対応
+- ✅ Markdown・MDX対応
 
-## 🚀 Project Structure
+## 🚀 プロジェクト構成
 
-Inside of your Astro project, you'll see the following folders and files:
+Astroプロジェクトには、次のフォルダーとファイルがあります。
 
 ```text
 ├── public/
@@ -33,31 +33,31 @@ Inside of your Astro project, you'll see the following folders and files:
 └── tsconfig.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Astroは`src/pages/`ディレクトリ内の`.astro`ファイルや`.md`ファイルを検索し、ファイル名に基づいて各ページのURLを生成します。
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+`src/components/`は、Astro、React、Vue、Svelte、Preactなどのコンポーネントを置くためのディレクトリです。
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+`src/content/`には、関連するMarkdown・MDX文書の「コレクション」があります。`getCollection()`を使うと`src/content/blog/`から記事を取得でき、任意のスキーマでフロントマターの型を検証できます。詳しくは[Astroのコンテンツコレクション](https://docs.astro.build/ja/guides/content-collections/)をご覧ください。
 
-Any static assets, like images, can be placed in the `public/` directory.
+画像などの静的ファイルは`public/`ディレクトリに配置できます。
 
-## 🧞 Commands
+## 🧞 コマンド
 
-All commands are run from the root of the project, from a terminal:
+すべてのコマンドは、プロジェクトのルートディレクトリで実行します。
 
-| Command                   | Action                                           |
+| コマンド                  | 内容                                             |
 | :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm install`             | 依存パッケージをインストール                     |
+| `npm run dev`             | `localhost:4321`で開発サーバーを起動             |
+| `npm run build`           | 公開用サイトを`./dist/`に生成                    |
+| `npm run preview`         | 公開前のビルド結果をローカルで確認               |
+| `npm run astro ...`       | `astro add`や`astro check`などのCLIを実行        |
+| `npm run astro -- --help` | Astro CLIのヘルプを表示                          |
 
-## 👀 Want to learn more?
+## 👀 さらに詳しく知る
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+[Astroの日本語ドキュメント](https://docs.astro.build/ja/)をご覧ください。質問や交流には[Discordサーバー](https://astro.build/chat)も利用できます。
 
-## Credit
+## クレジット
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+このテーマは[Bear Blog](https://github.com/HermanMartinus/bearblog/)をもとにしています。

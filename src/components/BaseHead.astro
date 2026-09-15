@@ -47,6 +47,7 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image.src, Astro.url)} />
+<meta property="og:locale" content="ja_JP" />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />

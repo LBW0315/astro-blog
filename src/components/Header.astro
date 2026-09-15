@@ -7,13 +7,13 @@ import HeaderLink from './HeaderLink.astro';
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
+			<HeaderLink href="/">ホーム</HeaderLink>
+			<HeaderLink href="/blog">記事一覧</HeaderLink>
+			<HeaderLink href="/about">このブログについて</HeaderLink>
 		</div>
 		<div class="social-links">
 			<a href="https://m.webtoo.ls/@astro" target="_blank">
-				<span class="sr-only">Follow Astro on Mastodon</span>
+				<span class="sr-only">AstroのMastodonをフォロー</span>
 				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
 					><path
 						fill="currentColor"
@@ -22,7 +22,7 @@ import HeaderLink from './HeaderLink.astro';
 				>
 			</a>
 			<a href="https://twitter.com/astrodotbuild" target="_blank">
-				<span class="sr-only">Follow Astro on Twitter</span>
+				<span class="sr-only">AstroのX（旧Twitter）をフォロー</span>
 				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
 					><path
 						fill="currentColor"
@@ -31,7 +31,7 @@ import HeaderLink from './HeaderLink.astro';
 				>
 			</a>
 			<a href="https://github.com/withastro/astro" target="_blank">
-				<span class="sr-only">Go to Astro's GitHub repo</span>
+				<span class="sr-only">AstroのGitHubリポジトリを見る</span>
 				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
 					><path
 						fill="currentColor"
@@ -78,6 +78,26 @@ import HeaderLink from './HeaderLink.astro';
 		display: flex;
 	}
 	@media (max-width: 720px) {
+		header {
+			padding: 0 0.75em;
+		}
+		nav {
+			flex-wrap: wrap;
+		}
+		h2 {
+			width: 100%;
+			text-align: center;
+		}
+		.internal-links {
+			display: flex;
+			width: 100%;
+			justify-content: center;
+			font-size: 0.85em;
+		}
+		nav a {
+			padding: 0.75em 0.4em;
+			white-space: nowrap;
+		}
 		.social-links {
 			display: none;
 		}

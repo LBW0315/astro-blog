@@ -24,19 +24,24 @@ export const categories = [
 		icon: 'code',
 		description: 'AWS・React・Flutter・Linux など、学んだ技術の記録。',
 	},
-	{ slug: 'math', label: '数学', icon: 'sigma', description: '元数学教諭として、数学のおもしろさを。' },
 	{
-		slug: 'stationery',
-		label: '文房具',
+		slug: 'tools',
+		label: '道具',
 		icon: 'pen',
-		description: '万年筆・ボールペン・ノートのこと。',
+		description: '万年筆やノート、キーボード、コーヒー、メガネなど、好きな道具のこと。',
 	},
-	{ slug: 'keyboard', label: 'キーボード', icon: 'keyboard', description: '打ち心地を求めて。' },
-	{ slug: 'coffee', label: 'コーヒー', icon: 'cup', description: '毎日の一杯と、道具の話。' },
-	{ slug: 'glasses', label: 'メガネ', icon: 'glasses', description: 'フレーム選びとお手入れ。' },
-	{ slug: 'dog', label: '愛犬', icon: 'paw', description: '白いペキニーズとの暮らし。' },
-	{ slug: 'parenting', label: '子育て', icon: 'sprout', description: '父親として、日々学んでいること。' },
-	{ slug: 'diary', label: '日々のこと', icon: 'notebook', description: 'ジャンルにおさまらない、日々の記録。' },
+	{
+		slug: 'thinking',
+		label: '考え方',
+		icon: 'lightbulb',
+		description: '日々の中で考えたことや、物事の捉え方。',
+	},
+	{
+		slug: 'parenting',
+		label: '子育て',
+		icon: 'sprout',
+		description: '父親として、日々学んでいること。',
+	},
 ] as const satisfies readonly Category[];
 
 export type CategorySlug = (typeof categories)[number]['slug'];

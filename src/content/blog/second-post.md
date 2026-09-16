@@ -2,8 +2,7 @@
 title: '読みやすい記事を書くために'
 description: '文章をわかりやすく整えるために意識したいポイントをまとめました。'
 pubDate: '2022-07-15'
-category: 'diary'
-heroImage: '../../assets/blog-placeholder-4.jpg'
+category: 'thinking'
 ---
 
 ブログの記事は、内容だけでなく読みやすさも大切です。伝えたいことを整理してから書き始めると、文章の流れが自然になります。

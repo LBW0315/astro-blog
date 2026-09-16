@@ -4,7 +4,7 @@ import CategoryChip from '../components/CategoryChip.astro';
 import Icon from '../components/Icon.astro';
 import PostGrid from '../components/PostGrid.astro';
 import ProfileCard from '../components/ProfileCard.astro';
-import { SITE_DESCRIPTION, SITE_SUBTITLE_EN, SITE_SUBTITLE_JA, SITE_TAGLINE, SITE_TITLE } from '../consts';
+import { SITE_DESCRIPTION, SITE_SUBTITLE_EN, SITE_SUBTITLE_JA, SITE_TITLE } from '../consts';
 import { categories } from '../data/categories';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPosts } from '../lib/posts';
@@ -18,13 +18,9 @@ const counts = Object.fromEntries(
 ---
 
 <BaseLayout description={SITE_DESCRIPTION}>
-	<!-- ヒーロー：サイト名と「継続は力なり」 -->
+	<!-- ヒーロー：サイト名とサブタイトル -->
 	<section class="hero">
 		<div class="container hero__inner">
-			<p class="hero__eyebrow">
-				<Icon name="pen" size={16} />
-				{SITE_TAGLINE}
-			</p>
 			<h1 class="hero__title">{SITE_TITLE}</h1>
 			<p class="hero__sub">
 				<span class="hero__sub-en">{SITE_SUBTITLE_EN}</span>
@@ -32,7 +28,7 @@ const counts = Object.fromEntries(
 			</p>
 			<span class="hero__line" aria-hidden="true"></span>
 			<p class="hero__lead">
-				技術のこと、数学のこと、好きな道具のこと。<br class="hero__br" />
+				技術のこと、考え方のこと、好きな道具のこと。<br class="hero__br" />
 				一歩ずつ、こつこつ書き続けていきます。
 			</p>
 		</div>
@@ -93,22 +89,8 @@ const counts = Object.fromEntries(
 		z-index: 1;
 		padding-block: var(--sp-9) var(--sp-8);
 	}
-	.hero__eyebrow {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--sp-2);
-		padding: var(--sp-1) var(--sp-4);
-		border-radius: var(--radius-pill);
-		background: var(--c-accent-wash);
-		color: var(--c-accent);
-		font-family: var(--font-heading);
-		font-size: var(--fs-sm);
-		font-weight: 700;
-		letter-spacing: 0.12em;
-	}
 	/* サイト名：ロゴと同じ細めの英字を大きく */
 	.hero__title {
-		margin-top: var(--sp-5);
 		margin-right: calc(var(--ls-logo) * -1);
 		font-family: var(--font-logo);
 		font-size: var(--fs-display);

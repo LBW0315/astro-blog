@@ -3,7 +3,7 @@
 import Icon from '../components/Icon.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Pekingese from '../components/Pekingese.astro';
-import { AUTHOR_NAME, AUTHOR_ROLE, SITE_TAGLINE } from '../consts';
+import { AUTHOR_INTRO, AUTHOR_NAME, AUTHOR_ROLE, SITE_TAGLINE, SITE_TITLE } from '../consts';
 import type { IconName } from '../data/icons';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
@@ -31,8 +31,29 @@ const skills = ['React', 'Flutter', 'AWS', 'Linux'];
 			<div class="intro__body">
 				<p class="intro__name">{AUTHOR_NAME}</p>
 				<p class="intro__role">{AUTHOR_ROLE}</p>
+				<!-- 自己紹介文（プロフィールカードと共通。src/consts.ts の AUTHOR_INTRO） -->
 				<p class="intro__text">
-					はじめまして、{AUTHOR_NAME}です。元数学教諭で、今はIT企業でQAエンジニアをしています。技術のことを中心に、数学や好きな道具のこと、家族との日々のことを、こつこつ書いていきます。
+					{AUTHOR_INTRO.map((line, i) => (i > 0 ? [<br />, line] : line))}
+				</p>
+			</div>
+		</section>
+
+		<!-- BUNBOU について（トップページのプロフィールカードからリンク） -->
+		<section id="about-bunbou" class="study" aria-labelledby="study-title">
+			<h2 id="study-title" class="section-title"><Icon name="notebook" />{SITE_TITLE} について</h2>
+			<div class="study__paper" data-reveal>
+				<p>
+					「文房（ぶんぼう）」は、もともと書斎を意味する言葉です。<br />
+					文房具という言葉も、「書斎で使う道具」から来ています。
+				</p>
+				<p>
+					昔、{AUTHOR_NAME}と呼ばれていたこと。<br />
+					万年筆やノート、キーボードが好きなこと。<br />
+					そして、好きなものに囲まれてこもれる場所がほしかったこと。
+				</p>
+				<p>
+					それらをひとつにまとめて、このデジタルな書斎を {SITE_TITLE} と名付けました。<br />
+					コーヒーでも片手に、ゆっくりしていってください。
 				</p>
 			</div>
 		</section>
@@ -88,13 +109,33 @@ const skills = ['React', 'Flutter', 'AWS', 'Linux'];
 			</div>
 		</section>
 
-		<!-- 聞こえについて -->
-		<section aria-labelledby="hearing-title">
-			<h2 id="hearing-title" class="section-title"><Icon name="ear" />聞こえについて</h2>
-			<div class="prose" data-reveal>
+		<!-- エンジニアになったきっかけ -->
+		<section aria-labelledby="story-title">
+			<h2 id="story-title" class="section-title"><Icon name="ear" />エンジニアになったきっかけ</h2>
+			<div class="story" data-reveal>
 				<p>
-					感音性難聴があります。そのため、このブログでは音声だけに頼る表現は使いません。動画を載せるときは字幕を付け、自動再生もしません。
+					私には感音性難聴があります。<br />
+					もともと聞こえにくさはありましたが、教員として働くうちに悪化し、<br />
+					教室で子どもたちの声を聞き分けられなくなりました。<br />
+					誰が話しているのか、何を言っているのかがわからない。
 				</p>
+				<p>
+					子どもたちは、一生懸命に自分の考えを伝えようとしてくれていました。<br />
+					それなのに、私はその思いを汲み取ってあげられない。
+				</p>
+				<!-- 周りの人の言葉：引用として、少し控えめに -->
+				<blockquote class="story__quote">
+					<p>「辞めなければ辞めさせられることはないし、給料ももらえる」</p>
+				</blockquote>
+				<p class="story__after-quote">
+					周りからはそう言って止められました。<br />
+					それでも、このまま教壇に立ち続けるのは、子どもたちに対して誠実ではないと思いました。
+				</p>
+				<p>
+					聞こえなくても力を発揮できる仕事をしよう。<br />
+					そう決めて、約10年勤めた教員を辞め、IT業界へ転職しました。
+				</p>
+				<p>今はQAエンジニアとして、画面を見て、触って、確かめる仕事をしています。</p>
 			</div>
 		</section>
 	</div>
@@ -123,14 +164,13 @@ const skills = ['React', 'Flutter', 'AWS', 'Linux'];
 		border-radius: var(--radius-pill);
 		background: var(--c-accent-wash);
 	}
-	/* 名前：丸ゴシックで大きく、字間をゆったり */
+	/* 名前：丸ゴシックで大きく */
 	.intro__name {
 		color: var(--c-heading);
 		font-family: var(--font-heading);
 		font-size: var(--fs-h1);
 		font-weight: 700;
 		line-height: 1.3;
-		letter-spacing: 0.12em;
 	}
 	.intro__role {
 		color: var(--c-text-sub);
@@ -143,6 +183,65 @@ const skills = ['React', 'Flutter', 'AWS', 'Linux'];
 		.intro {
 			grid-template-columns: auto 1fr;
 			padding: var(--sp-6);
+		}
+	}
+
+	/* ----- エンジニアになったきっかけ：飾りは控えめに、段落の間をゆったり ----- */
+	.story {
+		line-height: 2;
+	}
+	/* 段落どうしの間を広めに空けて、ひと呼吸おきながら読めるように */
+	.story > * + * {
+		margin-top: var(--sp-7);
+	}
+	/* 引用：左の細い罫線と、少し淡い文字色（6.78:1）で控えめに */
+	.story__quote {
+		margin: var(--sp-7) 0 0;
+		padding: var(--sp-1) 0 var(--sp-1) var(--sp-5);
+		border-left: 2px solid var(--c-line-strong);
+		color: var(--c-text-sub);
+	}
+	/* 引用とその直後の段落は、ひと続きの話なので少しだけ近づける */
+	.story > .story__after-quote {
+		margin-top: var(--sp-4);
+	}
+
+	/* ----- BUNBOU について：書斎の便箋のような、落ち着いた見せ方 ----- */
+	.study {
+		/* トップページのリンクから飛んできたとき、見出しが上にくっつかないように */
+		scroll-margin-top: var(--sp-6);
+	}
+	.study__paper {
+		position: relative;
+		padding: var(--sp-6) var(--sp-5) var(--sp-6) var(--sp-7);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-md);
+		background: var(--c-surface-raised);
+		/* 行間をゆったり */
+		line-height: 2.2;
+	}
+	/* 便箋の左側の縦罫線 */
+	.study__paper::before {
+		content: '';
+		position: absolute;
+		top: var(--sp-5);
+		bottom: var(--sp-5);
+		left: var(--sp-5);
+		width: 1px;
+		background: var(--c-line);
+	}
+	/* 段落の間もたっぷり空ける */
+	.study__paper p + p {
+		margin-top: var(--sp-5);
+	}
+	@media (min-width: 640px) {
+		.study__paper {
+			padding: var(--sp-8) var(--sp-8) var(--sp-8) var(--sp-9);
+		}
+		.study__paper::before {
+			top: var(--sp-7);
+			bottom: var(--sp-7);
+			left: var(--sp-7);
 		}
 	}
 

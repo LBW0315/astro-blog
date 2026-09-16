@@ -5,11 +5,11 @@
   ジャンルのラベルは別のリンクなので、手前に重ねています。
 */
 import { Image } from 'astro:assets';
-import { getCategory } from '../data/categories';
 import { getReadingMinutes, type Post } from '../lib/posts';
 import CategoryChip from './CategoryChip.astro';
 import FormattedDate from './FormattedDate.astro';
 import Icon from './Icon.astro';
+import PostThumbPlaceholder from './PostThumbPlaceholder.astro';
 
 interface Props {
 	post: Post;
@@ -19,7 +19,6 @@ interface Props {
 const { post, index = 0 } = Astro.props;
 const { title, description, pubDate, heroImage, category } = post.data;
 const minutes = getReadingMinutes(post.body);
-const cat = getCategory(category);
 ---
 
 <article class="card" data-reveal style={`--i: ${index}`}>
@@ -34,10 +33,8 @@ const cat = getCategory(category);
 					transition:name={`hero-${post.id}`}
 				/>
 			) : (
-				// 画像がない記事は、ジャンルのアイコンを淡く表示
-				<div class="card__placeholder">
-					<Icon name={cat.icon} size={44} />
-				</div>
+				// 画像がない記事は、淡いグレージュの SVG（ジャンルのアイコン入り）を表示
+				<PostThumbPlaceholder category={category} />
 			)
 		}
 	</div>
@@ -107,27 +104,9 @@ const cat = getCategory(category);
 	.card:hover .card__thumb :global(img) {
 		transform: scale(1.04);
 	}
-	.card__placeholder {
-		display: grid;
-		place-items: center;
-		height: 100%;
-		color: var(--c-line-strong);
-		/* 方眼ノートのような淡いマス目 */
-		background-image:
-			linear-gradient(var(--c-line) 1px, transparent 1px),
-			linear-gradient(90deg, var(--c-line) 1px, transparent 1px);
-		background-size: 20px 20px;
-		background-position: center;
-	}
-	.card__placeholder :global(svg) {
-		padding: var(--sp-3);
-		box-sizing: content-box;
-		border-radius: var(--radius-pill);
-		background: var(--c-surface);
-		transition: transform var(--dur-slow) var(--ease-soft);
-	}
-	.card:hover .card__placeholder :global(svg) {
-		transform: rotate(-8deg) scale(1.05);
+	/* プレースホルダーのアイコンは、ホバーで少しだけ傾く */
+	.card:hover .card__thumb :global(.ph__icon) {
+		transform: rotate(-8deg);
 	}
 
 	.card__body {

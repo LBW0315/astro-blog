@@ -1,0 +1,90 @@
+---
+/*
+  記事カード用のサムネイル（画像がない記事で使う SVG）
+  淡いグレージュの方眼ノートの上に、ジャンルのアイコンを控えめに置いています。
+  色は CSS 変数で塗るので、ダークモードでも自然に切り替わります。
+  飾りなので、画面読み上げでは読まれないようにしています（ジャンル名はカード内の文字で伝える）。
+*/
+import type { CategorySlug } from '../data/categories';
+import { getCategory } from '../data/categories';
+import { icons } from '../data/icons';
+
+interface Props {
+	category: CategorySlug;
+}
+
+const { category } = Astro.props;
+const shapes = icons[getCategory(category).icon];
+
+// 横 320 × 縦 180（16:9）の中に、16px 間隔の方眼の線を1本の path で描く
+const W = 320;
+const H = 180;
+const STEP = 16;
+let grid = '';
+for (let x = STEP; x < W; x += STEP) grid += `M${x} 0V${H}`;
+for (let y = STEP - 6; y < H; y += STEP) grid += `M0 ${y}H${W}`;
+
+// アイコン（24×24）を中央に 2 倍の大きさで置く
+const ICON_SIZE = 48;
+const iconX = (W - ICON_SIZE) / 2;
+const iconY = (H - ICON_SIZE) / 2;
+---
+
+<svg
+	class="ph"
+	viewBox={`0 0 ${W} ${H}`}
+	preserveAspectRatio="xMidYMid slice"
+	aria-hidden="true"
+	focusable="false"
+>
+	<!-- 背景 -->
+	<rect class="ph__bg" width={W} height={H}></rect>
+	<!-- 方眼のマス目 -->
+	<path class="ph__grid" d={grid}></path>
+	<!-- 中央の丸い台紙 -->
+	<circle class="ph__disc" cx={W / 2} cy={H / 2} r="44"></circle>
+	<!-- ジャンルのアイコン -->
+	<g class="ph__icon">
+		<svg x={iconX} y={iconY} width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 24 24">
+			{
+				shapes.map(([tag, attrs]) => {
+					const Tag = tag;
+					return <Tag {...attrs} />;
+				})
+			}
+		</svg>
+	</g>
+</svg>
+
+<style>
+	.ph {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+	.ph__bg {
+		fill: var(--c-surface);
+	}
+	.ph__grid {
+		fill: none;
+		stroke: var(--c-line);
+		stroke-width: 1;
+		opacity: 0.7;
+	}
+	.ph__disc {
+		fill: var(--c-bg);
+		stroke: var(--c-line);
+		stroke-width: 1;
+	}
+	.ph__icon {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 1.5;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		/* 回転の中心をアイコンの真ん中にする */
+		transform-box: fill-box;
+		transform-origin: center;
+		transition: transform var(--dur-slow) var(--ease-soft);
+	}
+</style>

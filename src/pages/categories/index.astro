@@ -17,7 +17,7 @@ const count = (slug: string) => posts.filter((p) => p.data.category === slug).le
 		<ul class="genres">
 			{
 				categories.map((c, i) => (
-					<li data-reveal style={`--i: ${i % 3}`}>
+					<li data-reveal style={`--i: ${i % 2}`}>
 						<a href={`/categories/${c.slug}/`} class="genre">
 							<span class="genre__icon">
 								<Icon name={c.icon} size={28} />
@@ -44,14 +44,10 @@ const count = (slug: string) => posts.filter((p) => p.data.category === slug).le
 		padding: 0;
 		list-style: none;
 	}
+	/* ジャンルは4つなので、タブレット以上では 2×2 に並べる */
 	@media (min-width: 640px) {
 		.genres {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-	@media (min-width: 1024px) {
-		.genres {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 	}
 	.genre {

@@ -3,7 +3,6 @@ title: 'Markdown記法ガイド'
 description: 'Astroの記事作成で使える、基本的なMarkdown記法のサンプルです。'
 pubDate: '2024-06-19'
 category: 'tech'
-heroImage: '../../assets/blog-placeholder-1.jpg'
 ---
 
 Astroで記事を書くときに使える、基本的なMarkdown記法をまとめました。

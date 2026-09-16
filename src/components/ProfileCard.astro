@@ -1,6 +1,6 @@
 ---
 // 書き手の簡単な紹介（トップページ・記事の最後に表示）
-import { AUTHOR_NAME, AUTHOR_ROLE } from '../consts';
+import { AUTHOR_INTRO, AUTHOR_NAME, AUTHOR_ROLE, SITE_TITLE } from '../consts';
 import Icon from './Icon.astro';
 import Pekingese from './Pekingese.astro';
 ---
@@ -13,9 +13,13 @@ import Pekingese from './Pekingese.astro';
 		<p class="profile__eyebrow">書いている人</p>
 		<h2 id="profile-title" class="profile__title">{AUTHOR_NAME}</h2>
 		<p class="profile__role">{AUTHOR_ROLE}</p>
+		<!-- 紹介文（src/consts.ts の AUTHOR_INTRO。行ごとに改行して表示） -->
 		<p class="profile__text">
-			小学校・中学校・高校で計10年間、数学などを教えたあと、IT企業でスマホアプリの実機テストを担当しています。React・Flutter・AWS・Linux
-			を勉強中。コーヒーと文房具とキーボードが好きな、1児のパパです。
+			{AUTHOR_INTRO.map((line, i) => (i > 0 ? [<br />, line] : line))}
+		</p>
+		<!-- 最後の一文：一段小さく淡いグレーで、プロフィールページの「BUNBOU について」へ -->
+		<p class="profile__about">
+			<a href="/about/#about-bunbou">{SITE_TITLE}（文房）は、「書斎」という意味の言葉です。</a>
 		</p>
 		<a href="/about/" class="pill-link">
 			プロフィールを見る
@@ -54,7 +58,6 @@ import Pekingese from './Pekingese.astro';
 	.profile__title {
 		font-size: var(--fs-h2);
 		line-height: 1.3;
-		letter-spacing: 0.1em;
 	}
 	/* 肩書き：名前のすぐ下に小さく */
 	.profile__role {
@@ -65,7 +68,24 @@ import Pekingese from './Pekingese.astro';
 	.profile__text {
 		font-size: var(--fs-sm);
 		line-height: 1.8;
+	}
+	/*
+	  BUNBOU についての一文：本文（14px）より一段小さい 13px、淡いグレー
+	  カード背景とのコントラスト比 5.30:1（ダーク 4.97:1）
+	  リンクだとわかるよう、下線は常に表示する
+	*/
+	.profile__about {
 		margin-bottom: var(--sp-2);
+		font-size: var(--fs-xs);
+		line-height: 1.8;
+	}
+	.profile__about a {
+		color: var(--c-text-faint);
+		text-decoration-color: var(--c-line-strong);
+	}
+	.profile__about a:hover {
+		color: var(--c-accent);
+		text-decoration-color: currentColor;
 	}
 	@media (min-width: 640px) {
 		.profile {

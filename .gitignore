@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 AGENTS.md
 CLAUDE.md
+
+# Claude Code の設定・スキル
+.claude/

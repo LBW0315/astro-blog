@@ -1,6 +1,7 @@
 ---
 // トップページ
 import CategoryChip from '../components/CategoryChip.astro';
+import EmptyPosts from '../components/EmptyPosts.astro';
 import Icon from '../components/Icon.astro';
 import PostGrid from '../components/PostGrid.astro';
 import ProfileCard from '../components/ProfileCard.astro';
@@ -42,7 +43,7 @@ const counts = Object.fromEntries(
 				<Icon name="notebook" />
 				新しい記事
 			</h2>
-			<PostGrid posts={latest} />
+			{latest.length > 0 ? <PostGrid posts={latest} /> : <EmptyPosts message="最初の記事を準備中です。" />}
 			{
 				posts.length > latest.length && (
 					<p class="home__more">

@@ -1,0 +1,39 @@
+---
+/*
+  記事がまだないときの表示
+  トップページ・記事一覧・ジャンル別ページで共通で使います。
+  link を渡すと、下にボタン風のリンクを表示します。
+*/
+import Pekingese from './Pekingese.astro';
+
+interface Props {
+	message: string;
+	link?: { href: string; label: string };
+}
+const { message, link } = Astro.props;
+---
+
+<div class="empty">
+	<Pekingese size={96} tilt />
+	<p>{message}</p>
+	{
+		link && (
+			<a href={link.href} class="pill-link">
+				{link.label}
+			</a>
+		)
+	}
+</div>
+
+<style>
+	.empty {
+		display: grid;
+		justify-items: center;
+		gap: var(--sp-4);
+		padding: var(--sp-8) var(--sp-4);
+		border: 1px dashed var(--c-line-strong);
+		border-radius: var(--radius-lg);
+		color: var(--c-text-sub);
+		text-align: center;
+	}
+</style>

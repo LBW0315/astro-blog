@@ -1,6 +1,7 @@
 ---
 // 記事一覧ページ（年ごとに区切って表示）
 import CategoryChip from '../../components/CategoryChip.astro';
+import EmptyPosts from '../../components/EmptyPosts.astro';
 import Icon from '../../components/Icon.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import PostGrid from '../../components/PostGrid.astro';
@@ -20,22 +21,26 @@ const usedCategories = categories.filter((c) => posts.some((p) => p.data.categor
 ---
 
 <BaseLayout title="記事一覧" description="これまでに書いた記事の一覧です。">
-	<PageHeader icon="list" title="記事一覧" lead={`これまでに書いた ${posts.length} 本の記事です。`} />
+	<PageHeader icon="list" title="記事一覧" lead={posts.length > 0 ? `これまでに書いた ${posts.length} 本の記事です。` : 'これから、こつこつ書いていきます。'} />
 
 	<div class="container">
-		<!-- ジャンルで絞り込む（ジャンル別ページへのリンク） -->
-		<nav class="filter" aria-labelledby="filter-title">
-			<p id="filter-title" class="filter__title">ジャンルで絞り込む</p>
-			<ul>
-				{
-					usedCategories.map((c) => (
-						<li>
-							<CategoryChip slug={c.slug} />
-						</li>
-					))
-				}
-			</ul>
-		</nav>
+		{posts.length === 0 && <EmptyPosts message="最初の記事を準備中です。" link={{ href: '/', label: 'トップページへ' }} />}
+
+		<!-- ジャンルで絞り込む（ジャンル別ページへのリンク）。記事があるときだけ表示 -->
+		{
+			usedCategories.length > 0 && (
+				<nav class="filter" aria-labelledby="filter-title">
+					<p id="filter-title" class="filter__title">ジャンルで絞り込む</p>
+					<ul>
+						{usedCategories.map((c) => (
+							<li>
+								<CategoryChip slug={c.slug} />
+							</li>
+						))}
+					</ul>
+				</nav>
+			)
+		}
 
 		{
 			[...byYear].map(([year, list]) => (

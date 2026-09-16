@@ -1,8 +1,8 @@
 ---
 // ジャンル別の記事一覧ページ（src/data/categories.ts のジャンルごとに自動で作られる）
 import CategoryChip from '../../components/CategoryChip.astro';
+import EmptyPosts from '../../components/EmptyPosts.astro';
 import PageHeader from '../../components/PageHeader.astro';
-import Pekingese from '../../components/Pekingese.astro';
 import PostGrid from '../../components/PostGrid.astro';
 import { type Category, categories } from '../../data/categories';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -46,13 +46,10 @@ const usedCategories = categories.filter((c) => allPosts.some((p) => p.data.cate
 			posts.length > 0 ? (
 				<PostGrid posts={posts} />
 			) : (
-				<div class="empty">
-					<Pekingese size={96} tilt />
-					<p>このジャンルの記事は、これから書く予定です。</p>
-					<a href="/blog/" class="pill-link">
-						ほかの記事を見る
-					</a>
-				</div>
+				<EmptyPosts
+					message="このジャンルの記事は、これから書く予定です。"
+					link={allPosts.length > 0 ? { href: '/blog/', label: 'ほかの記事を見る' } : undefined}
+				/>
 			)
 		}
 	</div>
@@ -69,15 +66,5 @@ const usedCategories = categories.filter((c) => allPosts.some((p) => p.data.cate
 		margin: 0;
 		padding: 0;
 		list-style: none;
-	}
-	.empty {
-		display: grid;
-		justify-items: center;
-		gap: var(--sp-4);
-		padding: var(--sp-8) var(--sp-4);
-		border: 1px dashed var(--c-line-strong);
-		border-radius: var(--radius-lg);
-		color: var(--c-text-sub);
-		text-align: center;
 	}
 </style>

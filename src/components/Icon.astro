@@ -1,0 +1,45 @@
+---
+/*
+  アイコン部品
+  使い方：<Icon name="cup" />　（name は src/data/icons.ts の名前）
+  飾りとして使うので、画面読み上げでは読まれないように aria-hidden を付けています。
+  意味を伝えたいときは、アイコンの横に必ず文字を添えてください。
+*/
+import { type IconName, icons } from '../data/icons';
+
+interface Props {
+	name: IconName;
+	size?: number;
+	class?: string;
+}
+
+const { name, size = 20, class: className } = Astro.props;
+const shapes = icons[name];
+---
+
+<svg
+	class:list={['icon', className]}
+	viewBox="0 0 24 24"
+	width={size}
+	height={size}
+	fill="none"
+	stroke="currentColor"
+	stroke-width="1.75"
+	stroke-linecap="round"
+	stroke-linejoin="round"
+	aria-hidden="true"
+	focusable="false"
+>
+	{
+		shapes.map(([tag, attrs]) => {
+			const Tag = tag;
+			return <Tag {...attrs} />;
+		})
+	}
+</svg>
+
+<style>
+	.icon {
+		flex-shrink: 0;
+	}
+</style>

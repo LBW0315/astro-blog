@@ -1,0 +1,58 @@
+---
+// ページの先頭へ戻るボタン（ペキニーズの足あと）
+// 少しスクロールすると右下にふわっと現れます。処理は ui.ts。
+import Icon from './Icon.astro';
+---
+
+<button type="button" class="back-to-top" data-back-to-top>
+	<Icon name="paw" size={22} />
+	<span class="sr-only">ページの先頭へ戻る</span>
+</button>
+
+<style>
+	.back-to-top {
+		position: fixed;
+		right: max(var(--sp-4), env(safe-area-inset-right));
+		bottom: max(var(--sp-4), env(safe-area-inset-bottom));
+		z-index: 40;
+		display: grid;
+		place-items: center;
+		width: 48px;
+		height: 48px;
+		padding: 0;
+		border: 1px solid var(--c-line-strong);
+		border-radius: var(--radius-pill);
+		background: var(--c-surface-raised);
+		color: var(--c-accent);
+		box-shadow: var(--shadow-md);
+		cursor: pointer;
+		/* 普段は隠しておく */
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(12px);
+		transition:
+			opacity var(--dur-base) var(--ease-soft),
+			transform var(--dur-base) var(--ease-soft),
+			visibility 0s linear var(--dur-base),
+			background-color var(--dur-fast) var(--ease-soft);
+	}
+	.back-to-top.is-shown {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition-delay: 0s;
+	}
+	.back-to-top:hover {
+		background: var(--c-accent-wash);
+	}
+	/* ホバーで足あとが「とことこ」上へ */
+	.back-to-top :global(svg) {
+		transition: transform var(--dur-base) var(--ease-soft);
+	}
+	.back-to-top:hover :global(svg) {
+		transform: translateY(-3px) rotate(-10deg);
+	}
+	.back-to-top:active {
+		transform: scale(0.92);
+	}
+</style>

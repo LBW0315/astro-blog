@@ -1,0 +1,123 @@
+---
+// ジャンル一覧ページ
+import Icon from '../../components/Icon.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { SITE_TITLE } from '../../consts';
+import { categories } from '../../data/categories';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts } from '../../lib/posts';
+
+const posts = await getPosts();
+const count = (slug: string) => posts.filter((p) => p.data.category === slug).length;
+---
+
+<BaseLayout title={`ジャンル | ${SITE_TITLE}`} description="ジャンルごとに記事を探せます。">
+	<PageHeader icon="grid" title="ジャンル" lead="気になるテーマから、記事を探してみてください。" />
+
+	<div class="container">
+		<ul class="genres">
+			{
+				categories.map((c, i) => (
+					<li data-reveal style={`--i: ${i % 3}`}>
+						<a href={`/categories/${c.slug}/`} class="genre">
+							<span class="genre__icon">
+								<Icon name={c.icon} size={28} />
+							</span>
+							<span class="genre__body">
+								<span class="genre__label">{c.label}</span>
+								<span class="genre__desc">{c.description}</span>
+								<span class="genre__count">{count(c.slug)}本の記事</span>
+							</span>
+							<Icon name="arrow-right" size={18} class="genre__arrow" />
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</BaseLayout>
+
+<style>
+	.genres {
+		display: grid;
+		gap: var(--sp-4);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	@media (min-width: 640px) {
+		.genres {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (min-width: 1024px) {
+		.genres {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+	.genre {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-4);
+		height: 100%;
+		padding: var(--sp-5);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-lg);
+		background: var(--c-surface-raised);
+		color: var(--c-text);
+		text-decoration: none;
+		transition:
+			transform var(--dur-base) var(--ease-soft),
+			border-color var(--dur-fast) var(--ease-soft);
+	}
+	.genre:hover {
+		transform: translateY(-3px);
+		border-color: var(--c-line-strong);
+		color: var(--c-text);
+	}
+	.genre:active {
+		transform: scale(0.98);
+	}
+	.genre__icon {
+		display: grid;
+		place-items: center;
+		flex-shrink: 0;
+		width: 56px;
+		height: 56px;
+		border-radius: var(--radius-pill);
+		background: var(--c-accent-wash);
+		color: var(--c-accent);
+		transition: transform var(--dur-slow) var(--ease-soft);
+	}
+	.genre:hover .genre__icon {
+		transform: rotate(-10deg);
+	}
+	.genre__body {
+		display: grid;
+		gap: var(--sp-1);
+		flex: 1;
+	}
+	.genre__label {
+		color: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: var(--fs-h3);
+		font-weight: 700;
+	}
+	.genre__desc {
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+		line-height: 1.7;
+	}
+	.genre__count {
+		color: var(--c-accent);
+		font-size: var(--fs-sm);
+		font-weight: 700;
+	}
+	.genre :global(.genre__arrow) {
+		color: var(--c-text-sub);
+		transition: transform var(--dur-base) var(--ease-soft);
+	}
+	.genre:hover :global(.genre__arrow) {
+		transform: translateX(4px);
+	}
+</style>

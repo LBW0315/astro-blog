@@ -1,0 +1,41 @@
+---
+// 記事カードを並べる枠（スマホ1列 → タブレット2列 → PC3列）
+import type { Post } from '../lib/posts';
+import PostCard from './PostCard.astro';
+
+interface Props {
+	posts: Post[];
+}
+const { posts } = Astro.props;
+---
+
+<ul class="post-grid">
+	{
+		posts.map((post, i) => (
+			<li>
+				<PostCard post={post} index={i % 3} />
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.post-grid {
+		display: grid;
+		gap: var(--sp-5);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	@media (min-width: 640px) {
+		.post-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (min-width: 1024px) {
+		.post-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: var(--sp-6);
+		}
+	}
+</style>

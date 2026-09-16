@@ -1,11 +1,10 @@
 ---
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseHead /> component.
+// <head> の中身（すべてのページで共通）
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
 import FallbackImage from '../assets/blog-placeholder-1.jpg';
 import { SITE_TITLE } from '../consts';
-import { Font } from 'astro:assets';
+import { fontCssVersion } from '../lib/font-css';
 
 interface Props {
 	title: string;
@@ -14,40 +13,48 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-
 const { title, description, image = FallbackImage } = Astro.props;
 ---
 
-<!-- Global Metadata -->
+<!-- 基本情報 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
-/>
+<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={new URL('rss.xml', Astro.site)} />
 <meta name="generator" content={Astro.generator} />
+<!-- スマホのブラウザの上部バーの色（ライト／ダーク） -->
+<meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#211f1d" media="(prefers-color-scheme: dark)" />
 
-<Font cssVariable="--font-atkinson" preload />
+<!--
+  Web フォント
+  ・定義は /fonts.css にまとめ、ブラウザにキャッシュしてもらう
+  ・media="print" で読み込み始め、読み終わったら all に切り替える
+    → フォントの読み込みを待たずに、標準フォントで先に文字を表示できる
+  ・日本語フォントは文字ごとに分割されていて、ページで使う文字の分だけ読み込まれる
+-->
+<link
+	rel="stylesheet"
+	href={`/fonts.css?v=${fontCssVersion}`}
+	media="print"
+	onload="this.media='all'"
+/>
+<noscript><link rel="stylesheet" href={`/fonts.css?v=${fontCssVersion}`} /></noscript>
 
-<!-- Canonical URL -->
+<!-- 正規 URL -->
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Primary Meta Tags -->
+<!-- ページのタイトルと説明 -->
 <title>{title}</title>
 <meta name="description" content={description} />
 
-<!-- Open Graph / Facebook -->
+<!-- SNS でシェアされたときの表示（Open Graph） -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(image.src, Astro.url)} />
 <meta property="og:locale" content="ja_JP" />
-
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />

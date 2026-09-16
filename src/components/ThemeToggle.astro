@@ -1,0 +1,69 @@
+---
+/*
+  ライト／ダークの切り替えボタン
+  クリックの処理は src/scripts/ui.ts にあります。
+  aria-pressed で「ダークモードがオンかどうか」を画面読み上げに伝えます。
+*/
+import Icon from './Icon.astro';
+---
+
+<button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
+	<span class="sr-only">ダークモード</span>
+	<span class="theme-toggle__icons" aria-hidden="true">
+		<Icon name="moon" class="theme-toggle__moon" />
+		<Icon name="sun" class="theme-toggle__sun" />
+	</span>
+</button>
+
+<style>
+	.theme-toggle {
+		display: none; /* JavaScript が動かないと切り替えられないので隠す */
+		place-items: center;
+		width: var(--tap);
+		height: var(--tap);
+		padding: 0;
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-pill);
+		background: var(--c-surface-raised);
+		color: var(--c-text);
+		cursor: pointer;
+		transition:
+			background-color var(--dur-fast) var(--ease-soft),
+			border-color var(--dur-fast) var(--ease-soft),
+			transform var(--dur-press) var(--ease-soft);
+	}
+	:global(.js) .theme-toggle {
+		display: grid;
+	}
+	.theme-toggle:hover {
+		border-color: var(--c-line-strong);
+		background: var(--c-accent-wash);
+		color: var(--c-accent);
+	}
+	.theme-toggle:active {
+		transform: scale(0.92);
+	}
+	/* 月と太陽を重ねておき、回転しながら入れ替える */
+	.theme-toggle__icons {
+		display: grid;
+	}
+	.theme-toggle__icons :global(svg) {
+		grid-area: 1 / 1;
+		transition:
+			transform var(--dur-slow) var(--ease-soft),
+			opacity var(--dur-base) var(--ease-soft);
+	}
+	/* ライトのとき：月を表示（押すとダークに） */
+	:global(.theme-toggle__sun) {
+		opacity: 0;
+		transform: rotate(-90deg) scale(0.6);
+	}
+	:global([data-theme='dark']) :global(.theme-toggle__moon) {
+		opacity: 0;
+		transform: rotate(90deg) scale(0.6);
+	}
+	:global([data-theme='dark']) :global(.theme-toggle__sun) {
+		opacity: 1;
+		transform: none;
+	}
+</style>

@@ -1,0 +1,84 @@
+---
+// ジャンル別の記事一覧ページ（src/data/categories.ts のジャンルごとに自動で作られる）
+import CategoryChip from '../../components/CategoryChip.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Pekingese from '../../components/Pekingese.astro';
+import PostGrid from '../../components/PostGrid.astro';
+import { SITE_TITLE } from '../../consts';
+import { type Category, categories } from '../../data/categories';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	return categories.map((category) => ({
+		params: { slug: category.slug },
+		props: { category, posts: posts.filter((p) => p.data.category === category.slug), allPosts: posts },
+	}));
+}
+
+interface Props {
+	category: Category;
+	posts: Post[];
+	allPosts: Post[];
+}
+
+const { category, posts, allPosts } = Astro.props;
+const usedCategories = categories.filter((c) => allPosts.some((p) => p.data.category === c.slug));
+---
+
+<BaseLayout title={`${category.label}の記事 | ${SITE_TITLE}`} description={category.description}>
+	<PageHeader icon={category.icon} eyebrow="ジャンル" title={category.label} lead={category.description} />
+
+	<div class="container">
+		<nav class="filter" aria-label="ほかのジャンル">
+			<ul>
+				{
+					usedCategories.map((c) => (
+						<li>
+							<CategoryChip slug={c.slug} current={c.slug === category.slug} />
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		{
+			posts.length > 0 ? (
+				<PostGrid posts={posts} />
+			) : (
+				<div class="empty">
+					<Pekingese size={96} tilt />
+					<p>このジャンルの記事は、これから書く予定です。</p>
+					<a href="/blog/" class="pill-link">
+						ほかの記事を見る
+					</a>
+				</div>
+			)
+		}
+	</div>
+</BaseLayout>
+
+<style>
+	.filter {
+		margin-bottom: var(--sp-7);
+	}
+	.filter ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sp-2);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.empty {
+		display: grid;
+		justify-items: center;
+		gap: var(--sp-4);
+		padding: var(--sp-8) var(--sp-4);
+		border: 1px dashed var(--c-line-strong);
+		border-radius: var(--radius-lg);
+		color: var(--c-text-sub);
+		text-align: center;
+	}
+</style>

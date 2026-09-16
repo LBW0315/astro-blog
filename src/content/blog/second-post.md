@@ -2,6 +2,7 @@
 title: '読みやすい記事を書くために'
 description: '文章をわかりやすく整えるために意識したいポイントをまとめました。'
 pubDate: '2022-07-15'
+category: 'diary'
 heroImage: '../../assets/blog-placeholder-4.jpg'
 ---
 

@@ -1,115 +1,82 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+// 記事一覧ページ（年ごとに区切って表示）
+import CategoryChip from '../../components/CategoryChip.astro';
+import Icon from '../../components/Icon.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import PostGrid from '../../components/PostGrid.astro';
+import { SITE_TITLE } from '../../consts';
+import { categories } from '../../data/categories';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts, type Post } from '../../lib/posts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = await getPosts();
+
+// 公開年ごとにまとめる（新しい年が先）
+const byYear = new Map<number, Post[]>();
+for (const post of posts) {
+	const year = post.data.pubDate.getFullYear();
+	byYear.set(year, [...(byYear.get(year) ?? []), post]);
+}
+const usedCategories = categories.filter((c) => posts.some((p) => p.data.category === c.slug));
 ---
 
-<!doctype html>
-<html lang="ja">
-	<head>
-		<BaseHead title={`記事一覧 | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1.35;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
+<BaseLayout title={`記事一覧 | ${SITE_TITLE}`} description="これまでに書いた記事の一覧です。">
+	<PageHeader icon="list" title="記事一覧" lead={`これまでに書いた ${posts.length} 本の記事です。`} />
+
+	<div class="container">
+		<!-- ジャンルで絞り込む（ジャンル別ページへのリンク） -->
+		<nav class="filter" aria-labelledby="filter-title">
+			<p id="filter-title" class="filter__title">ジャンルで絞り込む</p>
+			<ul>
+				{
+					usedCategories.map((c) => (
+						<li>
+							<CategoryChip slug={c.slug} />
+						</li>
+					))
 				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1 class="sr-only">記事一覧</h1>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+			</ul>
+		</nav>
+
+		{
+			[...byYear].map(([year, list]) => (
+				<section class="year" aria-labelledby={`year-${year}`}>
+					<h2 id={`year-${year}`} class="section-title">
+						<Icon name="calendar" />
+						{year}年<span class="year__count">{list.length}本</span>
+					</h2>
+					<PostGrid posts={list} />
+				</section>
+			))
+		}
+	</div>
+</BaseLayout>
+
+<style>
+	.filter {
+		margin-bottom: var(--sp-8);
+	}
+	.filter__title {
+		margin-bottom: var(--sp-3);
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+	}
+	.filter ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sp-2);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.year + .year {
+		margin-top: var(--sp-9);
+	}
+	.year__count {
+		margin-left: var(--sp-2);
+		color: var(--c-text-sub);
+		font-family: var(--font-body);
+		font-size: var(--fs-sm);
+		font-weight: 400;
+	}
+</style>

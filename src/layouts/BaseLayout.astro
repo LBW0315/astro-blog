@@ -1,0 +1,101 @@
+---
+/*
+  すべてのページの土台になるレイアウト
+  <html> から <body> までの共通部分（ヘッダー・フッター・テーマ・ページ遷移）をまとめています。
+*/
+import type { ImageMetadata } from 'astro';
+import { ClientRouter } from 'astro:transitions';
+import BackToTop from '../components/BackToTop.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: ImageMetadata;
+}
+
+const { title, description, image } = Astro.props;
+
+// ページ遷移のアニメーション
+// 前のページはすっと消え、次のページは少し下からふわっと現れる
+const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const pageTransition = {
+	forwards: {
+		old: { name: 'vt-fade-out', duration: '0.2s', easing: ease, fillMode: 'both' },
+		new: { name: 'vt-fade-in-up', duration: '0.4s', easing: ease, delay: '0.05s', fillMode: 'both' },
+	},
+	backwards: {
+		old: { name: 'vt-fade-out', duration: '0.2s', easing: ease, fillMode: 'both' },
+		new: { name: 'vt-fade-in-up', duration: '0.4s', easing: ease, delay: '0.05s', fillMode: 'both' },
+	},
+};
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title={title} description={description} image={image} />
+
+		<!--
+		  テーマ（ライト／ダーク）を、画面が描かれる前に決める小さなスクリプト
+		  ・保存された設定があればそれを使い、なければ OS の設定に合わせる
+		  ・html に "js" クラスを付けて、JavaScript が使えることを CSS に伝える
+		  ページ遷移のたびにも同じ処理を行う（astro:before-swap）
+		-->
+		<script is:inline>
+			(() => {
+				const getSaved = () => {
+					try {
+						return localStorage.getItem('theme');
+					} catch {
+						return null;
+					}
+				};
+				const apply = (doc) => {
+					const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+					const theme = getSaved() ?? (dark ? 'dark' : 'light');
+					doc.documentElement.dataset.theme = theme;
+					doc.documentElement.classList.add('js');
+				};
+				apply(document);
+				if (!window.__themeReady) {
+					window.__themeReady = true;
+					document.addEventListener('astro:before-swap', (e) => apply(e.newDocument));
+					// OS の設定が変わったら、保存した設定がない場合だけ追従する
+					matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+						if (!getSaved()) apply(document);
+					});
+				}
+			})();
+		</script>
+
+		<!-- ページ遷移をなめらかにする（Astro 標準の View Transitions） -->
+		<ClientRouter />
+		<slot name="head" />
+	</head>
+	<body>
+		<a href="#main" class="skip-link">本文へスキップ</a>
+		<slot name="before-header" />
+		<Header />
+		<main id="main" tabindex="-1" transition:animate={pageTransition}>
+			<slot />
+		</main>
+		<Footer />
+		<BackToTop />
+		<!-- 画面読み上げに「コピーしました」などを伝えるための見えない領域 -->
+		<div id="sr-status" class="sr-only" role="status" aria-live="polite"></div>
+
+		<script>
+			import '../scripts/ui';
+		</script>
+	</body>
+</html>
+
+<style>
+	/* main にフォーカスが移ったとき（本文へスキップ）は枠を出さない */
+	main:focus {
+		outline: none;
+	}
+</style>

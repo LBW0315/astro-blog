@@ -1,0 +1,134 @@
+/*
+  デザイントークン（サイト全体で使う「決まりごと」の値）
+  色・フォント・余白・角丸・影・動きの時間などをここに集めています。
+  見た目を調整したいときは、まずこのファイルの値を変えてください。
+
+  コントラスト比は、すべて実際の背景色との組み合わせで計算済みです。
+  （本文 4.5:1 以上 = WCAG AA、7:1 以上 = AAA）
+*/
+
+:root {
+	/* ===== 色：背景 ===== */
+	--c-bg: #faf8f5; /* ページの背景。紙のようなグレージュ */
+	--c-surface: #f2eee9; /* カード・コードブロックの背景 */
+	--c-surface-raised: #fffdfb; /* ヘッダーや浮いた要素の背景 */
+
+	/* ===== 色：文字 ===== */
+	--c-text: #2e2a27; /* 本文。背景との比 13.42:1（AAA） */
+	--c-text-sub: #5e564f; /* 日付などの補助文字。6.78:1（AA）／カード上 6.23:1 */
+	--c-heading: #26221f; /* 見出し。本文より少しだけ濃く */
+
+	/* ===== 色：罫線 ===== */
+	--c-line: #e3dcd4; /* 飾りの罫線（情報を持たないので薄くてOK） */
+	--c-line-strong: #93877a; /* ボタンなど操作部品の輪郭。3.31:1（非テキストの基準 3:1 以上） */
+
+	/* ===== 色：アクセント（青磁 = くすんだ青緑）===== */
+	--c-accent: #2a6058; /* リンクなど。6.80:1（AA）／白文字をのせると 7.21:1 */
+	--c-accent-hover: #1f4f49; /* リンクのホバー。8.72:1（AAA） */
+	--c-accent-wash: #e6f0ee; /* 淡い青磁。「補足」ボックスの背景 */
+	--c-on-accent: #ffffff; /* アクセント色の上にのせる文字 */
+
+	/* ===== 色：アクセント2（灰桜 = くすんだピンク）注意・強調専用 ===== */
+	--c-accent2: #7e4548; /* 7.00:1（AAA） */
+	--c-accent2-wash: #f6eaea; /* 淡い灰桜。「注意」ボックスの背景 */
+
+	/* ===== 色：その他 ===== */
+	--c-focus: #2a6058; /* キーボード操作時のフォーカス枠。6.80:1 */
+	--c-shadow: 60 45 30; /* 影の色（RGBの数値。透明度は影ごとに指定） */
+	--c-selection: #d6e6e2; /* 文字を選択したときの背景 */
+
+	/* ===== フォント ===== */
+	/* Astro の Fonts API が用意する Web フォント（--font-zen-maru など）を使う。
+	   /fonts.css が届く前は変数が未定義なので、var() の2つ目に書いた標準フォントで表示される */
+	--font-heading: var(--font-zen-maru, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif);
+	--font-body: var(--font-biz-udp, 'Hiragino Sans', 'Yu Gothic UI', Meiryo, sans-serif);
+	--font-code: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'BIZ UDGothic', monospace;
+
+	/* ===== 文字サイズ ===== */
+	/* clamp(最小, 画面幅に応じた値, 最大) で、スマホからPCまでなめらかに変化させる */
+	--fs-xs: 0.8125rem; /* 13px：ごく小さい注記 */
+	--fs-sm: 0.875rem; /* 14px：日付・ラベル */
+	--fs-body: 1.0625rem; /* 17px：本文 */
+	--fs-lead: 1.125rem; /* 18px：リード文 */
+	--fs-h4: 1.0625rem;
+	--fs-h3: 1.1875rem;
+	--fs-h2: clamp(1.3125rem, 1.15rem + 0.7vw, 1.5625rem);
+	--fs-h1: clamp(1.5625rem, 1.25rem + 1.5vw, 2.125rem);
+	--fs-display: clamp(1.875rem, 1.4rem + 2.4vw, 2.75rem); /* トップのサイト名 */
+
+	/* ===== 行間・字間 ===== */
+	--lh-body: 1.85; /* 本文の行間 */
+	--lh-heading: 1.5; /* 見出しの行間 */
+	--lh-tight: 1.4; /* カードのタイトルなど */
+	--ls-body: 0.02em; /* 本文の字間 */
+	--ls-heading: 0.04em; /* 見出しの字間 */
+
+	/* ===== 余白（4px の倍数で統一）===== */
+	--sp-1: 0.25rem; /* 4px */
+	--sp-2: 0.5rem; /* 8px */
+	--sp-3: 0.75rem; /* 12px */
+	--sp-4: 1rem; /* 16px */
+	--sp-5: 1.5rem; /* 24px */
+	--sp-6: 2rem; /* 32px */
+	--sp-7: 2.5rem; /* 40px */
+	--sp-8: 3rem; /* 48px */
+	--sp-9: 4rem; /* 64px */
+	--sp-10: 6rem; /* 96px */
+
+	/* ===== レイアウト幅 ===== */
+	--measure: 40.5rem; /* 本文の最大幅。17px × 全角約38文字 */
+	--toc-width: 15rem; /* 広い画面で右に出す目次の幅 */
+	--container: 75rem; /* ページ全体の最大幅（1200px）。ウルトラワイドでもここで止める */
+	--gutter: clamp(1.25rem, 4vw, 2.5rem); /* 画面の左右の余白 */
+	--tap: 44px; /* タップ領域の最小サイズ */
+
+	/* ===== 角丸 ===== */
+	--radius-sm: 6px;
+	--radius-md: 12px;
+	--radius-lg: 20px;
+	--radius-pill: 999px;
+
+	/* ===== 影（ごく薄く）===== */
+	--shadow-sm: 0 1px 2px rgb(var(--c-shadow) / 0.05), 0 1px 1px rgb(var(--c-shadow) / 0.03);
+	--shadow-md: 0 4px 16px rgb(var(--c-shadow) / 0.07), 0 1px 3px rgb(var(--c-shadow) / 0.05);
+
+	/* ===== 動き ===== */
+	--dur-press: 0.12s; /* ボタンを押した瞬間 */
+	--dur-fast: 0.2s; /* 色の変化など小さな反応 */
+	--dur-base: 0.3s; /* ホバーや下線の伸び縮み */
+	--dur-slow: 0.5s; /* スクロールでふわっと表示 */
+	--dur-slower: 0.6s; /* 一度だけ描かれる線など */
+	--ease-soft: cubic-bezier(0.22, 1, 0.36, 1); /* ふわっと減速する基本のイージング */
+	--ease-inout: cubic-bezier(0.65, 0, 0.35, 1); /* 行って戻る動き */
+	--reveal-distance: 12px; /* ふわっと表示するときに下から持ち上がる距離 */
+}
+
+/*
+  ダークモードの色
+  <html data-theme="dark"> のときに上書きします。
+  data-theme は BaseLayout の小さなスクリプトが、保存された設定か OS の設定から決めています。
+*/
+:root[data-theme='dark'] {
+	--c-bg: #211f1d;
+	--c-surface: #2a2725;
+	--c-surface-raised: #282523;
+
+	--c-text: #e9e4de; /* 13.00:1（AAA） */
+	--c-text-sub: #b3aba3; /* 7.25:1（AAA） */
+	--c-heading: #f2eee9;
+
+	--c-line: #3a3633;
+	--c-line-strong: #7a736b; /* 3.51:1 */
+
+	--c-accent: #8fc9be; /* 8.81:1（AAA）／カード上 7.96:1 */
+	--c-accent-hover: #b5ddd5; /* 11.16:1 */
+	--c-accent-wash: #243330;
+	--c-on-accent: #1b2b28; /* 明るい青磁の上には暗い文字。7.92:1 */
+
+	--c-accent2: #e0a8a6; /* 8.07:1（AAA） */
+	--c-accent2-wash: #3a2a2a;
+
+	--c-focus: #8fc9be;
+	--c-shadow: 0 0 0;
+	--c-selection: #35524c;
+}

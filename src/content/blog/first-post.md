@@ -2,6 +2,7 @@
 title: 'はじめての記事'
 description: 'このブログで発信していく内容についてご紹介します。'
 pubDate: '2022-07-08'
+category: 'diary'
 heroImage: '../../assets/blog-placeholder-3.jpg'
 ---
 

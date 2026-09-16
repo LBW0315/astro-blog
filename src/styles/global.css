@@ -1,147 +1,278 @@
 /*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+  サイト全体の基本スタイル
+  色や大きさの値は tokens.css の変数を使います。
+*/
+@import './tokens.css';
+@import './prose.css';
 
-:root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+/* ===== リセット（ブラウザごとの差をならす）===== */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
+
+html {
+	/* 文字サイズの自動拡大を防ぐ（スマホを横向きにしたとき） */
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	/* ライト／ダークに合わせてフォーム部品やスクロールバーの色も変える */
+	color-scheme: light;
+	/* ページ内リンクで飛んだとき、見出しが画面の端にくっつかないように */
+	scroll-padding-top: var(--sp-6);
+}
+:root[data-theme='dark'] {
+	color-scheme: dark;
+}
+
 body {
-	font-family:
-		'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'YuGothic', Meiryo,
-		var(--font-atkinson), sans-serif;
 	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
-	font-kerning: normal;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--c-bg);
+	color: var(--c-text);
+	font-family: var(--font-body);
+	font-size: var(--fs-body);
+	line-height: var(--lh-body);
+	letter-spacing: var(--ls-body);
+	/* 日本語の改行ルール：句読点などが行頭に来ないようにする */
 	line-break: strict;
+	overflow-wrap: anywhere;
 	word-break: normal;
+	font-kerning: normal;
+	-webkit-font-smoothing: antialiased;
+	/* テーマ切り替えのとき、色をやわらかく変える */
+	transition:
+		background-color var(--dur-base) var(--ease-soft),
+		color var(--dur-base) var(--ease-soft);
 }
+
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
+	flex: 1;
 }
+
+img,
+svg,
+video {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+::selection {
+	background-color: var(--c-selection);
+	color: var(--c-heading);
+}
+
+/* ===== 見出し ===== */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.35;
-	letter-spacing: 0.02em;
-}
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
-h3 {
-	font-size: 1.953em;
-}
-h4 {
-	font-size: 1.563em;
-}
-h5 {
-	font-size: 1.25em;
-}
-strong,
-b {
+	margin: 0;
+	font-family: var(--font-heading);
 	font-weight: 700;
+	line-height: var(--lh-heading);
+	letter-spacing: var(--ls-heading);
+	color: var(--c-heading);
+	/* 見出しの行末が1文字だけ残らないよう、なるべく均等に折り返す */
+	text-wrap: balance;
 }
+
+p {
+	margin: 0;
+}
+
+/* ===== リンク ===== */
+/* 色だけでなく下線でも「リンクだ」とわかるようにする */
 a {
-	color: var(--accent);
+	color: var(--c-accent);
+	text-decoration-line: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.25em;
+	transition:
+		color var(--dur-fast) var(--ease-soft),
+		text-decoration-color var(--dur-fast) var(--ease-soft);
 }
 a:hover {
-	color: var(--accent);
+	color: var(--c-accent-hover);
+	text-decoration-thickness: 2px;
 }
-p {
-	margin-bottom: 1em;
+
+/* ===== フォーカス表示（キーボード操作時にはっきり見せる）===== */
+/* マウスでクリックしたときは出さず、Tab キーで移動したときだけ出す */
+:focus-visible {
+	outline: 3px solid var(--c-focus);
+	outline-offset: 3px;
+	border-radius: var(--radius-sm);
 }
-.prose p {
-	margin-bottom: 2em;
+:focus:not(:focus-visible) {
+	outline: none;
 }
-textarea {
+
+/* ===== ボタンの基本 ===== */
+button {
+	font: inherit;
+	letter-spacing: inherit;
+	color: inherit;
+}
+
+/* ===== 画面読み上げ専用（見た目には表示しない）===== */
+.sr-only {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* ===== 「本文へスキップ」リンク ===== */
+/* 普段は隠れていて、Tab キーを押すと左上に現れる */
+.skip-link {
+	position: fixed;
+	top: var(--sp-3);
+	left: var(--sp-3);
+	z-index: 100;
+	padding: var(--sp-2) var(--sp-4);
+	background: var(--c-accent);
+	color: var(--c-on-accent);
+	border-radius: var(--radius-pill);
+	text-decoration: none;
+	transform: translateY(-200%);
+	transition: transform var(--dur-base) var(--ease-soft);
+}
+.skip-link:focus-visible {
+	transform: translateY(0);
+	color: var(--c-on-accent);
+}
+
+/* ===== ページの枠 ===== */
+/* 中身を中央に寄せ、画面が広くても広がりすぎないようにする */
+.container {
 	width: 100%;
-	font-size: 16px;
+	max-width: calc(var(--container) + var(--gutter) * 2);
+	margin-inline: auto;
+	padding-inline: var(--gutter);
 }
-input {
-	font-size: 16px;
+/* 本文と同じ幅の枠（読み物ページ用） */
+.container--narrow {
+	max-width: calc(var(--measure) + var(--gutter) * 2);
 }
-table {
-	width: 100%;
+
+/* ===== セクション見出し（一覧ページなどで使う小さな見出し）===== */
+.section-title {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-2);
+	margin-bottom: var(--sp-5);
+	font-size: var(--fs-h3);
 }
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
+.section-title svg {
+	color: var(--c-accent);
 }
-code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+/* 見出しの後ろに、細い罫線を伸ばす */
+.section-title::after {
+	content: '';
+	flex: 1;
+	height: 1px;
+	margin-left: var(--sp-3);
+	background: var(--c-line);
 }
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
+
+/* ===== ピル型のボタン風リンク ===== */
+.pill-link {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--sp-2);
+	min-height: var(--tap);
+	padding: var(--sp-2) var(--sp-5);
+	border: 1px solid var(--c-line-strong);
+	border-radius: var(--radius-pill);
+	background: var(--c-surface-raised);
+	color: var(--c-accent);
+	font-size: var(--fs-sm);
+	font-weight: 700;
+	text-decoration: none;
+	transition:
+		background-color var(--dur-fast) var(--ease-soft),
+		transform var(--dur-press) var(--ease-soft);
 }
-pre > code {
-	all: unset;
+.pill-link svg {
+	transition: transform var(--dur-base) var(--ease-soft);
 }
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0;
-	font-size: 1.333em;
+.pill-link:hover {
+	background: var(--c-accent-wash);
+	color: var(--c-accent-hover);
 }
-hr {
-	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+/* ホバーで矢印が少し右へ */
+.pill-link:hover svg {
+	transform: translateX(3px);
 }
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
+/* 押した瞬間に少し沈む */
+.pill-link:active {
+	transform: scale(0.96);
+}
+
+/* =====================================================
+   アニメーション
+   ===================================================== */
+
+/* スクロールで「ふわっと」表示する要素
+   html.js（JavaScript が動いている）のときだけ最初に隠す。
+   JavaScript が動かない環境では、最初から表示されたままになる。
+   ※ transition ではなく animation を使うのは、表示後のホバーの動きに遅れを残さないため */
+.js [data-reveal]:not(.is-visible) {
+	opacity: 0;
+}
+.js [data-reveal].is-visible {
+	animation: reveal var(--dur-slow) var(--ease-soft) backwards;
+	/* 並んだカードを少しずつずらして表示する（--i は順番） */
+	animation-delay: calc(min(var(--i, 0), 5) * 60ms);
+}
+@keyframes reveal {
+	from {
+		opacity: 0;
+		transform: translateY(var(--reveal-distance));
 	}
 }
 
-.sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+/* ページ遷移（View Transitions）のアニメーション
+   BaseLayout の transition:animate から呼び出す */
+@keyframes vt-fade-out {
+	to {
+		opacity: 0;
+	}
+}
+@keyframes vt-fade-in-up {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+}
+
+/* =====================================================
+   動きを減らす設定（OS の「視差効果を減らす」など）が有効なとき
+   すべてのアニメーションをほぼ一瞬にし、無限ループも止める。
+   ===================================================== */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		transition-delay: 0s !important;
+		animation-delay: 0s !important;
+		scroll-behavior: auto !important;
+	}
+	.js [data-reveal]:not(.is-visible) {
+		opacity: 1;
+	}
 }

@@ -2,6 +2,7 @@
 title: 'Astroでブログを作るメリット'
 description: 'Astroがコンテンツ中心のサイトに向いている理由をご紹介します。'
 pubDate: '2022-07-22'
+category: 'tech'
 heroImage: '../../assets/blog-placeholder-2.jpg'
 ---
 

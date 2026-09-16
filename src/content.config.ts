@@ -1,19 +1,21 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { categorySlugs } from './data/categories';
 
 const blog = defineCollection({
-	// Load Markdown and MDX files in the `src/content/blog/` directory.
+	// src/content/blog/ にある Markdown・MDX ファイルを読み込む
 	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
-	// Type-check frontmatter using a schema
+	// フロントマターの型チェック（書き間違いをビルド時に教えてくれる）
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
 			description: z.string(),
-			// Transform string to Date object
-			pubDate: z.coerce.date(),
-			updatedDate: z.coerce.date().optional(),
-			heroImage: z.optional(image()),
+			pubDate: z.coerce.date(), // 公開日（文字列を日付に変換）
+			updatedDate: z.coerce.date().optional(), // 更新日（任意）
+			heroImage: z.optional(image()), // アイキャッチ画像（任意）
+			// ジャンル。src/data/categories.ts にある slug のどれか
+			category: z.enum(categorySlugs),
 		}),
 });
 

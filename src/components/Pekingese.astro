@@ -1,0 +1,62 @@
+---
+/*
+  白いペキニーズの線画（自作 SVG）
+  ふわふわの毛・垂れた耳・まんまるの目・ぺたんとした鼻がポイントです。
+  白い犬なので、ライト／ダークどちらでも同じ色で描いています。
+  tilt を付けると、ホバーで首をかしげます。
+*/
+interface Props {
+	size?: number;
+	tilt?: boolean;
+	class?: string;
+}
+const { size = 120, tilt = false, class: className } = Astro.props;
+---
+
+<svg
+	class:list={['pekingese', { 'pekingese--tilt': tilt }, className]}
+	viewBox="0 0 120 112"
+	width={size}
+	height={Math.round(size * 0.93)}
+	aria-hidden="true"
+	focusable="false"
+>
+	<g stroke="#5e564f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		<!-- ふわふわのたてがみ（体の輪郭） -->
+		<path
+			fill="#fffdfb"
+			d="M22 58Q15.6 46 24 38Q24 25 36 23Q40.8 11.2 52 15Q60 6.4 68 15Q79.2 11.2 84 23Q96 25 96 38Q104.4 46 98 58Q104.4 70 96 78Q96 90.4 84 92Q79.2 103 68 99Q60 107.2 52 99Q40.8 103 36 92Q24 90.4 24 78Q15.6 70 22 58Z"
+		></path>
+		<!-- 垂れた耳（左右） -->
+		<path fill="#f3eee8" d="M40 32Q24 34 22 52Q20 67 29 75Q37 73 39 62Q43 47 40 32Z"></path>
+		<path fill="#f3eee8" d="M80 32Q96 34 98 52Q100 67 91 75Q83 73 81 62Q77 47 80 32Z"></path>
+		<!-- 前足 -->
+		<path fill="none" d="M44 101q6-7 12 0M64 101q6-7 12 0"></path>
+		<!-- 口 -->
+		<path fill="none" d="M60 65v3M60 68q-3 3.5-6.5 1.2M60 68q3 3.5 6.5 1.2"></path>
+	</g>
+	<!-- ほっぺ（ほんのり灰桜色） -->
+	<ellipse cx="44" cy="63" rx="4.5" ry="2.6" fill="#e3b9b9" opacity="0.6"></ellipse>
+	<ellipse cx="76" cy="63" rx="4.5" ry="2.6" fill="#e3b9b9" opacity="0.6"></ellipse>
+	<!-- まんまるの目と、目のきらめき -->
+	<circle cx="48" cy="52" r="4.2" fill="#2e2a27"></circle>
+	<circle cx="72" cy="52" r="4.2" fill="#2e2a27"></circle>
+	<circle cx="49.6" cy="50.4" r="1.3" fill="#fffdfb"></circle>
+	<circle cx="73.6" cy="50.4" r="1.3" fill="#fffdfb"></circle>
+	<!-- ぺたんとした鼻 -->
+	<path fill="#2e2a27" d="M55.5 60.5Q60 57.5 64.5 60.5Q63 65 60 65Q57 65 55.5 60.5Z"></path>
+</svg>
+
+<style>
+	.pekingese {
+		overflow: visible;
+	}
+	.pekingese--tilt {
+		transform-origin: 50% 90%;
+		transition: transform var(--dur-slow) var(--ease-soft);
+	}
+	/* ホバーで首をかしげる */
+	.pekingese--tilt:hover {
+		transform: rotate(-6deg);
+	}
+</style>

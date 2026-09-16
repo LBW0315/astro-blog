@@ -1,0 +1,193 @@
+---
+/*
+  記事カード（一覧に並べる1件分）
+  カードのどこを押しても記事へ移動できます（タイトルのリンクをカード全体に広げている）。
+  ジャンルのラベルは別のリンクなので、手前に重ねています。
+*/
+import { Image } from 'astro:assets';
+import { getCategory } from '../data/categories';
+import { getReadingMinutes, type Post } from '../lib/posts';
+import CategoryChip from './CategoryChip.astro';
+import FormattedDate from './FormattedDate.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+	post: Post;
+	index?: number; // 並び順。ふわっと表示するタイミングを少しずつずらすのに使う
+}
+
+const { post, index = 0 } = Astro.props;
+const { title, description, pubDate, heroImage, category } = post.data;
+const minutes = getReadingMinutes(post.body);
+const cat = getCategory(category);
+---
+
+<article class="card" data-reveal style={`--i: ${index}`}>
+	<div class="card__thumb">
+		{
+			heroImage ? (
+				<Image
+					src={heroImage}
+					width={720}
+					height={405}
+					alt=""
+					transition:name={`hero-${post.id}`}
+				/>
+			) : (
+				// 画像がない記事は、ジャンルのアイコンを淡く表示
+				<div class="card__placeholder">
+					<Icon name={cat.icon} size={44} />
+				</div>
+			)
+		}
+	</div>
+	<div class="card__body">
+		<div class="card__chip"><CategoryChip slug={category} /></div>
+		<h3 class="card__title">
+			<a href={`/blog/${post.id}/`} class="card__link">{title}</a>
+		</h3>
+		<p class="card__desc">{description}</p>
+		<p class="card__meta">
+			<span><Icon name="calendar" size={15} /><FormattedDate date={pubDate} /></span>
+			<span><Icon name="clock" size={15} />約{minutes}分</span>
+		</p>
+	</div>
+</article>
+
+<style>
+	.card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-lg);
+		background: var(--c-surface-raised);
+		box-shadow: var(--shadow-sm);
+		/* ホバーの浮き上がり（transform を使うので描画が軽い） */
+		transition:
+			transform var(--dur-base) var(--ease-soft),
+			border-color var(--dur-fast) var(--ease-soft);
+	}
+	/* ホバー時の影は、別の層の透明度を変えて表示する（描画が軽い） */
+	.card::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		box-shadow: var(--shadow-md);
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity var(--dur-base) var(--ease-soft);
+	}
+	.card:hover {
+		transform: translateY(-3px);
+		border-color: var(--c-line-strong);
+	}
+	.card:hover::after {
+		opacity: 1;
+	}
+	/* タップした瞬間は少し沈む */
+	.card:active {
+		transform: translateY(0) scale(0.99);
+	}
+
+	.card__thumb {
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+		background: var(--c-surface);
+	}
+	.card__thumb :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform var(--dur-slow) var(--ease-soft);
+	}
+	.card:hover .card__thumb :global(img) {
+		transform: scale(1.04);
+	}
+	.card__placeholder {
+		display: grid;
+		place-items: center;
+		height: 100%;
+		color: var(--c-line-strong);
+		/* 方眼ノートのような淡いマス目 */
+		background-image:
+			linear-gradient(var(--c-line) 1px, transparent 1px),
+			linear-gradient(90deg, var(--c-line) 1px, transparent 1px);
+		background-size: 20px 20px;
+		background-position: center;
+	}
+	.card__placeholder :global(svg) {
+		padding: var(--sp-3);
+		box-sizing: content-box;
+		border-radius: var(--radius-pill);
+		background: var(--c-surface);
+		transition: transform var(--dur-slow) var(--ease-soft);
+	}
+	.card:hover .card__placeholder :global(svg) {
+		transform: rotate(-8deg) scale(1.05);
+	}
+
+	.card__body {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		gap: var(--sp-2);
+		padding: var(--sp-4) var(--sp-5) var(--sp-5);
+	}
+	.card__chip {
+		margin-left: calc(var(--sp-1) * -1);
+	}
+	.card__title {
+		font-size: 1.125rem;
+		line-height: var(--lh-tight);
+	}
+	.card__link {
+		color: var(--c-heading);
+		text-decoration: none;
+	}
+	/* リンクの押せる範囲をカード全体に広げる */
+	.card__link::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: var(--radius-lg);
+	}
+	.card:hover .card__link {
+		color: var(--c-accent);
+	}
+	/* キーボードで選んだときは、カード全体に枠を出す */
+	.card__link:focus-visible {
+		outline: none;
+	}
+	.card:has(.card__link:focus-visible) {
+		outline: 3px solid var(--c-focus);
+		outline-offset: 3px;
+	}
+	.card__desc {
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+		line-height: 1.75;
+		/* 説明文は2行まで。はみ出した分は「…」 */
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.card__meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sp-1) var(--sp-4);
+		margin-top: auto;
+		padding-top: var(--sp-2);
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+	}
+	.card__meta span {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--sp-1);
+	}
+</style>

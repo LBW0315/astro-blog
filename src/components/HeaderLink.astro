@@ -1,24 +1,57 @@
 ---
+// ヘッダーのナビゲーションリンク
+// 今いるページのリンクには aria-current="page" を付け、画面読み上げにも伝える
 import type { HTMLAttributes } from 'astro/types';
 
 type Props = HTMLAttributes<'a'>;
 
 const { href, class: className, ...props } = Astro.props;
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
-const subpath = pathname.match(/[^\/]+/g);
-const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
+const pathname = Astro.url.pathname;
+const target = String(href);
+// 「/blog/」なら /blog/◯◯ の記事ページでも「今ここ」とみなす
+const isActive = target === '/' ? pathname === '/' : pathname.startsWith(target);
 ---
 
-<a href={href} class:list={[className, { active: isActive }]} {...props}>
+<a href={href} class:list={['nav-link', className]} aria-current={isActive ? 'page' : undefined} {...props}>
 	<slot />
 </a>
+
 <style>
-	a {
-		display: inline-block;
+	.nav-link {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--sp-1);
+		min-height: var(--tap);
+		padding-inline: var(--sp-3);
+		color: var(--c-text);
+		font-size: var(--fs-sm);
+		font-weight: 700;
 		text-decoration: none;
+		white-space: nowrap;
 	}
-	a.active {
-		font-weight: bolder;
-		text-decoration: underline;
+	.nav-link:hover {
+		color: var(--c-accent);
+	}
+	/* 万年筆のインクのような下線。ホバーや現在地で左から伸びる */
+	.nav-link::after {
+		content: '';
+		position: absolute;
+		left: var(--sp-3);
+		right: var(--sp-3);
+		bottom: 8px;
+		height: 2px;
+		border-radius: 2px;
+		background: currentColor;
+		transform: scaleX(0);
+		transform-origin: left center;
+		transition: transform var(--dur-base) var(--ease-soft);
+	}
+	.nav-link:hover::after,
+	.nav-link[aria-current='page']::after {
+		transform: scaleX(1);
+	}
+	.nav-link[aria-current='page'] {
+		color: var(--c-accent);
 	}
 </style>

@@ -1,0 +1,167 @@
+---
+/*
+  記事の目次
+  variant="inline"：スマホ〜タブレット用。本文の前に折りたたみで表示
+  variant="side"　：広い画面用。本文の右側に固定表示
+  今読んでいる見出しのハイライトは src/scripts/ui.ts が行います。
+*/
+import type { MarkdownHeading } from 'astro';
+import Icon from './Icon.astro';
+
+interface Props {
+	headings: MarkdownHeading[];
+	variant: 'inline' | 'side';
+}
+
+const { headings, variant } = Astro.props;
+// h2 と h3 だけを目次にする
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+	items.length > 0 &&
+		(variant === 'inline' ? (
+			<details class="toc toc--inline">
+				<summary>
+					<Icon name="list" size={18} />
+					<span>目次</span>
+					<Icon name="chevron-down" size={18} class="toc__chevron" />
+				</summary>
+				<ol class="toc__list">
+					{items.map((h) => (
+						<li class={`depth-${h.depth}`}>
+							<a href={`#${h.slug}`} data-toc-link>
+								{h.text}
+							</a>
+						</li>
+					))}
+				</ol>
+			</details>
+		) : (
+			<nav class="toc toc--side" aria-label="目次">
+				<p class="toc__title">
+					<Icon name="list" size={18} />
+					目次
+				</p>
+				<ol class="toc__list">
+					{items.map((h) => (
+						<li class={`depth-${h.depth}`}>
+							<a href={`#${h.slug}`} data-toc-link>
+								{h.text}
+							</a>
+						</li>
+					))}
+				</ol>
+			</nav>
+		))
+}
+
+<style>
+	.toc {
+		font-size: var(--fs-sm);
+		line-height: 1.6;
+	}
+	.toc__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.toc__list a {
+		position: relative;
+		display: block;
+		padding: var(--sp-2) var(--sp-3) var(--sp-2) var(--sp-4);
+		color: var(--c-text-sub);
+		text-decoration: none;
+		transition: color var(--dur-fast) var(--ease-soft);
+	}
+	.toc__list .depth-3 a {
+		padding-left: var(--sp-7);
+		font-size: var(--fs-xs);
+	}
+	.toc__list a:hover {
+		color: var(--c-accent);
+	}
+	/* 左側のインクの線。今読んでいる見出しのところで伸びる */
+	.toc__list a::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: var(--sp-2);
+		bottom: var(--sp-2);
+		width: 3px;
+		border-radius: 3px;
+		background: var(--c-accent);
+		transform: scaleY(0);
+		transition: transform var(--dur-base) var(--ease-soft);
+	}
+	/* 現在地：線＋太字＋濃い文字色（色だけに頼らない） */
+	.toc__list a[aria-current='true'] {
+		color: var(--c-heading);
+		font-weight: 700;
+	}
+	.toc__list a[aria-current='true']::before {
+		transform: scaleY(1);
+	}
+
+	/* ----- スマホ用：折りたたみ ----- */
+	.toc--inline {
+		margin-bottom: var(--sp-7);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-md);
+		background: var(--c-surface);
+	}
+	.toc--inline summary {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-2);
+		min-height: var(--tap);
+		padding: var(--sp-2) var(--sp-4);
+		font-weight: 700;
+		cursor: pointer;
+		list-style: none;
+	}
+	.toc--inline summary::-webkit-details-marker {
+		display: none;
+	}
+	.toc--inline summary :global(.toc__chevron) {
+		margin-left: auto;
+		transition: transform var(--dur-base) var(--ease-soft);
+	}
+	.toc--inline[open] summary :global(.toc__chevron) {
+		transform: rotate(180deg);
+	}
+	.toc--inline .toc__list {
+		padding: 0 var(--sp-3) var(--sp-3);
+	}
+	.toc--inline[open] .toc__list {
+		animation: toc-open var(--dur-base) var(--ease-soft);
+	}
+	@keyframes toc-open {
+		from {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+	}
+
+	/* ----- 広い画面用：右側に固定 ----- */
+	.toc--side {
+		position: sticky;
+		top: var(--sp-6);
+		max-height: calc(100vh - var(--sp-9));
+		overflow-y: auto;
+		padding-left: var(--sp-4);
+		border-left: 1px solid var(--c-line);
+	}
+	.toc__title {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-2);
+		margin-bottom: var(--sp-2);
+		color: var(--c-heading);
+		font-family: var(--font-heading);
+		font-weight: 700;
+	}
+	.toc--side .toc__list a {
+		margin-left: calc(var(--sp-4) * -1 - 2px);
+	}
+</style>

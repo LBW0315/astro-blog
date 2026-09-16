@@ -1,0 +1,37 @@
+---
+/*
+  注記ボックス（MDX 記事で使う部品）
+  使い方（.mdx ファイルの中で）：
+    import Callout from '../../components/Callout.astro';
+    <Callout type="warning">ここに注意書き</Callout>
+
+  type：note（補足）／tip（ポイント）／warning（注意）
+  色・アイコン・ラベルの3つで見分けられるようにしています。
+*/
+import type { IconName } from '../data/icons';
+import Icon from './Icon.astro';
+
+interface Props {
+	type?: 'note' | 'tip' | 'warning';
+	title?: string; // ラベルを変えたいときだけ指定
+}
+
+const TYPES: Record<string, { label: string; icon: IconName }> = {
+	note: { label: '補足', icon: 'info' },
+	tip: { label: 'ポイント', icon: 'lightbulb' },
+	warning: { label: '注意', icon: 'alert' },
+};
+
+const { type = 'note', title } = Astro.props;
+const { label, icon } = TYPES[type];
+---
+
+<div class:list={['callout', `callout--${type}`]} role="note">
+	<p class="callout__label">
+		<Icon name={icon} size={18} />
+		<span>{title ?? label}</span>
+	</p>
+	<div class="callout__body">
+		<slot />
+	</div>
+</div>

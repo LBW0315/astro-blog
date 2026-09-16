@@ -1,24 +1,226 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+// プロフィールページ
+import Icon from '../components/Icon.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Pekingese from '../components/Pekingese.astro';
+import { SITE_TAGLINE, SITE_TITLE } from '../consts';
+import type { IconName } from '../data/icons';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// 好きなもの（アイコン＋名前＋ひとこと）
+const favorites: { icon: IconName; label: string; note: string }[] = [
+	{ icon: 'cup', label: 'コーヒー', note: '毎日の一杯が楽しみです' },
+	{ icon: 'keyboard', label: 'キーボード', note: '打ち心地にこだわりたい' },
+	{ icon: 'pen', label: '万年筆・ボールペン', note: '万年筆は約10本' },
+	{ icon: 'notebook', label: 'ノート', note: '書き心地のよい紙を探して' },
+	{ icon: 'glasses', label: 'メガネ', note: '約6本を気分でかけ替え' },
+];
+
+const skills = ['React', 'Flutter', 'AWS', 'Linux'];
 ---
 
-<Layout
-	title="このブログについて"
-	description="このブログと運営者についてご紹介します。"
-	pubDate={new Date('2021-08-08')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		このブログでは、日々の学びや気づき、試してみたことを記録しています。
-		興味のあるテーマを自分の言葉で整理し、読んだ方の小さなヒントになるような記事を目指しています。
-	</p>
+<BaseLayout title={`プロフィール | ${SITE_TITLE}`} description="このブログを書いている人の紹介です。">
+	<PageHeader icon="user" title="プロフィール" lead={`「${SITE_TAGLINE}」を合言葉に、好きなことを書き続けています。`} />
 
-	<p>
-		サイトはAstroで制作しています。読みやすさと表示の軽さを大切にしながら、少しずつ内容を充実させていきます。
-	</p>
+	<div class="container container--narrow about">
+		<!-- 自己紹介 -->
+		<section class="intro" data-reveal>
+			<div class="intro__avatar">
+				<Pekingese size={96} tilt />
+			</div>
+			<div class="prose">
+				<p>
+					はじめまして。元数学教諭で、今はIT企業でQAエンジニアをしています。技術のことを中心に、数学や好きな道具のこと、家族との日々のことを、こつこつ書いていきます。
+				</p>
+			</div>
+		</section>
 
-	<p>
-		このページの文章やプロフィールは仮の内容です。運営者名、自己紹介、連絡先などに置き換えてご利用ください。
-	</p>
-</Layout>
+		<!-- 経歴 -->
+		<section aria-labelledby="career-title">
+			<h2 id="career-title" class="section-title"><Icon name="calendar" />これまでのこと</h2>
+			<ol class="timeline">
+				<li data-reveal style="--i: 0">
+					<p class="timeline__label">教員時代（計10年）</p>
+					<p>数学教諭として、小学校で1年、中学校で8年、高校で1年、教壇に立ちました。</p>
+				</li>
+				<li data-reveal style="--i: 1">
+					<p class="timeline__label">現在</p>
+					<p>IT企業のQAエンジニアとして、スマホアプリの実機テストを担当しています。</p>
+				</li>
+			</ol>
+		</section>
+
+		<!-- 学習中の技術 -->
+		<section aria-labelledby="skill-title">
+			<h2 id="skill-title" class="section-title"><Icon name="code" />勉強中の技術</h2>
+			<ul class="tags" data-reveal>
+				{skills.map((s) => <li>{s}</li>)}
+			</ul>
+		</section>
+
+		<!-- 好きなもの -->
+		<section aria-labelledby="fav-title">
+			<h2 id="fav-title" class="section-title"><Icon name="lightbulb" />好きなもの</h2>
+			<ul class="favorites">
+				{
+					favorites.map((f, i) => (
+						<li data-reveal style={`--i: ${i}`}>
+							<span class="favorites__icon">
+								<Icon name={f.icon} size={24} />
+							</span>
+							<span>
+								<span class="favorites__label">{f.label}</span>
+								<span class="favorites__note">{f.note}</span>
+							</span>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+
+		<!-- 家族 -->
+		<section aria-labelledby="family-title">
+			<h2 id="family-title" class="section-title"><Icon name="paw" />家族</h2>
+			<div class="prose" data-reveal>
+				<p>結婚していて、子どもが1人います。それから、白いペキニーズも大切な家族です。1児のパパとして、子育ても奮闘中です。</p>
+			</div>
+		</section>
+
+		<!-- 聞こえについて -->
+		<section aria-labelledby="hearing-title">
+			<h2 id="hearing-title" class="section-title"><Icon name="ear" />聞こえについて</h2>
+			<div class="prose" data-reveal>
+				<p>
+					感音性難聴があります。そのため、このブログでは音声だけに頼る表現は使いません。動画を載せるときは字幕を付け、自動再生もしません。
+				</p>
+			</div>
+		</section>
+	</div>
+</BaseLayout>
+
+<style>
+	.about {
+		display: grid;
+		gap: var(--sp-8);
+	}
+
+	.intro {
+		display: grid;
+		gap: var(--sp-5);
+		align-items: center;
+		padding: var(--sp-5);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-lg);
+		background: var(--c-surface-raised);
+	}
+	.intro__avatar {
+		display: grid;
+		place-items: center;
+		width: 128px;
+		height: 128px;
+		border-radius: var(--radius-pill);
+		background: var(--c-accent-wash);
+	}
+	@media (min-width: 640px) {
+		.intro {
+			grid-template-columns: auto 1fr;
+			padding: var(--sp-6);
+		}
+	}
+
+	/* 経歴：左に細い線でつないだ年表 */
+	.timeline {
+		margin: 0;
+		padding: 0 0 0 var(--sp-5);
+		border-left: 2px solid var(--c-line);
+		list-style: none;
+	}
+	.timeline li {
+		position: relative;
+	}
+	.timeline li + li {
+		margin-top: var(--sp-5);
+	}
+	/* 年表の丸い点 */
+	.timeline li::before {
+		content: '';
+		position: absolute;
+		top: 0.55em;
+		left: calc(var(--sp-5) * -1 - 7px);
+		width: 12px;
+		height: 12px;
+		border: 2px solid var(--c-accent);
+		border-radius: 50%;
+		background: var(--c-bg);
+	}
+	.timeline__label {
+		color: var(--c-accent);
+		font-family: var(--font-heading);
+		font-weight: 700;
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sp-2);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.tags li {
+		padding: var(--sp-1) var(--sp-4);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-pill);
+		background: var(--c-surface);
+		font-family: var(--font-code);
+		font-size: var(--fs-sm);
+	}
+
+	.favorites {
+		display: grid;
+		gap: var(--sp-3);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	@media (min-width: 640px) {
+		.favorites {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	.favorites li {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-3);
+		padding: var(--sp-3) var(--sp-4);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-md);
+		background: var(--c-surface-raised);
+	}
+	.favorites__icon {
+		display: grid;
+		place-items: center;
+		flex-shrink: 0;
+		width: 44px;
+		height: 44px;
+		border-radius: var(--radius-pill);
+		background: var(--c-surface);
+		color: var(--c-accent);
+		transition: transform var(--dur-slow) var(--ease-soft);
+	}
+	.favorites li:hover .favorites__icon {
+		transform: rotate(-10deg) scale(1.05);
+	}
+	.favorites__label {
+		display: block;
+		color: var(--c-heading);
+		font-weight: 700;
+		line-height: 1.5;
+	}
+	.favorites__note {
+		display: block;
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+		line-height: 1.5;
+	}
+</style>

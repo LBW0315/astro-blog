@@ -1,86 +1,312 @@
 ---
+/*
+  記事ページのレイアウト
+  スマホ：パンくず → ジャンル・日付 → タイトル → 目次（折りたたみ）→ 本文
+  広い画面（1024px〜）：本文の右に目次を固定表示
+*/
+import type { MarkdownHeading } from 'astro';
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
+import CategoryChip from '../components/CategoryChip.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import Icon from '../components/Icon.astro';
+import ProfileCard from '../components/ProfileCard.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import Toc from '../components/Toc.astro';
+import { SITE_TITLE } from '../consts';
+import { getCategory } from '../data/categories';
+import { getReadingMinutes, type Post } from '../lib/posts';
+import BaseLayout from './BaseLayout.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+	post: Post;
+	headings: MarkdownHeading[];
+	prev?: Post; // ひとつ古い記事
+	next?: Post; // ひとつ新しい記事
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { post, headings, prev, next } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category } = post.data;
+const cat = getCategory(category);
+const minutes = getReadingMinutes(post.body);
+const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<html lang="ja">
-	<head>
-		<BaseHead title={title} description={description} image={heroImage} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-size: 0.9em;
-			}
-		</style>
-	</head>
+<BaseLayout title={`${title} | ${SITE_TITLE}`} description={description} image={heroImage}>
+	<ReadingProgress slot="before-header" />
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" loading="eager" />}
+	<div class:list={['container', 'post', { 'post--toc': hasToc }]}>
+		<article class="post__article" data-article>
+			<header class="post__header">
+				<!-- パンくずリスト：今どこにいるかを示す -->
+				<nav aria-label="パンくずリスト" class="breadcrumb">
+					<ol>
+						<li><a href="/">ホーム</a></li>
+						<li><a href={`/categories/${cat.slug}/`}>{cat.label}</a></li>
+						<li><span aria-current="page">この記事</span></li>
+					</ol>
+				</nav>
+
+				<div class="post__meta">
+					<CategoryChip slug={category} />
+					<span class="post__meta-item">
+						<Icon name="calendar" size={16} />
+						<span class="sr-only">公開日</span>
+						<FormattedDate date={pubDate} />
+					</span>
+					{
+						updatedDate && (
+							<span class="post__meta-item">
+								<Icon name="refresh" size={16} />
+								<span>
+									更新 <FormattedDate date={updatedDate} />
+								</span>
+							</span>
+						)
+					}
+					<span class="post__meta-item">
+						<Icon name="clock" size={16} />
+						約{minutes}分で読めます
+					</span>
 				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										最終更新日：<FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
+
+				<h1 class="post__title">{title}</h1>
+				<p class="post__lead">{description}</p>
+				<!-- インクで引いたような線が、一度だけすっと伸びる -->
+				<span class="ink-line" aria-hidden="true"></span>
+			</header>
+
+			{
+				heroImage && (
+					<div class="post__hero">
+						<Image
+							src={heroImage}
+							width={1020}
+							height={574}
+							alt=""
+							loading="eager"
+							transition:name={`hero-${post.id}`}
+						/>
 					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+				)
+			}
+
+			<!-- スマホ〜タブレットの目次 -->
+			<div class="post__toc-inline">
+				<Toc headings={headings} variant="inline" />
+			</div>
+
+			<div class="prose">
+				<slot />
+			</div>
+
+			<footer class="post__footer">
+				{
+					(prev || next) && (
+						<nav class="pager" aria-label="前後の記事">
+							{next ? (
+								<a href={`/blog/${next.id}/`} class="pager__link pager__link--next">
+									<span class="pager__label">
+										<Icon name="arrow-left" size={16} />
+										新しい記事
+									</span>
+									<span class="pager__title">{next.data.title}</span>
+								</a>
+							) : (
+								<span />
+							)}
+							{prev && (
+								<a href={`/blog/${prev.id}/`} class="pager__link pager__link--prev">
+									<span class="pager__label">
+										古い記事
+										<Icon name="arrow-right" size={16} />
+									</span>
+									<span class="pager__title">{prev.data.title}</span>
+								</a>
+							)}
+						</nav>
+					)
+				}
+				<ProfileCard />
+			</footer>
+		</article>
+
+		{
+			hasToc && (
+				<aside class="post__toc-side">
+					<Toc headings={headings} variant="side" />
+				</aside>
+			)
+		}
+	</div>
+</BaseLayout>
+
+<style>
+	.post {
+		padding-top: var(--sp-6);
+	}
+	.post__article {
+		min-width: 0;
+		max-width: var(--measure);
+		margin-inline: auto;
+	}
+
+	/* ----- パンくず ----- */
+	.breadcrumb ol {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sp-1);
+		margin: 0 0 var(--sp-4);
+		padding: 0;
+		list-style: none;
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+	}
+	.breadcrumb li + li::before {
+		content: '/';
+		margin-right: var(--sp-1);
+		color: var(--c-line-strong);
+	}
+	.breadcrumb a {
+		color: var(--c-text-sub);
+	}
+	.breadcrumb a:hover {
+		color: var(--c-accent);
+	}
+
+	/* ----- 記事の頭 ----- */
+	.post__meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var(--sp-2) var(--sp-4);
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+	}
+	.post__meta-item {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--sp-1);
+	}
+	.post__title {
+		margin-top: var(--sp-5);
+		font-size: var(--fs-h1);
+		line-height: 1.45;
+	}
+	.post__lead {
+		margin-top: var(--sp-3);
+		color: var(--c-text-sub);
+		font-size: var(--fs-body);
+	}
+	.ink-line {
+		display: block;
+		width: 64px;
+		height: 3px;
+		margin-top: var(--sp-5);
+		border-radius: 3px;
+		background: var(--c-accent);
+		transform-origin: left center;
+		animation: ink-draw var(--dur-slower) var(--ease-soft) 0.3s backwards;
+	}
+	@keyframes ink-draw {
+		from {
+			transform: scaleX(0);
+		}
+	}
+
+	.post__hero {
+		margin-top: var(--sp-6);
+	}
+	.post__hero :global(img) {
+		width: 100%;
+		border-radius: var(--radius-lg);
+	}
+
+	.post__toc-inline {
+		margin-top: var(--sp-7);
+	}
+	.post .prose {
+		margin-top: var(--sp-7);
+	}
+
+	/* ----- 記事の終わり ----- */
+	.post__footer {
+		display: grid;
+		gap: var(--sp-7);
+		margin-top: var(--sp-9);
+		padding-top: var(--sp-7);
+		border-top: 1px solid var(--c-line);
+	}
+	.pager {
+		display: grid;
+		gap: var(--sp-3);
+	}
+	.pager__link {
+		display: grid;
+		gap: var(--sp-1);
+		padding: var(--sp-4) var(--sp-5);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-md);
+		background: var(--c-surface-raised);
+		color: var(--c-heading);
+		text-decoration: none;
+		transition:
+			border-color var(--dur-fast) var(--ease-soft),
+			transform var(--dur-base) var(--ease-soft);
+	}
+	.pager__link:hover {
+		border-color: var(--c-line-strong);
+		color: var(--c-accent);
+	}
+	.pager__link--next:hover {
+		transform: translateX(-3px);
+	}
+	.pager__link--prev:hover {
+		transform: translateX(3px);
+	}
+	.pager__link--prev {
+		text-align: right;
+	}
+	.pager__label {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--sp-1);
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+	}
+	.pager__link--prev .pager__label {
+		justify-self: end;
+	}
+	.pager__title {
+		font-weight: 700;
+		line-height: var(--lh-tight);
+	}
+	@media (min-width: 640px) {
+		.pager {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	/* ----- 広い画面：右に目次 ----- */
+	.post__toc-side {
+		display: none;
+	}
+	@media (min-width: 1024px) {
+		.post--toc {
+			display: grid;
+			grid-template-columns: minmax(0, var(--measure)) var(--toc-width);
+			justify-content: center;
+			gap: var(--sp-9);
+		}
+		.post--toc .post__article {
+			margin-inline: 0;
+		}
+		.post--toc .post__toc-inline {
+			display: none;
+		}
+		.post__toc-side {
+			display: block;
+			/* 目次はタイトルの高さあたりから始める */
+			padding-top: var(--sp-10);
+		}
+	}
+</style>

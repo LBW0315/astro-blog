@@ -1,0 +1,66 @@
+---
+// 書き手の簡単な紹介（トップページ・記事の最後に表示）
+import Icon from './Icon.astro';
+import Pekingese from './Pekingese.astro';
+---
+
+<aside class="profile" aria-labelledby="profile-title" data-reveal>
+	<div class="profile__avatar">
+		<Pekingese size={72} tilt />
+	</div>
+	<div class="profile__body">
+		<p class="profile__eyebrow">この記事を書いている人</p>
+		<h2 id="profile-title" class="profile__title">元数学教諭のQAエンジニア</h2>
+		<p class="profile__text">
+			小学校・中学校・高校で計10年間、数学などを教えたあと、IT企業でスマホアプリの実機テストを担当しています。React・Flutter・AWS・Linux
+			を勉強中。コーヒーと文房具とキーボードが好きな、1児のパパです。
+		</p>
+		<a href="/about/" class="pill-link">
+			プロフィールを見る
+			<Icon name="arrow-right" size={16} />
+		</a>
+	</div>
+</aside>
+
+<style>
+	.profile {
+		display: grid;
+		gap: var(--sp-4);
+		padding: var(--sp-5);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-lg);
+		background: var(--c-surface-raised);
+	}
+	.profile__avatar {
+		display: grid;
+		place-items: center;
+		width: 104px;
+		height: 104px;
+		border-radius: var(--radius-pill);
+		background: var(--c-accent-wash);
+	}
+	.profile__body {
+		display: grid;
+		gap: var(--sp-2);
+		justify-items: start;
+	}
+	.profile__eyebrow {
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+	}
+	.profile__title {
+		font-size: var(--fs-h3);
+	}
+	.profile__text {
+		font-size: var(--fs-sm);
+		line-height: 1.8;
+		margin-bottom: var(--sp-2);
+	}
+	@media (min-width: 640px) {
+		.profile {
+			grid-template-columns: auto 1fr;
+			gap: var(--sp-5);
+			padding: var(--sp-6);
+		}
+	}
+</style>

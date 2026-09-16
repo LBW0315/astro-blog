@@ -1,0 +1,87 @@
+---
+/*
+  ジャンルの小さなラベル（アイコン＋文字）
+  link を付けると、そのジャンルのページへのリンクになります。
+*/
+import { type CategorySlug, getCategory } from '../data/categories';
+import Icon from './Icon.astro';
+
+interface Props {
+	slug: CategorySlug;
+	link?: boolean;
+	current?: boolean; // 絞り込み中のジャンルなど「今ここ」を示す
+	count?: number; // 記事数を表示したいとき
+}
+
+const { slug, link = true, current = false, count } = Astro.props;
+const category = getCategory(slug);
+const Tag = link ? 'a' : 'span';
+---
+
+<Tag
+	class="chip"
+	href={link ? `/categories/${category.slug}/` : undefined}
+	aria-current={link && current ? 'page' : undefined}
+>
+	<Icon name={category.icon} size={16} />
+	<span>{category.label}</span>
+	{count !== undefined && <span class="chip__count">{count}<span class="sr-only">件</span></span>}
+</Tag>
+
+<style>
+	.chip {
+		position: relative; /* カード全体のリンクより手前に出す */
+		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--sp-1);
+		padding: 0.15em 0.75em;
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-pill);
+		background: var(--c-surface-raised);
+		color: var(--c-text);
+		font-size: var(--fs-sm);
+		font-weight: 700;
+		line-height: 1.6;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.chip :global(svg) {
+		color: var(--c-accent);
+	}
+	/* リンクのときだけ、押しやすい大きさと反応を付ける */
+	a.chip {
+		min-height: var(--tap);
+		padding-inline: 1em;
+		transition:
+			background-color var(--dur-fast) var(--ease-soft),
+			border-color var(--dur-fast) var(--ease-soft),
+			transform var(--dur-press) var(--ease-soft);
+	}
+	a.chip:hover {
+		border-color: var(--c-line-strong);
+		background: var(--c-accent-wash);
+		color: var(--c-heading);
+	}
+	a.chip:active {
+		transform: scale(0.95);
+	}
+	/* 今いるジャンル：色の反転＋太い枠で、色が見えにくくてもわかる */
+	a.chip[aria-current='page'] {
+		border: 2px solid var(--c-accent);
+		background: var(--c-accent);
+		color: var(--c-on-accent);
+	}
+	a.chip[aria-current='page'] :global(svg) {
+		color: currentColor;
+	}
+	.chip__count {
+		margin-left: var(--sp-1);
+		color: var(--c-text-sub);
+		font-size: var(--fs-xs);
+		font-weight: 400;
+	}
+	a.chip[aria-current='page'] .chip__count {
+		color: currentColor;
+	}
+</style>

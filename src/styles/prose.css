@@ -1,0 +1,327 @@
+/*
+  記事本文（.prose）の文字組み
+  Markdown から作られる見出し・段落・リスト・コードなどの見た目です。
+  「見出しの前は広く、後ろは狭く」の余白で、まとまりが一目でわかるようにしています。
+*/
+
+.prose {
+	max-width: var(--measure); /* 1行 全角約38文字 */
+	font-size: var(--fs-body);
+	line-height: var(--lh-body);
+}
+
+/* 要素どうしの基本の間隔（直前の要素との間にだけ空ける） */
+.prose > * + * {
+	margin-top: var(--sp-5);
+}
+
+/* ===== 見出し ===== */
+/* h2：大きな区切り。上に細い罫線と広い余白 */
+.prose h2 {
+	margin-top: var(--sp-9);
+	padding-top: var(--sp-6);
+	border-top: 1px solid var(--c-line);
+	font-size: var(--fs-h2);
+}
+/* h3：左にインクのような短い線 */
+.prose h3 {
+	margin-top: var(--sp-7);
+	padding-left: var(--sp-3);
+	border-left: 3px solid var(--c-accent);
+	font-size: var(--fs-h3);
+}
+/* h4 以下：文字の太さと大きさだけで控えめに */
+.prose :is(h4, h5, h6) {
+	margin-top: var(--sp-6);
+	font-size: var(--fs-h4);
+}
+/* 見出しの直後は間隔を狭くして、次の段落とのつながりを見せる */
+.prose :is(h2, h3, h4, h5, h6) + * {
+	margin-top: var(--sp-3);
+}
+/* 目次から飛んだとき、見出しが画面の上にくっつかないように */
+.prose :is(h2, h3, h4) {
+	scroll-margin-top: var(--sp-6);
+}
+
+/* ===== リスト ===== */
+.prose :is(ul, ol) {
+	padding-left: 1.5em;
+}
+.prose li + li,
+.prose li > :is(ul, ol) {
+	margin-top: var(--sp-2);
+}
+.prose li::marker {
+	color: var(--c-text-sub);
+}
+
+/* ===== 強調 ===== */
+.prose strong {
+	font-weight: 700;
+	/* 蛍光ペンのような、ごく淡い下線マーカー */
+	background: linear-gradient(transparent 62%, var(--c-accent-wash) 62%);
+}
+
+/* ===== 引用 ===== */
+.prose blockquote {
+	margin-inline: 0;
+	padding: var(--sp-4) var(--sp-5);
+	border-left: 3px solid var(--c-line-strong);
+	border-radius: 0 var(--radius-md) var(--radius-md) 0;
+	background: var(--c-surface);
+	color: var(--c-text);
+}
+.prose blockquote > * + * {
+	margin-top: var(--sp-3);
+}
+.prose cite {
+	color: var(--c-text-sub);
+	font-size: var(--fs-sm);
+	font-style: normal;
+}
+
+/* ===== 区切り線：中央に小さな点を3つ ===== */
+.prose hr {
+	margin-block: var(--sp-8);
+	border: 0;
+	height: auto;
+	text-align: center;
+	overflow: visible;
+}
+.prose hr::before {
+	content: '・・・';
+	color: var(--c-text-sub);
+	letter-spacing: 0.6em;
+}
+
+/* ===== 画像 ===== */
+.prose img {
+	border-radius: var(--radius-md);
+}
+.prose figure {
+	margin-inline: 0;
+}
+.prose figcaption {
+	margin-top: var(--sp-2);
+	color: var(--c-text-sub);
+	font-size: var(--fs-sm);
+	text-align: center;
+}
+
+/* ===== 表：狭い画面では表だけ横スクロール ===== */
+.prose table {
+	display: block;
+	width: max-content;
+	max-width: 100%;
+	overflow-x: auto;
+	border-collapse: collapse;
+	font-size: var(--fs-sm);
+	line-height: 1.7;
+}
+.prose :is(th, td) {
+	padding: var(--sp-2) var(--sp-4);
+	border-bottom: 1px solid var(--c-line);
+	text-align: left;
+}
+.prose th {
+	border-bottom: 2px solid var(--c-line-strong);
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+/* ===== インラインコード（文中の `code`）===== */
+.prose :not(pre) > code {
+	padding: 0.1em 0.4em;
+	border-radius: var(--radius-sm);
+	background: var(--c-surface);
+	font-family: var(--font-code);
+	font-size: 0.9em;
+	letter-spacing: 0;
+	overflow-wrap: anywhere;
+}
+
+/* ===== キーボードのキー（<kbd>）：キーキャップ風 ===== */
+.prose kbd {
+	display: inline-block;
+	min-width: 1.8em;
+	padding: 0.05em 0.45em;
+	border: 1px solid var(--c-line-strong);
+	border-bottom-width: 3px;
+	border-radius: var(--radius-sm);
+	background: var(--c-surface-raised);
+	font-family: var(--font-code);
+	font-size: 0.85em;
+	line-height: 1.5;
+	text-align: center;
+	transition:
+		transform var(--dur-press) var(--ease-soft),
+		border-bottom-width var(--dur-press) var(--ease-soft);
+}
+/* 押すとキーが沈む（ちょっとした遊び心） */
+.prose kbd:active {
+	transform: translateY(2px);
+	border-bottom-width: 1px;
+}
+
+/* ===== 脚注 ===== */
+.prose .footnotes {
+	margin-top: var(--sp-9);
+	padding-top: var(--sp-5);
+	border-top: 1px solid var(--c-line);
+	color: var(--c-text-sub);
+	font-size: var(--fs-sm);
+}
+
+/* =====================================================
+   コードブロック
+   src/lib/shiki-a11y.mjs が作る .code-block の見た目
+   ===================================================== */
+.prose .code-block {
+	border: 1px solid var(--c-line);
+	border-radius: var(--radius-md);
+	background: var(--c-surface);
+	overflow: hidden;
+}
+
+/* 言語名とコピーボタンの行 */
+.code-block__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--sp-2);
+	padding-left: var(--sp-4);
+	border-bottom: 1px solid var(--c-line);
+	font-size: var(--fs-xs);
+	color: var(--c-text-sub);
+	letter-spacing: 0.04em;
+}
+
+/* コピーボタン（JavaScript が動くときだけ表示） */
+.code-block__copy {
+	display: none;
+	align-items: center;
+	gap: var(--sp-1);
+	min-width: var(--tap);
+	min-height: var(--tap);
+	padding: 0 var(--sp-4);
+	border: 0;
+	background: transparent;
+	color: var(--c-text-sub);
+	font-size: var(--fs-xs);
+	cursor: pointer;
+	transition:
+		color var(--dur-fast) var(--ease-soft),
+		background-color var(--dur-fast) var(--ease-soft),
+		transform var(--dur-press) var(--ease-soft);
+}
+.js .code-block__copy {
+	display: inline-flex;
+}
+.code-block__copy:hover {
+	background: var(--c-accent-wash);
+	color: var(--c-accent);
+}
+.code-block__copy:active {
+	transform: scale(0.94);
+}
+.code-block__copy svg {
+	width: 16px;
+	height: 16px;
+}
+/* 普段はコピーのアイコン、完了したらチェックのアイコンに切り替える */
+.code-block__icon-check,
+.code-block__copy[data-state='done'] .code-block__icon-copy {
+	display: none;
+}
+.code-block__copy[data-state='done'] .code-block__icon-check {
+	display: block;
+}
+/* コピー完了時：色・アイコン・文字でわかるように。チェックが「ぽん」と出る */
+.code-block__copy[data-state='done'] {
+	color: var(--c-accent);
+}
+.code-block__copy[data-state='done'] svg {
+	animation: pop var(--dur-base) var(--ease-soft);
+}
+.code-block__copy[data-state='error'] {
+	color: var(--c-accent2);
+}
+@keyframes pop {
+	from {
+		transform: scale(0.4);
+		opacity: 0;
+	}
+}
+
+/* コード本体 */
+.prose pre.astro-code {
+	margin: 0;
+	padding: var(--sp-4) var(--sp-5);
+	/* Shiki が付ける背景色より、サイトの背景色を優先する */
+	background-color: var(--c-surface) !important;
+	font-family: var(--font-code);
+	font-size: 0.875rem;
+	line-height: 1.7;
+	letter-spacing: 0;
+	overflow-x: auto; /* 長い行は横スクロール */
+	tab-size: 2;
+}
+.prose pre.astro-code code {
+	font-family: inherit;
+}
+
+/* ダークモードでは、Shiki が用意したダーク用の色に切り替える */
+:root[data-theme='dark'] .astro-code span {
+	color: var(--shiki-dark) !important;
+}
+
+/* =====================================================
+   注記ボックス（補足・ポイント・注意）
+   色だけでなく「アイコン＋ラベル＋左の罫線」で見分けられる
+   ===================================================== */
+.callout {
+	padding: var(--sp-4) var(--sp-5);
+	border-left: 4px solid;
+	border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.callout__label {
+	display: flex;
+	align-items: center;
+	gap: var(--sp-2);
+	margin: 0;
+	font-family: var(--font-heading);
+	font-size: var(--fs-sm);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+}
+.callout__body {
+	margin-top: var(--sp-2);
+}
+.callout__body > * + * {
+	margin-top: var(--sp-3);
+}
+/* 補足：淡い青磁 */
+.callout--note {
+	border-color: var(--c-accent);
+	background: var(--c-accent-wash);
+}
+.callout--note .callout__label {
+	color: var(--c-accent);
+}
+/* ポイント：グレージュ（色を増やさず、罫線とアイコンで区別） */
+.callout--tip {
+	border-color: var(--c-line-strong);
+	background: var(--c-surface);
+}
+.callout--tip .callout__label {
+	color: var(--c-heading);
+}
+/* 注意：淡い灰桜 */
+.callout--warning {
+	border-color: var(--c-accent2);
+	background: var(--c-accent2-wash);
+}
+.callout--warning .callout__label {
+	color: var(--c-accent2);
+}

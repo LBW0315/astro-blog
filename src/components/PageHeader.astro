@@ -1,0 +1,70 @@
+---
+// 一覧ページなどの上部に置く、タイトルと説明文
+import type { IconName } from '../data/icons';
+import Icon from './Icon.astro';
+
+interface Props {
+	icon: IconName;
+	title: string;
+	lead?: string;
+	eyebrow?: string; // タイトルの上の小さな文字
+}
+const { icon, title, lead, eyebrow } = Astro.props;
+---
+
+<header class="page-header">
+	<div class="container">
+		{eyebrow && <p class="page-header__eyebrow">{eyebrow}</p>}
+		<h1 class="page-header__title">
+			<span class="page-header__icon"><Icon name={icon} size={24} /></span>
+			{title}
+		</h1>
+		{lead && <p class="page-header__lead">{lead}</p>}
+		<span class="page-header__line" aria-hidden="true"></span>
+	</div>
+</header>
+
+<style>
+	.page-header {
+		padding-block: var(--sp-8) var(--sp-7);
+	}
+	.page-header__eyebrow {
+		margin-bottom: var(--sp-2);
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+	}
+	.page-header__title {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-3);
+		font-size: var(--fs-h1);
+	}
+	.page-header__icon {
+		display: grid;
+		place-items: center;
+		width: 48px;
+		height: 48px;
+		border-radius: var(--radius-pill);
+		background: var(--c-accent-wash);
+		color: var(--c-accent);
+	}
+	.page-header__lead {
+		margin-top: var(--sp-3);
+		color: var(--c-text-sub);
+	}
+	.page-header__line {
+		display: block;
+		width: 64px;
+		height: 3px;
+		margin-top: var(--sp-5);
+		border-radius: 3px;
+		background: var(--c-accent);
+		transform-origin: left center;
+		animation: page-draw var(--dur-slower) var(--ease-soft) 0.25s backwards;
+	}
+	@keyframes page-draw {
+		from {
+			transform: scaleX(0);
+		}
+	}
+</style>

@@ -2,6 +2,7 @@
 title: 'MDXの使い方'
 description: 'AstroでMDXを使い、記事にコンポーネントを組み込む方法をご紹介します。'
 pubDate: '2024-06-01'
+category: 'tech'
 heroImage: '../../assets/blog-placeholder-5.jpg'
 ---
 
@@ -28,3 +29,23 @@ import HeaderLink from '../../components/HeaderLink.astro';
 - [MDXの構文ドキュメント](https://mdxjs.com/docs/what-is-mdx)
 - [Astroでの使い方](https://docs.astro.build/ja/basics/astro-pages/#markdownmdxページ)
 - **注意：** 操作できるコンポーネントを作るには、[クライアントディレクティブ](https://docs.astro.build/ja/reference/directives-reference/#clientディレクティブ)が必要です。指定しない場合、MDX内のコンポーネントは標準ではJavaScriptを含まない静的HTMLとして出力されます。
+
+## 注記ボックスの使い方
+
+MDXの記事では、`Callout`コンポーネントで補足・ポイント・注意のボックスを置けます。
+
+import Callout from '../../components/Callout.astro';
+
+<Callout type="note">
+	補足のボックスです。本文の流れから少し外れる情報を書くときに使います。
+</Callout>
+
+<Callout type="tip">
+	ポイントのボックスです。覚えておくと便利なことを書きます。
+</Callout>
+
+<Callout type="warning">
+	注意のボックスです。操作を間違えると困ることなどを書きます。
+</Callout>
+
+キーボードのキーは<kbd>Cmd</kbd> + <kbd>C</kbd>のように書けます。

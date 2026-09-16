@@ -1,0 +1,27 @@
+---
+// 読了の進み具合を示す、画面最上部の細いバー（記事ページだけ）
+// 幅は ui.ts がスクロールに合わせて transform で変えます。
+---
+
+<div class="progress" aria-hidden="true" transition:name="reading-progress" transition:animate="none">
+	<div class="progress__bar" data-progress-bar></div>
+</div>
+
+<style>
+	.progress {
+		position: fixed;
+		inset: 0 0 auto;
+		z-index: 50;
+		height: 3px;
+		pointer-events: none;
+	}
+	.progress__bar {
+		height: 100%;
+		background: var(--c-accent);
+		border-radius: 0 3px 3px 0;
+		transform: scaleX(0);
+		transform-origin: left center;
+		/* JavaScript で毎フレーム更新するので、ごく短い補間だけ */
+		transition: transform 0.1s linear;
+	}
+</style>

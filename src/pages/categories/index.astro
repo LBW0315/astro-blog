@@ -2,7 +2,6 @@
 // ジャンル一覧ページ
 import Icon from '../../components/Icon.astro';
 import PageHeader from '../../components/PageHeader.astro';
-import { SITE_TITLE } from '../../consts';
 import { categories } from '../../data/categories';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPosts } from '../../lib/posts';
@@ -11,7 +10,7 @@ const posts = await getPosts();
 const count = (slug: string) => posts.filter((p) => p.data.category === slug).length;
 ---
 
-<BaseLayout title={`ジャンル | ${SITE_TITLE}`} description="ジャンルごとに記事を探せます。">
+<BaseLayout title="ジャンル" description="ジャンルごとに記事を探せます。">
 	<PageHeader icon="grid" title="ジャンル" lead="気になるテーマから、記事を探してみてください。" />
 
 	<div class="container">

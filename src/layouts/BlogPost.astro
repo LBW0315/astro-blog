@@ -12,7 +12,6 @@ import Icon from '../components/Icon.astro';
 import ProfileCard from '../components/ProfileCard.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import Toc from '../components/Toc.astro';
-import { SITE_TITLE } from '../consts';
 import { getCategory } from '../data/categories';
 import { getReadingMinutes, type Post } from '../lib/posts';
 import BaseLayout from './BaseLayout.astro';
@@ -31,7 +30,7 @@ const minutes = getReadingMinutes(post.body);
 const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<BaseLayout title={`${title} | ${SITE_TITLE}`} description={description} image={heroImage}>
+<BaseLayout title={title} description={description} image={heroImage}>
 	<ReadingProgress slot="before-header" />
 
 	<div class:list={['container', 'post', { 'post--toc': hasToc }]}>

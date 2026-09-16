@@ -3,7 +3,7 @@
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
 import FallbackImage from '../assets/blog-placeholder-1.jpg';
-import { SITE_TITLE } from '../consts';
+import { AUTHOR_NAME, SITE_TITLE } from '../consts';
 import { fontCssVersion } from '../lib/font-css';
 
 interface Props {
@@ -49,6 +49,7 @@ const { title, description, image = FallbackImage } = Astro.props;
 <!-- ページのタイトルと説明 -->
 <title>{title}</title>
 <meta name="description" content={description} />
+<meta name="author" content={AUTHOR_NAME} />
 
 <!-- SNS でシェアされたときの表示（Open Graph） -->
 <meta property="og:type" content="website" />

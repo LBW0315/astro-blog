@@ -2,11 +2,10 @@
 // ページが見つからないときに表示するページ
 import Icon from '../components/Icon.astro';
 import Pekingese from '../components/Pekingese.astro';
-import { SITE_TITLE } from '../consts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title={`ページが見つかりません | ${SITE_TITLE}`} description="お探しのページは見つかりませんでした。">
+<BaseLayout title="ページが見つかりません" description="お探しのページは見つかりませんでした。">
 	<div class="container container--narrow not-found">
 		<Pekingese size={160} tilt />
 		<p class="not-found__code">404</p>

@@ -18,6 +18,17 @@ export default defineConfig({
 	// 日本語フォントは文字ごとに小さく分割されているので、ページで使う文字の分だけ読み込まれる。
 	fonts: [
 		{
+			// ロゴ「BUNBOU」用：細めで字間を広げても美しい英字フォント（英字だけなので軽い）
+			provider: fontProviders.google(),
+			name: 'Jost',
+			cssVariable: '--font-jost',
+			weights: [300],
+			styles: ['normal'],
+			subsets: ['latin'],
+			display: 'swap',
+			fallbacks: ['Avenir Next', 'Helvetica Neue', 'Segoe UI', 'sans-serif'],
+		},
+		{
 			// 見出し用：柔らかい丸ゴシック
 			provider: fontProviders.google(),
 			name: 'Zen Maru Gothic',

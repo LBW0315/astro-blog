@@ -11,7 +11,7 @@
 // @ts-expect-error Astro の内部モジュール（型定義が公開されていない）
 import { componentDataByCssVariable } from 'virtual:astro:assets/fonts/internal';
 
-const FONT_VARIABLES = ['--font-zen-maru', '--font-biz-udp'];
+const FONT_VARIABLES = ['--font-jost', '--font-zen-maru', '--font-biz-udp'];
 
 export const fontCss: string = FONT_VARIABLES.map((v) => {
 	const data = componentDataByCssVariable.get(v);

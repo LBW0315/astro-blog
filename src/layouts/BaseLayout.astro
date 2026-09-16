@@ -9,9 +9,10 @@ import BackToTop from '../components/BackToTop.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import { pageTitle } from '../consts';
 
 interface Props {
-	title: string;
+	title?: string; // ページ名（例：「記事一覧」）。タブには「記事一覧 | BUNBOU」と表示される。トップページでは省略
 	description: string;
 	image?: ImageMetadata;
 }
@@ -36,7 +37,7 @@ const pageTransition = {
 <!doctype html>
 <html lang="ja">
 	<head>
-		<BaseHead title={title} description={description} image={image} />
+		<BaseHead title={pageTitle(title)} description={description} image={image} />
 
 		<!--
 		  テーマ（ライト／ダーク）を、画面が描かれる前に決める小さなスクリプト

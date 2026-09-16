@@ -4,7 +4,6 @@ import CategoryChip from '../../components/CategoryChip.astro';
 import Icon from '../../components/Icon.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import PostGrid from '../../components/PostGrid.astro';
-import { SITE_TITLE } from '../../consts';
 import { categories } from '../../data/categories';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPosts, type Post } from '../../lib/posts';
@@ -20,7 +19,7 @@ for (const post of posts) {
 const usedCategories = categories.filter((c) => posts.some((p) => p.data.category === c.slug));
 ---
 
-<BaseLayout title={`記事一覧 | ${SITE_TITLE}`} description="これまでに書いた記事の一覧です。">
+<BaseLayout title="記事一覧" description="これまでに書いた記事の一覧です。">
 	<PageHeader icon="list" title="記事一覧" lead={`これまでに書いた ${posts.length} 本の記事です。`} />
 
 	<div class="container">

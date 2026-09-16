@@ -4,7 +4,6 @@ import CategoryChip from '../../components/CategoryChip.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import Pekingese from '../../components/Pekingese.astro';
 import PostGrid from '../../components/PostGrid.astro';
-import { SITE_TITLE } from '../../consts';
 import { type Category, categories } from '../../data/categories';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPosts, type Post } from '../../lib/posts';
@@ -27,7 +26,7 @@ const { category, posts, allPosts } = Astro.props;
 const usedCategories = categories.filter((c) => allPosts.some((p) => p.data.category === c.slug));
 ---
 
-<BaseLayout title={`${category.label}の記事 | ${SITE_TITLE}`} description={category.description}>
+<BaseLayout title={`${category.label}の記事`} description={category.description}>
 	<PageHeader icon={category.icon} eyebrow="ジャンル" title={category.label} lead={category.description} />
 
 	<div class="container">

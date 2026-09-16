@@ -1,17 +1,16 @@
 ---
 // サイト上部のヘッダー
-import { NAV_LINKS, SITE_TITLE } from '../consts';
+import { NAV_LINKS, SITE_SUBTITLE_EN, SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
-import Icon from './Icon.astro';
 import ThemeToggle from './ThemeToggle.astro';
 ---
 
 <header class="site-header" transition:name="site-header" transition:animate="none">
 	<div class="container site-header__inner">
+		<!-- ロゴ：サイト名と英語のサブタイトル -->
 		<a href="/" class="logo">
-			<!-- ロゴマーク：万年筆のペン先 -->
-			<span class="logo__mark" aria-hidden="true"><Icon name="pen" size={18} /></span>
-			<span class="logo__text">{SITE_TITLE}</span>
+			<span class="logo__name">{SITE_TITLE}</span>
+			<span class="logo__sub">{SITE_SUBTITLE_EN}</span>
 		</a>
 
 		<ThemeToggle />
@@ -53,33 +52,39 @@ import ThemeToggle from './ThemeToggle.astro';
 	.logo {
 		grid-area: logo;
 		display: inline-flex;
-		align-items: center;
-		gap: var(--sp-2);
+		flex-direction: column;
+		justify-content: center;
 		justify-self: start;
 		min-height: var(--tap);
+		padding-block: var(--sp-1);
 		color: var(--c-heading);
-		font-family: var(--font-heading);
-		font-size: 1.1875rem;
-		font-weight: 700;
-		letter-spacing: 0.06em;
 		text-decoration: none;
 	}
 	.logo:hover {
 		color: var(--c-heading);
 	}
-	/* ロゴマーク：丸の中にペン先。ホバーで少し傾く */
-	.logo__mark {
-		display: grid;
-		place-items: center;
-		width: 34px;
-		height: 34px;
-		border-radius: var(--radius-pill);
-		background: var(--c-accent-wash);
-		color: var(--c-accent);
-		transition: transform var(--dur-slow) var(--ease-soft);
+	/* サイト名：細めの英字を、字間を広くとって */
+	.logo__name {
+		font-family: var(--font-logo);
+		font-size: 1.375rem;
+		font-weight: var(--fw-logo);
+		line-height: 1.2;
+		letter-spacing: var(--ls-logo);
+		/* 最後の文字の後ろにも字間が付くので、その分だけ詰める */
+		margin-right: calc(var(--ls-logo) * -1);
 	}
-	.logo:hover .logo__mark {
-		transform: rotate(-12deg);
+	/* 英語サブタイトル：小さめに */
+	.logo__sub {
+		margin-top: 2px;
+		color: var(--c-text-sub);
+		font-family: var(--font-logo);
+		font-size: var(--fs-subtitle-en);
+		line-height: 1.3;
+		letter-spacing: 0.14em;
+		transition: color var(--dur-fast) var(--ease-soft);
+	}
+	.logo:hover .logo__sub {
+		color: var(--c-accent);
 	}
 
 	:global(.theme-toggle) {

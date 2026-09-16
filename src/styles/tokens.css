@@ -16,6 +16,7 @@
 	/* ===== 色：文字 ===== */
 	--c-text: #2e2a27; /* 本文。背景との比 13.42:1（AAA） */
 	--c-text-sub: #5e564f; /* 日付などの補助文字。6.78:1（AA）／カード上 6.23:1 */
+	--c-text-faint: #716963; /* 淡いグレーの控えめな文字。5.08:1（AA）／カード上 4.66:1／ヘッダー上 5.30:1 */
 	--c-heading: #26221f; /* 見出し。本文より少しだけ濃く */
 
 	/* ===== 色：罫線 ===== */
@@ -42,6 +43,8 @@
 	   /fonts.css が届く前は変数が未定義なので、var() の2つ目に書いた標準フォントで表示される */
 	--font-heading: var(--font-zen-maru, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif);
 	--font-body: var(--font-biz-udp, 'Hiragino Sans', 'Yu Gothic UI', Meiryo, sans-serif);
+	/* ロゴ用の細い英字 */
+	--font-logo: var(--font-jost, 'Avenir Next', 'Helvetica Neue', 'Segoe UI', sans-serif);
 	--font-code: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'BIZ UDGothic', monospace;
 
 	/* ===== 文字サイズ ===== */
@@ -54,7 +57,8 @@
 	--fs-h3: 1.1875rem;
 	--fs-h2: clamp(1.3125rem, 1.15rem + 0.7vw, 1.5625rem);
 	--fs-h1: clamp(1.5625rem, 1.25rem + 1.5vw, 2.125rem);
-	--fs-display: clamp(1.875rem, 1.4rem + 2.4vw, 2.75rem); /* トップのサイト名 */
+	--fs-display: clamp(2.25rem, 1.6rem + 3.2vw, 3.5rem); /* トップのサイト名 */
+	--fs-subtitle-en: 0.75rem; /* 英語サブタイトル（12px） */
 
 	/* ===== 行間・字間 ===== */
 	--lh-body: 1.85; /* 本文の行間 */
@@ -62,6 +66,8 @@
 	--lh-tight: 1.4; /* カードのタイトルなど */
 	--ls-body: 0.02em; /* 本文の字間 */
 	--ls-heading: 0.04em; /* 見出しの字間 */
+	--ls-logo: 0.32em; /* ロゴ「BUNBOU」の字間（広め） */
+	--fw-logo: 300; /* ロゴの文字の太さ（細め） */
 
 	/* ===== 余白（4px の倍数で統一）===== */
 	--sp-1: 0.25rem; /* 4px */
@@ -115,6 +121,7 @@
 
 	--c-text: #e9e4de; /* 13.00:1（AAA） */
 	--c-text-sub: #b3aba3; /* 7.25:1（AAA） */
+	--c-text-faint: #9a928a; /* 5.36:1（AA）／カード上 4.84:1／ヘッダー上 4.97:1 */
 	--c-heading: #f2eee9;
 
 	--c-line: #3a3633;

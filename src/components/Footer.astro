@@ -1,6 +1,6 @@
 ---
 // サイト下部のフッター
-import { NAV_LINKS, SITE_TAGLINE, SITE_TITLE } from '../consts';
+import { NAV_LINKS, SITE_SUBTITLE_EN, SITE_SUBTITLE_JA, SITE_TITLE } from '../consts';
 import CoffeeSteam from './CoffeeSteam.astro';
 import Icon from './Icon.astro';
 
@@ -13,7 +13,8 @@ const year = new Date().getFullYear();
 			<CoffeeSteam />
 			<div>
 				<p class="site-footer__title">{SITE_TITLE}</p>
-				<p class="site-footer__tagline">{SITE_TAGLINE}</p>
+				<p class="site-footer__sub-en">{SITE_SUBTITLE_EN}</p>
+				<p class="site-footer__sub-ja">{SITE_SUBTITLE_JA}</p>
 			</div>
 		</div>
 
@@ -56,15 +57,24 @@ const year = new Date().getFullYear();
 		gap: var(--sp-3);
 	}
 	.site-footer__title {
-		font-family: var(--font-heading);
-		font-weight: 700;
 		color: var(--c-heading);
+		font-family: var(--font-logo);
+		font-size: 1.125rem;
+		font-weight: var(--fw-logo);
+		letter-spacing: var(--ls-logo);
+		line-height: 1.4;
+	}
+	.site-footer__sub-en {
+		color: var(--c-text-sub);
+		font-family: var(--font-logo);
+		font-size: var(--fs-subtitle-en);
+		letter-spacing: 0.14em;
 		line-height: 1.5;
 	}
-	.site-footer__tagline {
-		color: var(--c-text-sub);
-		font-size: var(--fs-sm);
-		line-height: 1.5;
+	.site-footer__sub-ja {
+		color: var(--c-text-faint);
+		font-size: var(--fs-xs);
+		line-height: 1.6;
 	}
 	.site-footer__links {
 		display: flex;

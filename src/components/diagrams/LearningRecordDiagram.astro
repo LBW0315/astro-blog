@@ -1,75 +1,114 @@
 ---
 /*
   記事「積み重ねを「形」に残したくて、ブログを始めました」専用の図解
-  学習を「残さない場合」と「ブログに残す場合」の比較（before / after）
+  学習を「残さない場合」と「ブログに残す場合」の比較（before / after・手描き風）
 
-  色だけで区別しないように、次の3つを組み合わせています。
-  - 見出しのラベル（これまで／これから）と記号（…／✓）
-  - 枠線の種類（点線＝消えていく／実線＝残る）
-  - 色（灰桜＝これまで／青磁＝これから）
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、線と図形だけにかけています。
+  文字にはかけないので、読みやすさは変わりません。
+
+  色だけで区別しないように、次の組み合わせにしています。
+  - 残さない場合：グレーの点線（流れて消えていく）＋見出し「残さないと…」
+  - ブログに残す場合：青磁の実線（形に残る）＋見出し「ブログに残すと」
+  ※「これから」ラベル（予定の部分）の意味とぶつからないよう、この図では使わない
 */
-const before = ['毎日コツコツ学習する', 'メモせず、そのまま', '「何を学んだっけ…」'];
-const after = ['毎日コツコツ学習する', 'メモ程度でブログに残す', 'ふと振り返れる', '形になって、自信に繋がる'];
+type Step = { label: string; icon: string };
+type Panel = { key: string; heading: string; steps: Step[]; desc: string };
 
-const BOX_H = 44;
-const GAP = 26; // 箱と箱の間（矢印が入る）
+// アイコン（24×24 のマス目の手描き線）
+const ICONS: Record<string, string> = {
+	book: 'M2 5c4-2 7-2 10 1c3-3 6-3 10-1v15c-4-2-7-2-10 1c-3-3-6-3-10-1z M12 6v15',
+	wind: 'M2 8h13a3 3 0 1 0-3-3 M2 14h18a3 3 0 1 1-3 3 M2 20h8',
+	question: 'M8 8a4 4 0 1 1 6 3.5c-1.5.8-2 1.6-2 3.5 M12 20.5v.5',
+	pen: 'M15 3l6 6L9 21H3v-6z M12.5 5.5l6 6',
+	lookback: 'M4 12a8 8 0 1 0 2.5-5.8 M4 3v4h4 M12 8v4l3 2',
+	flat: 'M2 20h20 M6 20v-2 M11 20v-3 M16 20v-2',
+	sprout: 'M12 22v-10 M12 12c0-4-3-7-8-7c0 4 3 7 8 7z M12 15c0-4 3-7 8-7c0 4-3 7-8 7z',
+};
+
+const panels: Panel[] = [
+	{
+		key: 'before',
+		heading: '残さないと…',
+		steps: [
+			{ label: '毎日コツコツ学習する', icon: 'book' },
+			{ label: 'メモせず、そのまま', icon: 'wind' },
+			{ label: '「何を学んだっけ…」', icon: 'question' },
+			{ label: '積み重なった感じがしない', icon: 'flat' },
+		],
+		desc: '学習を残さない場合：毎日コツコツ学習する、メモせずそのまま、「何を学んだっけ…」、積み重なった感じがしない',
+	},
+	{
+		key: 'after',
+		heading: 'ブログに残すと',
+		steps: [
+			{ label: '毎日コツコツ学習する', icon: 'book' },
+			{ label: 'メモ程度でブログに残す', icon: 'pen' },
+			{ label: 'ふと振り返れる', icon: 'lookback' },
+			{ label: '形になって、自信に繋がる', icon: 'sprout' },
+		],
+		desc: 'ブログに残す場合：毎日コツコツ学習する、メモ程度でブログに残す、ふと振り返れる、形になって自信に繋がる',
+	},
+];
+
+const BOX_X = 20;
+const BOX_W = 260;
+const BOX_H = 48;
+const GAP = 30; // 箱と箱の間（矢印が入る）
 const TOP = 56;
-const height = (n: number) => TOP + n * BOX_H + (n - 1) * GAP + 16;
+const CX = 150;
 const y = (i: number) => TOP + i * (BOX_H + GAP);
-const H = height(after.length);
+const H = y(4) - GAP + 18; // 4段ぶんの高さ
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
 ---
 
 <figure class="lr-diagram">
 	<div class="lr-diagram__panels">
-		<svg
-			class="lr-panel lr-panel--before"
-			viewBox={`0 0 300 ${H}`}
-			role="img"
-			aria-labelledby="lr-before-title"
-		>
-			<title id="lr-before-title">
-				これまで：毎日コツコツ学習する、メモせずそのまま、「何を学んだっけ…」と積み重なった感じがしない
-			</title>
-			<text class="lr-heading" x="150" y="30" text-anchor="middle">… これまで</text>
-			{
-				before.map((label, i) => (
-					<g class:list={['lr-step', { 'lr-step--fade': i === before.length - 1 }]}>
-						{i > 0 && (
-							<path class="lr-arrow" d={`M150 ${y(i) - GAP + 4}V${y(i) - 6}M144 ${y(i) - 12}l6 6 6-6`} />
-						)}
-						<rect x="30" y={y(i)} width="240" height={BOX_H} rx="10" />
-						<text x="150" y={y(i) + BOX_H / 2} text-anchor="middle" dominant-baseline="central">
-							{label}
-						</text>
-					</g>
-				))
-			}
-		</svg>
+		{
+			panels.map((p) => (
+				<svg
+					class:list={['lr-panel', `lr-panel--${p.key}`]}
+					viewBox={`0 0 300 ${H}`}
+					role="img"
+					aria-labelledby={`lr-${p.key}-title`}
+				>
+					<title id={`lr-${p.key}-title`}>{p.desc}</title>
+					<defs>
+						<filter id={`lr-sketch-${p.key}`} x="-5%" y="-5%" width="110%" height="110%">
+							<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed={p.key === 'before' ? 5 : 9} />
+							<feDisplacementMap in="SourceGraphic" scale="3" />
+						</filter>
+					</defs>
 
-		<svg
-			class="lr-panel lr-panel--after"
-			viewBox={`0 0 300 ${H}`}
-			role="img"
-			aria-labelledby="lr-after-title"
-		>
-			<title id="lr-after-title">
-				これから：毎日コツコツ学習する、メモ程度でブログに残す、ふと振り返れる、形になって自信に繋がる
-			</title>
-			<text class="lr-heading" x="150" y="30" text-anchor="middle">✓ これから</text>
-			{
-				after.map((label, i) => (
-					<g class:list={['lr-step', { 'lr-step--goal': i === after.length - 1 }]}>
-						{i > 0 && (
-							<path class="lr-arrow" d={`M150 ${y(i) - GAP + 4}V${y(i) - 6}M144 ${y(i) - 12}l6 6 6-6`} />
-						)}
-						<rect x="30" y={y(i)} width="240" height={BOX_H} rx="10" />
-						<text x="150" y={y(i) + BOX_H / 2} text-anchor="middle" dominant-baseline="central">
-							{label}
-						</text>
+					{/* 線と図形（手描き風のゆらぎをかける） */}
+					<g filter={`url(#lr-sketch-${p.key})`}>
+						<rect class="lr-card" x="4" y="4" width="292" height={H - 8} rx="14" />
+						{p.steps.map((s, i) => (
+							<g class:list={['lr-step', { 'lr-step--last': i === p.steps.length - 1 }]}>
+								{i > 0 && <path class="lr-arrow" d={arrow(y(i) - GAP + 4, y(i) - 4)} />}
+								<rect x={BOX_X} y={y(i)} width={BOX_W} height={BOX_H} rx="10" />
+								<path class="lr-icon" transform={`translate(${BOX_X + 12} ${y(i) + 12})`} d={ICONS[s.icon]} />
+							</g>
+						))}
 					</g>
-				))
-			}
-		</svg>
+
+					{/* 文字（ゆらぎをかけない） */}
+					<text class="lr-heading" x="150" y="34" text-anchor="middle">
+						{p.heading}
+					</text>
+					{p.steps.map((s, i) => (
+						<text
+							class:list={['lr-label', { 'lr-label--last': i === p.steps.length - 1 }]}
+							x={BOX_X + 48}
+							y={y(i) + BOX_H / 2}
+							dominant-baseline="central"
+						>
+							{s.label}
+						</text>
+					))}
+				</svg>
+			))
+		}
 	</div>
 	<figcaption>学習を残さない場合と、ブログに残す場合の違い</figcaption>
 </figure>
@@ -83,63 +122,75 @@ const H = height(after.length);
 	.lr-panel {
 		display: block;
 		width: 100%;
+		max-width: 24rem;
 		height: auto;
-		border: 1px solid var(--c-line);
-		border-radius: var(--radius-md);
-		background: var(--c-surface-raised);
+		margin-inline: auto;
 		font-family: var(--font-body);
-		font-size: 15px;
+	}
+	.lr-card {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.2;
+	}
+	.lr-step rect {
+		fill: var(--c-bg);
+		stroke-width: 2;
+	}
+	.lr-icon,
+	.lr-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.lr-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
 	}
 	.lr-heading {
 		font-family: var(--font-heading);
 		font-size: 16px;
 		font-weight: 700;
 	}
-	.lr-step rect {
-		fill: var(--c-bg);
-		stroke-width: 1.5;
-	}
-	.lr-step text {
+	.lr-label {
 		fill: var(--c-text);
-	}
-	.lr-arrow {
-		fill: none;
-		stroke: var(--c-line-strong);
-		stroke-width: 2;
-		stroke-linecap: round;
-		stroke-linejoin: round;
+		font-size: 15px;
 	}
 
-	/* これまで：灰桜・点線（流れて消えていく） */
+	/* 残さない場合：グレーの点線（流れて消えていく） */
 	.lr-panel--before .lr-heading {
-		fill: var(--c-accent2);
+		fill: var(--c-text-sub);
 	}
-	.lr-panel--before rect {
+	.lr-panel--before .lr-step rect {
 		stroke: var(--c-line-strong);
-		stroke-dasharray: 5 4;
+		stroke-dasharray: 6 5;
 	}
 	.lr-panel--before .lr-arrow {
-		stroke-dasharray: 3 4;
+		stroke-dasharray: 3 5;
 	}
-	.lr-step--fade rect {
-		stroke: var(--c-accent2);
+	.lr-panel--before .lr-step--last .lr-icon {
+		stroke: var(--c-text-sub);
 	}
-	.lr-step--fade text {
+	.lr-panel--before .lr-label--last {
 		fill: var(--c-text-sub);
 	}
 
-	/* これから：青磁・実線（形に残る） */
+	/* ブログに残す場合：青磁の実線（形に残る） */
 	.lr-panel--after .lr-heading {
 		fill: var(--c-accent);
 	}
-	.lr-panel--after rect {
+	.lr-panel--after .lr-step rect {
 		stroke: var(--c-accent);
 	}
-	.lr-step--goal rect {
+	.lr-panel--after .lr-step--last rect {
 		fill: var(--c-accent-wash);
-		stroke-width: 2.5;
+		stroke-width: 2.6;
 	}
-	.lr-step--goal text {
+	.lr-panel--after .lr-step--last .lr-icon {
+		stroke: var(--c-accent);
+	}
+	.lr-panel--after .lr-label--last {
 		fill: var(--c-accent);
 		font-weight: 700;
 	}

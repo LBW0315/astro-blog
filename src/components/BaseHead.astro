@@ -23,10 +23,10 @@ const { title, description, image = FallbackImage } = Astro.props;
      ?v= の数字は、アイコンを作り直したときに増やす（ブラウザに保存された古いアイコンを使わせないため） -->
 <link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4" />
 <!-- ホーム画面に追加したときの名前（iPhone）と、アプリとしての情報（Android など） -->
 <meta name="apple-mobile-web-app-title" content={SITE_TITLE} />
-<link rel="manifest" href="/site.webmanifest?v=3" />
+<link rel="manifest" href="/site.webmanifest?v=4" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={new URL('rss.xml', Astro.site)} />
 <meta name="generator" content={Astro.generator} />

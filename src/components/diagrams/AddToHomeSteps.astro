@@ -1,0 +1,185 @@
+---
+/*
+  記事「ホーム画面のアイコンが「ブ」だったので、マグのアイコンを作った話」専用の図解
+  ホーム画面に追加する手順（スクリーンショットではなく、簡単なスマホのイラスト）
+
+  - 手順の文章は HTML の番号付きリストに書くので、読み上げでも順番がわかる。イラストは飾り扱い
+  - タップする場所は、青磁の輪（丸・角丸）で囲む
+  - スマホの外形とメニューの線には手描き風のゆらぎをかける。アイコンと輪にはかけない
+  - 実在のアプリの画面や写真は描かない
+*/
+import { appIcon } from './iconDrawings';
+
+interface Props {
+	platform: 'ios' | 'android';
+}
+const { platform } = Astro.props;
+
+const fid = `aths-${platform}`;
+const soft = 'fill:none;stroke:var(--c-line-strong);stroke-linecap:round;stroke-linejoin:round';
+const panel = 'fill:var(--c-bg);stroke:var(--c-line-strong);stroke-width:1.5';
+const ring = 'fill:none;stroke:var(--c-accent);stroke-width:3';
+
+const phone = (inner: string, marks = '') => `
+	<g filter="url(#${fid})">
+		<rect x="12" y="6" width="96" height="188" rx="16" style="fill:var(--c-surface-raised);stroke:var(--c-text);stroke-width:2.5"/>
+		${inner}
+	</g>
+	${marks}`;
+const pageLines = (y: number) =>
+	`<path d="M26 ${y}h56M26 ${y + 14}h68M26 ${y + 28}h48" style="${soft};stroke-width:3"/>`;
+const icon = (x: number, y: number, size: number, id: string) =>
+	`<g transform="translate(${x} ${y}) scale(${size / 180})">${appIcon(id)}</g>`;
+
+const steps: Record<Props['platform'], { text: string; art: string }[]> = {
+	ios: [
+		{
+			text: 'Safariでこのブログを開き、アドレスバーの横の「…」をタップ',
+			art: phone(
+				`${pageLines(40)}<rect x="20" y="162" width="80" height="22" rx="11" style="${panel};fill:var(--c-surface)"/>`,
+				`<g style="fill:var(--c-text)"><circle cx="85" cy="173" r="1.8"/><circle cx="90" cy="173" r="1.8"/><circle cx="95" cy="173" r="1.8"/></g>
+				<circle cx="90" cy="173" r="11" style="${ring}"/>`,
+			),
+		},
+		{
+			text: 'メニューの「共有」をタップ',
+			art: phone(
+				`${pageLines(40)}<rect x="38" y="84" width="64" height="72" rx="8" style="${panel}"/>
+				<path d="M48 98h40M48 114h40M48 130h40M48 146h40" style="${soft};stroke-width:3"/>
+				<rect x="20" y="162" width="80" height="22" rx="11" style="${panel};fill:var(--c-surface)"/>`,
+				`<rect x="42" y="121" width="56" height="18" rx="9" style="${ring}"/>`,
+			),
+		},
+		{
+			text: '下にスクロールして「ホーム画面に追加」をタップ',
+			art: phone(
+				`<rect x="16" y="80" width="88" height="110" rx="12" style="${panel}"/>
+				<g style="${soft};stroke-width:1.5"><circle cx="34" cy="98" r="7"/><circle cx="56" cy="98" r="7"/><circle cx="78" cy="98" r="7"/></g>
+				<path d="M28 122h48M28 140h48M28 158h40M28 176h48" style="${soft};stroke-width:3"/>
+				<g style="${soft};stroke:var(--c-text);stroke-width:1.5"><rect x="83" y="152" width="12" height="12" rx="3"/><path d="M89 155v6M86 158h6"/></g>`,
+				`<rect x="21" y="148" width="80" height="20" rx="10" style="${ring}"/>`,
+			),
+		},
+		{
+			text: '名前が「BUNBOU」になっていることを確認して「追加」をタップ',
+			art: phone(
+				`<rect x="16" y="18" width="88" height="96" rx="12" style="${panel}"/>
+				<path d="M28 88h60M28 100h44" style="${soft};stroke-width:3"/>
+				<rect x="76" y="26" width="22" height="12" rx="6" style="fill:var(--c-accent)"/>`,
+				`${icon(26, 46, 30, `${fid}-4`)}
+				<path d="M64 60h30" style="fill:none;stroke:var(--c-text);stroke-width:3;stroke-linecap:round"/>
+				<circle cx="87" cy="32" r="12" style="${ring}"/>`,
+			),
+		},
+	],
+	android: [
+		{
+			text: 'Chromeでこのブログを開き、右上の「⋮」をタップ',
+			art: phone(
+				`<rect x="20" y="18" width="68" height="18" rx="9" style="${panel};fill:var(--c-surface)"/>${pageLines(56)}`,
+				`<g style="fill:var(--c-text)"><circle cx="98" cy="22" r="1.8"/><circle cx="98" cy="27" r="1.8"/><circle cx="98" cy="32" r="1.8"/></g>
+				<circle cx="98" cy="27" r="10" style="${ring}"/>`,
+			),
+		},
+		{
+			text: 'メニューの「ホーム画面に追加」をタップ',
+			art: phone(
+				`${pageLines(56)}<rect x="44" y="22" width="60" height="112" rx="8" style="${panel}"/>
+				<path d="M54 38h38M54 54h38M54 70h38M54 86h38M54 102h38M54 118h38" style="${soft};stroke-width:3"/>`,
+				`<rect x="48" y="77" width="52" height="18" rx="9" style="${ring}"/>`,
+			),
+		},
+		{
+			text: '「ショートカットを作成」を選んで「追加」をタップ',
+			art: phone(
+				`${pageLines(40)}<rect x="18" y="72" width="84" height="76" rx="10" style="${panel}"/>
+				<path d="M52 90h40M52 102h28" style="${soft};stroke-width:3"/>
+				<rect x="68" y="126" width="26" height="12" rx="6" style="fill:var(--c-accent)"/>`,
+				`${icon(26, 82, 22, `${fid}-3`)}
+				<rect x="63" y="121" width="36" height="22" rx="11" style="${ring}"/>`,
+			),
+		},
+		{
+			text: 'ホーム画面に、マグのアイコンが追加される',
+			art: phone(
+				`<g style="${soft};stroke-width:1.5;stroke-dasharray:4 3">
+					<rect x="26" y="36" width="20" height="20" rx="5"/><rect x="50" y="36" width="20" height="20" rx="5"/><rect x="74" y="36" width="20" height="20" rx="5"/>
+					<rect x="26" y="70" width="20" height="20" rx="5"/><rect x="50" y="70" width="20" height="20" rx="5"/><rect x="74" y="70" width="20" height="20" rx="5"/>
+				</g>`,
+				`${icon(44, 110, 32, `${fid}-4`)}
+				<rect x="38" y="104" width="44" height="44" rx="13" style="${ring}"/>`,
+			),
+		},
+	],
+};
+---
+
+<figure class="aths">
+	<svg class="aths__defs" width="0" height="0" aria-hidden="true">
+		<filter id={fid} x="-5%" y="-5%" width="110%" height="110%">
+			<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed={platform === 'ios' ? 2 : 6} />
+			<feDisplacementMap in="SourceGraphic" scale="3" />
+		</filter>
+	</svg>
+	<ol class="aths__steps">
+		{
+			steps[platform].map((s, i) => (
+				<li class="aths__step">
+					<svg viewBox="0 0 120 200" aria-hidden="true">
+						<Fragment set:html={s.art} />
+					</svg>
+					<p>
+						<span class="aths__num">{i + 1}</span>
+						{s.text}
+					</p>
+				</li>
+			))
+		}
+	</ol>
+	<figcaption>
+		{platform === 'ios' ? 'iPhone（Safari）でホーム画面に追加する手順' : 'Android（Chrome）でホーム画面に追加する手順'}
+	</figcaption>
+</figure>
+
+<style>
+	.aths__defs {
+		position: absolute;
+		width: 0;
+		height: 0;
+	}
+	.aths__steps {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+		gap: var(--sp-4);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.aths__step {
+		margin: 0;
+	}
+	.aths__step svg {
+		display: block;
+		width: 100%;
+		max-width: 7.5rem;
+		height: auto;
+		margin-inline: auto;
+	}
+	.aths__step p {
+		margin: var(--sp-2) 0 0;
+		font-size: var(--fs-sm);
+		line-height: 1.6;
+	}
+	.aths__num {
+		display: inline-grid;
+		place-items: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		margin-right: var(--sp-1);
+		border-radius: var(--radius-pill);
+		background: var(--c-accent);
+		color: var(--c-on-accent);
+		font-size: var(--fs-xs);
+		font-weight: 700;
+	}
+</style>

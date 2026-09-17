@@ -1,0 +1,138 @@
+---
+title: 'ホーム画面のアイコンが「ブ」だったので、マグのアイコンを作った話'
+description: 'ブラウザのタブはAstroのロゴ、iPhoneのホーム画面は「ブ」の1文字。16pxに入る好きなものを探して、BUNBOUらしいマグのアイコンを作りました。'
+pubDate: 2026-09-17
+category: tech
+---
+
+import Callout from '../../components/Callout.astro';
+import IconBeforeAfter from '../../components/diagrams/IconBeforeAfter.astro';
+import IconCandidates from '../../components/diagrams/IconCandidates.astro';
+import AddToHomeSteps from '../../components/diagrams/AddToHomeSteps.astro';
+
+## はじめに：タブのアイコンがAstroのロゴのままだった
+
+ふとブラウザのタブを見たら、アイコンがAstroのロゴのままでした。Astroで作っているので間違いではないのですが、自分のブログなのに、なんかやだった。
+
+<IconBeforeAfter kind="tab" />
+
+## iPhoneのホーム画面では「ブ」になった
+
+さらに、iPhoneでホーム画面に追加してみたら、アイコンが「ブ」の1文字。名前も「ブンのデジタル書…」で切れていて、正直ダサかった。
+
+アイコンが設定されていないと、iPhoneがサイト名の頭文字で勝手に作るらしいです。名前のほうは、ページのタイトル（`<title>`）の「ブンのデジタル書斎 | BUNBOU」が使われて、途中で切れていました。
+
+<IconBeforeAfter kind="home" />
+
+## 好きなものが多すぎる問題
+
+アイコンを作ろうと決めたものの、ここで悩みました。好きなものが多すぎるんです。
+
+- ブログ
+- エンジニア
+- 万年筆
+- メガネ
+- カメラ
+- コーヒー
+- デジタル秘密基地・書斎
+
+でも、タブのアイコンは16pxしかありません。**16pxには、1つのモチーフしか入らない。**
+
+そこで、B、文、丸メガネ、ペン先、鍵穴、キーボード、ノートPCなど、いろいろ描いて小さいサイズで見比べました。
+
+<IconCandidates />
+
+見比べてわかったのは、**凝ったデザインほど、16pxだと潰れる**ということです。大きいサイズでは良さそうに見えても、タブの大きさまで縮めると、何の絵かわからなくなりました。
+
+<IconBeforeAfter kind="small" />
+
+## 決めたこと：サイズで絵を変えて、マグでそろえる
+
+### タブ用：線を太くしたコーヒーマグ
+
+湯気2本と、青磁（緑）の帯。線を太くして、16pxでもマグだとわかるようにしました。
+
+### ホーム画面用：マグと万年筆
+
+ホーム画面のアイコンは180pxあるので、もう1つ好きなものを入れられます。
+
+最初は、マグをペン立てにして、万年筆を挿したデザインにしました。ただ、飲み物を入れるマグに文房具を入れるのは、ちょっと気が引ける……。そこで、マグの手前に万年筆を置くデザインに変えました。
+
+### 絵は変えても、マグの形と色は同じ
+
+サイズで絵を変えても、同じマグの形と色にして統一感を出しました。ホーム画面の名前は「BUNBOU」にして、切れないようにしています。
+
+## やったこと（技術的な話）
+
+やったことは、次の4つです。
+
+- **`favicon.svg` を差し替え**：ブラウザのタブのアイコン
+- **`apple-touch-icon.png`（180px）を追加**：iPhoneのホーム画面のアイコン
+- **`apple-mobile-web-app-title` を指定**：iPhoneのホーム画面での名前
+- **`site.webmanifest` を作成**：Android向けの名前とアイコン（192px・512px）
+
+`<head>` には、次のように書いています。
+
+```html
+<link rel="icon" href="/favicon.ico?v=2" sizes="32x32" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4" />
+<meta name="apple-mobile-web-app-title" content="BUNBOU" />
+<link rel="manifest" href="/site.webmanifest?v=4" />
+```
+
+`site.webmanifest` の中身は、こんな感じです。
+
+```json
+{
+	"name": "BUNBOU",
+	"short_name": "BUNBOU",
+	"start_url": "/",
+	"display": "browser",
+	"theme_color": "#faf8f5",
+	"background_color": "#faf8f5",
+	"icons": [
+		{ "src": "/icon-192.png?v=4", "sizes": "192x192", "type": "image/png" },
+		{ "src": "/icon-512.png?v=4", "sizes": "512x512", "type": "image/png" }
+	]
+}
+```
+
+<Callout type="warning" title="iPhoneはアイコンを覚えてしまう">
+	アイコンを変えても、すでにホーム画面にあるアイコンは変わりませんでした。一度ホーム画面から削除して、追加し直す必要がありました。
+</Callout>
+
+<Callout type="tip" title="ファイル名の後ろの「?v=4」">
+	ブラウザもアイコンを覚えてしまうので、URLの後ろに番号を付けて、新しいファイルとして読み込ませています。アイコンを作り直したら、番号を増やします。
+</Callout>
+
+## Astroだと、ここまで作り込める
+
+アイコンまわりを、ほかのサービスとも比べてみました。
+
+| サービス | タブ・ホーム画面のアイコン |
+| --- | --- |
+| Zenn・Qiita | 個人の記事では、サービスのアイコン |
+| note | 基本はnoteのアイコン。法人向けの「note pro」で独自ドメインを設定すると、ロゴとファビコンを差し替えられる |
+| WordPress | 「サイトアイコン」に正方形の画像（512px以上が推奨）を1枚設定する。テーマやプラグインで、さらに細かく設定することもできる |
+| Astro | ファイルを置いて、`<head>` に自分で書く。サイズごとの絵も、ホーム画面の名前も自由に決められる |
+
+Zenn・Qiita・noteは、書くことに集中できる、とても便利なサービスです。そのぶん、アイコンは基本的にサービスのものになります（Zenn・Qiitaの組織向けの有料プランなどで変えられるかは、今回は確認できていません）。WordPressもサイトアイコンは設定できますが、基本は画像1枚です。
+
+Astroは、サイズごとに絵を変えたり、ホーム画面の名前を指定したり、細かいところまで自分で作り込めます。自分の書斎を自分で作っている感じがして、楽しいです。
+
+## ぜひホーム画面に追加してみてください！
+
+ぜひホーム画面に追加して、マグのアイコンを見てほしいです！
+
+### iPhone（Safari）
+
+<AddToHomeSteps platform="ios" />
+
+### Android（Chrome）
+
+<AddToHomeSteps platform="android" />
+
+<Callout type="note">
+	iOS・Androidやブラウザのバージョンによって、メニューの場所や名前が変わることがあります。たとえばiOS 26では、「追加」の画面に「Webアプリとして開く」のスイッチが出ます。Android版Chromeでは、「ショートカットを作成」ではなく「インストール」と表示されることもあります。
+</Callout>

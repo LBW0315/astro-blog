@@ -1,0 +1,87 @@
+---
+/*
+  記事「ホーム画面のアイコンが「ブ」だったので、マグのアイコンを作った話」専用の図解
+  候補として描いたアイコンを、大きいサイズ（64px）と実寸（16px）で並べる
+
+  - 名前は画面の文字（HTML）で書くので、読み上げでもわかる。アイコンの絵は飾り扱い（aria-hidden）
+  - 採用したマグだけ、青磁の実線の枠＋「○ 採用」のラベルで区別する
+  - アイコンは実際の見た目を比べるためのものなので、手描き風のゆらぎはかけない
+*/
+import { candidateIcon } from './iconDrawings';
+
+const items = [
+	{ key: 'b', label: 'B' },
+	{ key: 'bun', label: '文' },
+	{ key: 'glasses', label: '丸メガネ' },
+	{ key: 'nib', label: 'ペン先' },
+	{ key: 'keyhole', label: '鍵穴' },
+	{ key: 'keyboard', label: 'キーボード' },
+	{ key: 'laptop', label: 'ノートPC' },
+	{ key: 'mug', label: 'コーヒーマグ', chosen: true },
+];
+---
+
+<figure class="ic">
+	<ul class="ic__grid">
+		{
+			items.map((it) => (
+				<li class:list={['ic__item', { 'ic__item--chosen': it.chosen }]}>
+					<div class="ic__icons">
+						<svg viewBox="0 0 32 32" width="64" height="64" aria-hidden="true">
+							<Fragment set:html={candidateIcon(it.key, `ic-${it.key}-64`)} />
+						</svg>
+						<svg viewBox="0 0 32 32" width="16" height="16" aria-hidden="true">
+							<Fragment set:html={candidateIcon(it.key, `ic-${it.key}-16`)} />
+						</svg>
+					</div>
+					<p class="ic__label">
+						{it.label}
+						{it.chosen && <span class="ic__badge">○ 採用</span>}
+					</p>
+				</li>
+			))
+		}
+	</ul>
+	<figcaption>候補として描いたアイコン（左が64px、右が実寸の16px）</figcaption>
+</figure>
+
+<style>
+	.ic__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+		gap: var(--sp-3);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.ic__item {
+		margin: 0;
+		padding: var(--sp-3);
+		border: 1px dashed var(--c-line-strong);
+		border-radius: var(--radius-md);
+		background: var(--c-surface-raised);
+	}
+	.ic__item--chosen {
+		border: 2px solid var(--c-accent);
+		background: var(--c-accent-wash);
+	}
+	.ic__icons {
+		display: flex;
+		align-items: end;
+		gap: var(--sp-3);
+	}
+	.ic__icons svg {
+		display: block;
+	}
+	.ic__label {
+		margin: var(--sp-2) 0 0;
+		font-size: var(--fs-sm);
+		line-height: 1.5;
+	}
+	.ic__badge {
+		display: inline-block;
+		margin-left: var(--sp-2);
+		color: var(--c-accent);
+		font-weight: 700;
+	}
+</style>

@@ -1,0 +1,194 @@
+---
+/*
+  記事「ホーム画面のアイコンが「ブ」だったので、マグのアイコンを作った話」専用の図解
+  Before / After を左右（狭い画面では上下）に並べる。3種類とも同じ枠・同じ配置
+
+  kind：
+  - tab   … ブラウザのタブ
+  - home  … iPhone のホーム画面
+  - small … 16px で潰れる問題
+
+  見た目のルール（色だけで区別しない）：
+  - Before：くすんだグレーの点線の枠＋「× Before」
+  - After：青磁の実線の枠＋「○ After」
+  手描き風のゆらぎは枠・タブ・画面・矢印だけにかけ、アイコンと文字にはかけない
+*/
+import { appIcon, defaultLogo, faviconMug, laptopCoffee, letterIcon } from './iconDrawings';
+
+interface Props {
+	kind: 'tab' | 'home' | 'small';
+}
+const { kind } = Astro.props;
+
+type Side = { art: string; caption: string; desc: string };
+
+// 手描き風のフィルターを参照する id（パネルごと）
+const fid = (side: string) => `iba-${kind}-${side}`;
+const sketchLine = 'fill:none;stroke:var(--c-line-strong);stroke-width:2;stroke-linecap:round;stroke-linejoin:round';
+
+// ----- ブラウザのタブ -----
+const tab = (side: string, icon: string) => `
+	<g filter="url(#${fid(side)})">
+		<path d="M16 132H284" style="${sketchLine}"/>
+		<path d="M20 132q8 0 8-8V84q0-12 12-12h220q12 0 12 12v40q0 8 8 8" style="${sketchLine};fill:var(--c-bg)"/>
+	</g>
+	<g transform="translate(40 90) scale(0.8125)">${icon}</g>
+	<text x="74" y="103" dominant-baseline="central" style="fill:var(--c-text);font-size:15px">プロフィール | BUNBOU</text>`;
+
+// ----- iPhone のホーム画面（ほかのアプリは空白の四角） -----
+const home = (side: string, icon: string, name: string, strong: boolean) => `
+	<g filter="url(#${fid(side)})">
+		<rect x="66" y="52" width="168" height="124" rx="18" style="${sketchLine};fill:var(--c-surface)"/>
+		<g style="${sketchLine};stroke-width:1.5;stroke-dasharray:4 3">
+			<rect x="96" y="60" width="26" height="26" rx="6"/>
+			<rect x="137" y="60" width="26" height="26" rx="6"/>
+			<rect x="178" y="60" width="26" height="26" rx="6"/>
+		</g>
+	</g>
+	<g transform="translate(124 94)">${icon}</g>
+	<text x="150" y="160" text-anchor="middle" dominant-baseline="central" style="fill:var(${strong ? '--c-text' : '--c-text-sub'});font-size:14px;${strong ? 'font-weight:700' : ''}">${name}</text>`;
+
+// ----- 16px で潰れる問題（大きいサイズ → 16px） -----
+const small = (side: string, draw: (id: string) => string) => `
+	<g transform="translate(36 52) scale(3)">${draw(`${fid(side)}-big`)}</g>
+	<g filter="url(#${fid(side)})"><path d="M146 100h40m-8-6l8 6-8 6" style="${sketchLine}"/></g>
+	<g transform="translate(212 92) scale(0.5)">${draw(`${fid(side)}-small`)}</g>
+	<text x="84" y="168" text-anchor="middle" style="fill:var(--c-text-sub);font-size:14px">大きいサイズ</text>
+	<text x="220" y="168" text-anchor="middle" style="fill:var(--c-text-sub);font-size:14px">16px</text>`;
+
+const data: Record<Props['kind'], { before: Side; after: Side; caption: string }> = {
+	tab: {
+		before: {
+			art: tab('before', defaultLogo()),
+			caption: 'Astroのロゴのまま',
+			desc: 'Before：ブラウザのタブ「プロフィール | BUNBOU」のアイコンが、Astroのロゴのまま',
+		},
+		after: {
+			art: tab('after', faviconMug(`${fid('after')}-mug`)),
+			caption: 'コーヒーマグのアイコンに',
+			desc: 'After：同じタブのアイコンが、湯気の立つコーヒーマグに変わった',
+		},
+		caption: 'ブラウザのタブのアイコン',
+	},
+	home: {
+		before: {
+			art: home('before', letterIcon(), 'ブンのデジタル書…', false),
+			caption: '「ブ」の1文字、名前も切れる',
+			desc: 'Before：iPhoneのホーム画面で、アイコンが暗い背景に「ブ」の1文字、名前が「ブンのデジタル書…」で切れている',
+		},
+		after: {
+			art: home('after', `<g transform="scale(${52 / 180})">${appIcon(`${fid('after')}-app`)}</g>`, 'BUNBOU', true),
+			caption: 'マグと万年筆、名前もすっきり',
+			desc: 'After：アイコンがマグと万年筆の絵になり、名前が「BUNBOU」ですっきり表示されている',
+		},
+		caption: 'iPhoneでホーム画面に追加したときの見た目',
+	},
+	small: {
+		before: {
+			art: small('before', () => laptopCoffee()),
+			caption: '16pxだと潰れてわからない',
+			desc: 'Before：ノートPCとコーヒーの凝ったアイコンは、16pxに縮めると線が潰れて何の絵かわからない',
+		},
+		after: {
+			art: small('after', (id) => faviconMug(id)),
+			caption: '16pxでもマグとわかる',
+			desc: 'After：線を太くしたマグのアイコンは、16pxに縮めてもマグだとわかる',
+		},
+		caption: '凝ったデザインと、線を太くしたマグを16pxに縮めて比べた',
+	},
+};
+
+const { before, after, caption } = data[kind];
+const panels = [
+	{ side: 'before', label: '× Before', ...before },
+	{ side: 'after', label: '○ After', ...after },
+];
+---
+
+<figure class="iba">
+	<div class="iba__panels">
+		{
+			panels.map((p) => (
+				<svg class:list={['iba-panel', `iba-panel--${p.side}`]} viewBox="0 0 300 220" role="img" aria-label={p.desc}>
+					<defs>
+						<filter id={fid(p.side)} x="-5%" y="-5%" width="110%" height="110%">
+							<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed={p.side === 'before' ? 4 : 8} />
+							<feDisplacementMap in="SourceGraphic" scale="3" />
+						</filter>
+					</defs>
+					<g filter={`url(#${fid(p.side)})`}>
+						<rect class="iba-card" x="4" y="4" width="292" height="212" rx="14" />
+						<rect class="iba-pill" x="16" y="16" width="100" height="28" rx="14" />
+					</g>
+					<text class="iba-label" x="66" y="30" text-anchor="middle" dominant-baseline="central">
+						{p.label}
+					</text>
+					<Fragment set:html={p.art} />
+					<text class="iba-caption" x="150" y="200" text-anchor="middle">
+						{p.caption}
+					</text>
+				</svg>
+			))
+		}
+	</div>
+	<figcaption>{caption}</figcaption>
+</figure>
+
+<style>
+	.iba__panels {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+		gap: var(--sp-4);
+	}
+	.iba-panel {
+		display: block;
+		width: 100%;
+		max-width: 24rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.iba-card {
+		fill: var(--c-surface-raised);
+		stroke-width: 2;
+	}
+	.iba-pill {
+		stroke-width: 1.5;
+	}
+	.iba-label {
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.iba-caption {
+		font-size: 15px;
+		font-weight: 700;
+	}
+
+	/* Before：くすんだグレーの点線 */
+	.iba-panel--before .iba-card {
+		stroke: var(--c-line-strong);
+		stroke-dasharray: 7 5;
+	}
+	.iba-panel--before .iba-pill {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+	}
+	.iba-panel--before .iba-label,
+	.iba-panel--before .iba-caption {
+		fill: var(--c-text-sub);
+	}
+
+	/* After：青磁の実線 */
+	.iba-panel--after .iba-card {
+		stroke: var(--c-accent);
+	}
+	.iba-panel--after .iba-pill {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.iba-panel--after .iba-label,
+	.iba-panel--after .iba-caption {
+		fill: var(--c-accent);
+	}
+</style>

@@ -1,0 +1,173 @@
+---
+/*
+  記事「noteでもWordPressでもなく、Astro + S3 + CloudFrontでブログを書く理由」専用の図解
+  AWS の構成図（手描き風）
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、線と図形だけにかけています。
+  文字にはかけないので、読みやすさは変わりません。
+
+  色だけで区別しないように、次の組み合わせにしています。
+  - できている部分：青磁の実線
+  - これからの部分：灰桜の点線＋「これから」のラベル
+*/
+type Row = { y: number; title: string; sub: string; icon: string; planned?: boolean };
+
+const BOX_X = 40;
+const BOX_W = 210;
+const BOX_H = 56;
+const CX = 145; // 矢印の横位置
+
+const rows: Row[] = [
+	{ y: 14, title: 'ブラウザ', sub: '記事を読む人', icon: 'browser' },
+	{ y: 106, title: 'Route 53', sub: 'ドメイン・DNS', icon: 'globe', planned: true },
+	{ y: 198, title: 'CloudFront', sub: '配信（CDN）', icon: 'cloud' },
+	{ y: 310, title: 'S3', sub: '記事のHTMLを置く', icon: 'bucket' },
+];
+
+// アイコン（28×28 のマス目の手描き線）
+const ICONS: Record<string, string> = {
+	browser: 'M1 3h26v22H1z M1 9h26 M5 6h.5 M9 6h.5',
+	globe: 'M14 2a12 12 0 1 0 0 24a12 12 0 1 0 0-24z M14 2c-7 7-7 17 0 24 M14 2c7 7 7 17 0 24 M2 14h24',
+	cloud: 'M7 22h15a5 5 0 0 0 0-10a7 7 0 0 0-13-2a6 6 0 0 0-2 12z',
+	bucket: 'M3 7l3 18h16l3-18 M3 7c0 4 22 4 22 0c0-4-22-4-22 0z',
+	key: 'M8 9a5 5 0 1 0 0 10a5 5 0 1 0 0-10z M13 14h13 M22 14v5 M26 14v4',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 380;
+---
+
+<figure class="aws-arch">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="aws-arch-title aws-arch-desc">
+		<title id="aws-arch-title">このブログのAWS構成図</title>
+		<desc id="aws-arch-desc">
+			読む人のブラウザから、Route 53（ドメイン・DNS、これから）、CloudFront（配信）を通り、OACでCloudFrontからだけ許可されたS3（記事のHTMLを置く場所）に届く。CloudFrontにはus-east-1で発行するACM証明書（これから）を付ける。
+		</desc>
+		<defs>
+			<filter id="aws-arch-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g class="sk-shapes" filter="url(#aws-arch-sketch)">
+			{
+				rows.map((r) => (
+					<g class:list={['sk-box', { 'sk-box--planned': r.planned }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="sk-icon" transform={`translate(${BOX_X + 14} ${r.y + 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="sk-arrow" d={arrow(74, 102)} />
+			<path class="sk-arrow" d={arrow(166, 194)} />
+			<path class="sk-arrow" d={arrow(258, 306)} />
+
+			<!-- ACM 証明書（CloudFront に付ける） -->
+			<g class="sk-box sk-box--planned">
+				<path class="sk-link" d="M250 226h18" />
+				<rect x="268" y="190" width="84" height="84" rx="10" />
+				<path class="sk-icon" transform="translate(296 200)" d={ICONS.key} />
+			</g>
+
+			<!-- OAC の鍵 -->
+			<path class="sk-icon sk-icon--oac" transform="translate(158 268)" d="M1 12h18v14H1z M5 12V8a5 5 0 0 1 10 0v4" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g class="sk-label">
+					<text class="sk-title" x={BOX_X + 56} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class="sk-sub" x={BOX_X + 56} y={r.y + 44}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+		<text class="sk-title sk-title--sm" x="310" y="246" text-anchor="middle">ACM証明書</text>
+		<text class="sk-sub" x="310" y="264" text-anchor="middle">us-east-1</text>
+		<text class="sk-title sk-title--sm" x="184" y="282">OAC</text>
+		<text class="sk-sub" x="184" y="299">CloudFrontからだけ許可</text>
+
+		<!-- 「これから」ラベル -->
+		{
+			[
+				{ x: 180, y: 96 },
+				{ x: 282, y: 180 },
+			].map((t) => (
+				<g class="sk-tag">
+					<rect x={t.x} y={t.y} width="64" height="21" rx="10.5" />
+					<text x={t.x + 32} y={t.y + 11} text-anchor="middle" dominant-baseline="central">
+						これから
+					</text>
+				</g>
+			))
+		}
+	</svg>
+	<figcaption>このブログのAWS構成（点線は、これから作る部分）</figcaption>
+</figure>
+
+<style>
+	.aws-arch svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.sk-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.sk-box--planned rect {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 7 5;
+	}
+	.sk-icon,
+	.sk-arrow,
+	.sk-link {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.sk-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.sk-link {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 4 4;
+	}
+	.sk-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.sk-title--sm {
+		font-size: 14px;
+	}
+	.sk-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.sk-tag rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.sk-tag text {
+		fill: var(--c-accent2);
+		font-size: 13px;
+		font-weight: 700;
+	}
+</style>

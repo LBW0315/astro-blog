@@ -124,6 +124,10 @@
 	border-bottom: 1px solid var(--c-line);
 	text-align: left;
 }
+/* 1列目は行の見出しになることが多いので、狭い画面でも1文字ずつ折り返さない */
+.prose td:first-child {
+	white-space: nowrap;
+}
 .prose th {
 	border-bottom: 2px solid var(--c-line-strong);
 	font-weight: 700;

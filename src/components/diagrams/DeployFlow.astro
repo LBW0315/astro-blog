@@ -1,0 +1,168 @@
+---
+/*
+  記事「noteでもWordPressでもなく、Astro + S3 + CloudFrontでブログを書く理由」専用の図解
+  記事を書いてから公開されるまでの流れ（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - できている部分：青磁の実線
+  - これからの部分（GitHub Actions）：灰桜の点線の枠＋「これから」のラベル
+*/
+type Row = { y: number; title: string; sub: string; icon: string; planned?: boolean };
+
+const BOX_X = 44;
+const BOX_W = 272;
+const BOX_H = 52;
+const CX = 180;
+
+const rows: Row[] = [
+	{ y: 14, title: '記事を書く', sub: 'Markdownファイル', icon: 'doc' },
+	{ y: 96, title: 'git push', sub: 'GitHubへ送る', icon: 'push' },
+	{ y: 210, title: 'Astro build', sub: 'HTMLを作る', icon: 'box', planned: true },
+	{ y: 292, title: 'S3 sync', sub: 'S3にアップロード', icon: 'bucket', planned: true },
+	{ y: 374, title: 'CloudFront invalidation', sub: '古いキャッシュを消す', icon: 'refresh', planned: true },
+];
+
+const ICONS: Record<string, string> = {
+	doc: 'M5 1h12l6 6v20H5z M17 1v6h6 M9 14h10 M9 19h10 M9 24h6',
+	push: 'M14 19V3 M8 9l6-6 6 6 M3 17v8h22v-8',
+	box: 'M3 8l11-6 11 6v13l-11 6-11-6z M3 8l11 6 11-6 M14 14v13',
+	bucket: 'M3 7l3 18h16l3-18 M3 7c0 4 22 4 22 0c0-4-22-4-22 0z',
+	refresh: 'M24 11A10 10 0 0 0 6 7 M5 2v5h5 M4 17a10 10 0 0 0 18 4 M23 26v-5h-5',
+	server: 'M2 2h24v10H2z M2 16h24v10H2z M6 7h.5 M6 21h.5',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 510;
+---
+
+<figure class="deploy-flow">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="deploy-flow-title deploy-flow-desc">
+		<title id="deploy-flow-title">記事を書いてから公開されるまでの流れ</title>
+		<desc id="deploy-flow-desc">
+			記事をMarkdownで書き、git pushでGitHubへ送る。そのあとGitHub Actions（これから作る）が、Astro buildでHTMLを作り、S3 syncでS3にアップロードし、CloudFront invalidationで古いキャッシュを消す。サーバは存在しない。
+		</desc>
+		<defs>
+			<filter id="deploy-flow-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#deploy-flow-sketch)">
+			<!-- GitHub Actions のまとまり -->
+			<rect class="df-group" x="20" y="170" width="320" height="272" rx="16" />
+			{
+				rows.map((r) => (
+					<g class:list={['df-box', { 'df-box--planned': r.planned }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="df-icon" transform={`translate(${BOX_X + 14} ${r.y + 12})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="df-arrow" d={arrow(70, 92)} />
+			<path class="df-arrow" d={arrow(152, 206)} />
+			<path class="df-arrow" d={arrow(266, 288)} />
+			<path class="df-arrow" d={arrow(348, 370)} />
+
+			<!-- サーバは存在しない（サーバの絵に打ち消し線） -->
+			<path class="df-icon df-icon--faint" transform="translate(92 466)" d={ICONS.server} />
+			<path class="df-strike" d="M88 498L124 462" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="df-group-label" x="36" y="194">GitHub Actions</text>
+		{
+			rows.map((r) => (
+				<g>
+					<text class="df-title" x={BOX_X + 56} y={r.y + 22}>
+						{r.title}
+					</text>
+					<text class="df-sub" x={BOX_X + 56} y={r.y + 41}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+		<text class="df-note" x="136" y="486">サーバは存在しません</text>
+
+		<!-- 「これから」ラベル -->
+		<g class="df-tag">
+			<rect x="262" y="159" width="64" height="21" rx="10.5" />
+			<text x="294" y="170" text-anchor="middle" dominant-baseline="central">これから</text>
+		</g>
+	</svg>
+	<figcaption>記事を書いてから公開されるまでの流れ（点線の枠は、これから自動化する部分）</figcaption>
+</figure>
+
+<style>
+	.deploy-flow svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.df-group {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.df-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.df-box--planned rect {
+		stroke: var(--c-line-strong);
+		stroke-dasharray: 6 5;
+	}
+	.df-icon,
+	.df-arrow,
+	.df-strike {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.df-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.df-icon--faint {
+		stroke: var(--c-text-sub);
+	}
+	.df-strike {
+		stroke-width: 2.4;
+	}
+	.df-title,
+	.df-group-label,
+	.df-note {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.df-group-label {
+		fill: var(--c-accent2);
+	}
+	.df-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.df-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.df-tag text {
+		fill: var(--c-accent2);
+		font-size: 13px;
+		font-weight: 700;
+	}
+</style>

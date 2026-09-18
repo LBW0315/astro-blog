@@ -1,0 +1,151 @@
+---
+/*
+  記事「AIに聞きながら、Astroでブログを作り始めた日」専用の図解
+  セットアップの選択肢をスクリーンショットに撮り、AIへ質問した場面。
+*/
+---
+
+<figure class="apw">
+	<svg viewBox="0 0 360 340" role="img" aria-labelledby="apw-title apw-desc">
+		<title id="apw-title">Astroの選択肢をスクリーンショットでAIに質問する様子</title>
+		<desc id="apw-desc">
+			左にAstroセットアップの選択肢が並ぶターミナル、中央にスクリーンショットを表すカメラ、右に選択肢の意味を説明するAIとの会話があり、分からないところだけ確認しながら進めている。
+		</desc>
+		<defs>
+			<filter id="astro-prompt-ai-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="17"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<g filter="url(#astro-prompt-ai-sketch)">
+			<!-- ターミナル -->
+			<rect class="apw__card" x="10" y="42" width="150" height="242" rx="13" />
+			<path class="apw__line" d="M10 76h150" />
+			<circle class="apw__dot" cx="29" cy="60" r="4" />
+			<circle class="apw__dot" cx="43" cy="60" r="4" />
+			<circle class="apw__dot" cx="57" cy="60" r="4" />
+			<rect class="apw__selected" x="26" y="133" width="118" height="30" rx="7" />
+			<path class="apw__check" d="M34 148l5 5 9-11" />
+
+			<!-- スクリーンショットを撮って送る -->
+			<path class="apw__camera" d="M166 164h30v24h-30z M174 164l3-6h8l3 6 M173 176a8 8 0 1 0 16 0a8 8 0 1 0-16 0z" />
+			<path class="apw__arrow" d="M174 202q15 18 31 1 M198 199l7 4-3 7" />
+
+			<!-- AIとの会話 -->
+			<rect class="apw__chat" x="204" y="58" width="146" height="208" rx="18" />
+			<path class="apw__chat-tail" d="M218 266l-10 17 25-17" />
+			<circle class="apw__ai-disc" cx="231" cy="91" r="17" />
+			<path class="apw__spark" d="M231 80v22 M220 91h22 M224 84l14 14 M238 84l-14 14" />
+			<path class="apw__rule" d="M222 123h110 M222 165h110 M222 207h88" />
+		</g>
+
+		<text class="apw__eyebrow" x="85" y="28" text-anchor="middle">Astroのセットアップ</text>
+		<text class="apw__terminal" x="24" y="102">どのテンプレート？</text>
+		<text class="apw__terminal apw__terminal--selected" x="54" y="151">ブログ</text>
+		<text class="apw__terminal" x="24" y="190">依存関係は？</text>
+		<text class="apw__terminal" x="24" y="222">Gitを使う？</text>
+		<text class="apw__terminal apw__terminal--muted" x="24" y="258">意味が分からない…</text>
+
+		<text class="apw__tag" x="181" y="225" text-anchor="middle">スクショ</text>
+		<text class="apw__eyebrow" x="277" y="42" text-anchor="middle">AIに質問</text>
+		<text class="apw__answer" x="222" y="139">これは、最初から</text>
+		<text class="apw__answer" x="222" y="158">入れる内容の違いです</text>
+		<text class="apw__answer" x="222" y="181">ブログを作るなら、</text>
+		<text class="apw__answer apw__answer--accent" x="222" y="200">ブログを選べばOK</text>
+		<text class="apw__answer" x="222" y="225">次へ進めます</text>
+
+		<text class="apw__note" x="180" y="319" text-anchor="middle">分からないところだけ、画面を見せて聞きました</text>
+	</svg>
+	<figcaption>選択肢の意味が分からないときは、スクリーンショットごとAIに見せる</figcaption>
+</figure>
+
+<style>
+	.apw svg {
+		display: block;
+		width: 100%;
+		max-width: 32rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.apw__card,
+	.apw__chat {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
+	}
+	.apw__chat {
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.apw__chat-tail {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.apw__line,
+	.apw__camera,
+	.apw__arrow,
+	.apw__check,
+	.apw__spark,
+	.apw__rule {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.apw__rule {
+		stroke: var(--c-line);
+		stroke-dasharray: 5 5;
+	}
+	.apw__arrow {
+		stroke: var(--c-accent2);
+		stroke-width: 2.2;
+	}
+	.apw__dot {
+		fill: var(--c-line-strong);
+	}
+	.apw__selected,
+	.apw__ai-disc {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 1.6;
+	}
+	.apw__check,
+	.apw__spark {
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.apw__eyebrow {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.apw__terminal,
+	.apw__answer,
+	.apw__tag,
+	.apw__note {
+		fill: var(--c-text);
+		font-size: 15px;
+	}
+	.apw__terminal {
+		font-family: var(--font-code);
+	}
+	.apw__terminal--selected,
+	.apw__answer--accent {
+		fill: var(--c-accent);
+		font-weight: 700;
+	}
+	.apw__terminal--muted,
+	.apw__note {
+		fill: var(--c-text-sub);
+	}
+	.apw__tag {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

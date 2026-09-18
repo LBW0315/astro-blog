@@ -1,0 +1,160 @@
+---
+/*
+  記事「AIに聞きながら、Astroでブログを作り始めた日」専用の図解
+  自分のことや好きなものをAIへ伝えながら、BUNBOUの名前と雰囲気が固まる様子。
+*/
+const notes = [
+	{ x: 18, y: 30, w: 122, label: '元数学教諭', tilt: -3 },
+	{ x: 220, y: 24, w: 122, label: 'QAエンジニア', tilt: 2 },
+	{ x: 8, y: 104, w: 100, label: '万年筆', tilt: 2 },
+	{ x: 126, y: 92, w: 96, label: 'ノート', tilt: -2 },
+	{ x: 238, y: 104, w: 104, label: 'コーヒー', tilt: 3 },
+	{ x: 72, y: 166, w: 118, label: 'ペキニーズ', tilt: -2 },
+	{ x: 214, y: 170, w: 110, label: '学習の記録', tilt: 1 },
+];
+---
+
+<figure class="bim">
+	<svg viewBox="0 0 360 460" role="img" aria-labelledby="bim-title bim-desc">
+		<title id="bim-title">自分のことや好きなものからBUNBOUができるまで</title>
+		<desc id="bim-desc">
+			元数学教諭、QAエンジニア、万年筆、ノート、コーヒー、ペキニーズ、学習の記録という付箋が、AIとの会話を通って、紙と文房具を感じるデジタル書斎BUNBOUへまとまっていく。
+		</desc>
+		<defs>
+			<filter id="bunbou-identity-making-sketch" x="-7%" y="-7%" width="114%" height="114%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="31"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+			<pattern id="bunbou-identity-grid" width="18" height="18" patternUnits="userSpaceOnUse">
+				<path d="M18 0H0V18" class="bim__grid-line" />
+			</pattern>
+		</defs>
+
+		<g filter="url(#bunbou-identity-making-sketch)">
+			{
+				notes.map((note) => (
+					<g transform={`rotate(${note.tilt} ${note.x + note.w / 2} ${note.y + 23})`}>
+						<rect class="bim__note" x={note.x} y={note.y} width={note.w} height="46" rx="5" />
+						<path class="bim__tape" d={`M${note.x + note.w / 2 - 15} ${note.y - 4}h30v9h-30z`} />
+					</g>
+				))
+			}
+
+			<!-- 会話へ集まる線 -->
+			<path class="bim__thread" d="M76 76q28 116 105 145 M280 70q-16 104-99 151 M58 150q44 68 123 71 M291 150q-38 55-110 71 M133 207q20 11 48 14 M267 211q-34 4-86 10" />
+			<path class="bim__talk" d="M103 218h154v68H131l-24 18 8-18h-12z" />
+			<path class="bim__arrow" d="M180 292q4 24 0 45 M174 330l6 7 6-7" />
+
+			<!-- BUNBOUの完成イメージ -->
+			<rect class="bim__result" x="34" y="340" width="292" height="100" rx="16" />
+			<rect class="bim__grid" x="34" y="340" width="292" height="100" rx="16" />
+			<path class="bim__mug" d="M63 374h42v27a15 15 0 0 1-15 15H78a15 15 0 0 1-15-15z M105 380h8a10 10 0 0 1 0 20h-8 M77 365q-6-6 0-12 M91 365q-6-6 0-12" />
+			<path class="bim__pen" d="M244 411l44-44 13 13-44 44-18 5z M288 367l13 13 M239 429l18-5" />
+			<path class="bim__accent-line" d="M126 408h90" />
+		</g>
+
+		{
+			notes.map((note) => (
+				<text class="bim__note-text" x={note.x + note.w / 2} y={note.y + 25} text-anchor="middle" dominant-baseline="central">
+					{note.label}
+				</text>
+			))
+		}
+		<text class="bim__talk-title" x="180" y="243" text-anchor="middle">AIとの会話</text>
+		<text class="bim__talk-sub" x="180" y="267" text-anchor="middle">日本語で、少しずつ伝える</text>
+		<text class="bim__brand" x="171" y="381">BUNBOU</text>
+		<text class="bim__brand-sub" x="171" y="401">自分のデジタル書斎</text>
+		<text class="bim__brand-sub" x="171" y="424">紙・文房具・落ち着く場所</text>
+	</svg>
+	<figcaption>名前もデザインも、最初から決まっていたわけではありません</figcaption>
+</figure>
+
+<style>
+	.bim svg {
+		display: block;
+		width: 100%;
+		max-width: 32rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.bim__note {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.4;
+	}
+	.bim__tape {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 1;
+	}
+	.bim__thread,
+	.bim__arrow,
+	.bim__mug,
+	.bim__pen,
+	.bim__accent-line {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.bim__thread {
+		stroke-dasharray: 5 6;
+	}
+	.bim__arrow {
+		stroke: var(--c-accent);
+		stroke-width: 2.3;
+	}
+	.bim__talk {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.bim__result {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2.3;
+	}
+	.bim__grid {
+		fill: url(#bunbou-identity-grid);
+		opacity: 0.6;
+	}
+	.bim__grid-line {
+		fill: none;
+		stroke: var(--c-line);
+		stroke-width: 1;
+	}
+	.bim__mug,
+	.bim__pen {
+		stroke: var(--c-text);
+		stroke-width: 2.2;
+	}
+	.bim__accent-line {
+		stroke: var(--c-accent);
+		stroke-width: 3;
+	}
+	.bim__note-text,
+	.bim__talk-sub,
+	.bim__brand-sub {
+		fill: var(--c-text);
+		font-size: 15px;
+	}
+	.bim__talk-title,
+	.bim__brand {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.bim__talk-sub,
+	.bim__brand-sub {
+		fill: var(--c-text-sub);
+	}
+	.bim__brand {
+		font-family: var(--font-logo);
+		font-size: 20px;
+		font-weight: var(--fw-logo);
+		letter-spacing: 0.18em;
+	}
+</style>

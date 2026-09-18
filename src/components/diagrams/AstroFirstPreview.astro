@@ -1,0 +1,146 @@
+---
+/*
+  記事「AIに聞きながら、Astroでブログを作り始めた日」専用の図解
+  開発サーバーを起動し、最初の画面が表示された瞬間。
+*/
+---
+
+<figure class="afp">
+	<svg viewBox="0 0 360 310" role="img" aria-labelledby="afp-title afp-desc">
+		<title id="afp-title">Astroの最初の画面が表示された瞬間</title>
+		<desc id="afp-desc">
+			左下のターミナルでnpm run devを実行すると、矢印の先にあるブラウザにブログのひな形が表示され、周りに驚きを表す線と「思ったより簡単だった」という吹き出しが出ている。
+		</desc>
+		<defs>
+			<filter id="astro-first-preview-sketch" x="-7%" y="-7%" width="114%" height="114%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.038" numOctaves="2" seed="23"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+			<pattern id="astro-first-preview-grid" width="18" height="18" patternUnits="userSpaceOnUse">
+				<path d="M18 0H0V18" class="afp__grid-line" />
+			</pattern>
+		</defs>
+
+		<g filter="url(#astro-first-preview-sketch)">
+			<!-- ブラウザ -->
+			<rect class="afp__browser" x="38" y="42" width="284" height="188" rx="14" />
+			<path class="afp__line" d="M38 78h284" />
+			<circle class="afp__dot" cx="57" cy="60" r="4" />
+			<circle class="afp__dot" cx="71" cy="60" r="4" />
+			<circle class="afp__dot" cx="85" cy="60" r="4" />
+			<rect class="afp__address" x="110" y="51" width="188" height="19" rx="9" />
+			<rect class="afp__page" x="53" y="91" width="254" height="124" rx="8" />
+			<rect class="afp__grid" x="53" y="91" width="254" height="124" rx="8" />
+			<path class="afp__ink" d="M76 150h76" />
+			<rect class="afp__post" x="176" y="126" width="106" height="63" rx="8" />
+			<path class="afp__post-line" d="M190 143h70 M190 155h56 M190 174h38" />
+
+			<!-- ターミナルの付箋 -->
+			<path class="afp__terminal" d="M21 214h164v72H21z M21 236h164" />
+			<path class="afp__arrow" d="M177 230q36 20 69-5 M239 221l7 4-5 7" />
+
+			<!-- ぱっと表示された驚きの線 -->
+			<path class="afp__ray" d="M68 29l-12-15 M180 26V7 M291 29l12-15 M331 104l17-5" />
+
+			<!-- 感想の吹き出し -->
+			<path class="afp__bubble" d="M214 243h128v48H231l-17 12 5-12h-5z" />
+		</g>
+
+		<text class="afp__url" x="204" y="61" text-anchor="middle">localhost:4321</text>
+		<text class="afp__logo" x="76" y="124">BUNBOUのもと</text>
+		<text class="afp__lead" x="76" y="174">ブログのひな形が表示された</text>
+		<text class="afp__terminal-text" x="34" y="229">Terminal</text>
+		<text class="afp__terminal-code" x="34" y="262">$ npm run dev</text>
+		<text class="afp__reaction" x="278" y="267" text-anchor="middle">思ったより</text>
+		<text class="afp__reaction afp__reaction--accent" x="278" y="285" text-anchor="middle">簡単だった。</text>
+	</svg>
+	<figcaption>開発サーバーを起動すると、ブラウザにブログのひな形が表示された</figcaption>
+</figure>
+
+<style>
+	.afp svg {
+		display: block;
+		width: 100%;
+		max-width: 32rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.afp__browser,
+	.afp__terminal,
+	.afp__bubble {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
+	}
+	.afp__page {
+		fill: var(--c-bg);
+		stroke: var(--c-line);
+		stroke-width: 1.2;
+	}
+	.afp__grid {
+		fill: url(#astro-first-preview-grid);
+		opacity: 0.65;
+	}
+	.afp__grid-line {
+		fill: none;
+		stroke: var(--c-line);
+		stroke-width: 1;
+	}
+	.afp__address,
+	.afp__post {
+		fill: var(--c-surface);
+		stroke: var(--c-line);
+		stroke-width: 1.2;
+	}
+	.afp__line,
+	.afp__ink,
+	.afp__post-line,
+	.afp__arrow,
+	.afp__ray {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.afp__ink,
+	.afp__arrow {
+		stroke: var(--c-accent);
+		stroke-width: 2.5;
+	}
+	.afp__post-line {
+		stroke: var(--c-line-strong);
+	}
+	.afp__ray {
+		stroke: var(--c-accent2);
+		stroke-width: 2.3;
+	}
+	.afp__dot {
+		fill: var(--c-line-strong);
+	}
+	.afp__url,
+	.afp__terminal-text,
+	.afp__terminal-code {
+		fill: var(--c-text-sub);
+		font-family: var(--font-code);
+		font-size: 15px;
+	}
+	.afp__logo,
+	.afp__reaction {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.afp__lead {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+	}
+	.afp__reaction {
+		font-size: 16px;
+	}
+	.afp__reaction--accent {
+		fill: var(--c-accent);
+	}
+</style>

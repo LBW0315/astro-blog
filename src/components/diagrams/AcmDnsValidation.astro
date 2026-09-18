@@ -1,0 +1,125 @@
+---
+/*
+  記事「独自ドメインでHTTPSになるまで」専用の図解
+  ACMのDNS検証で、証明書が発行されるまで（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  ここは全部「やり終わったこと」なので、青磁の実線だけで描いています。
+*/
+type Step = { y: number; no: string; title: string; sub: string };
+
+const BOX_X = 40;
+const BOX_W = 280;
+const BOX_H = 56;
+const CX = 180; // 矢印の横位置
+
+const steps: Step[] = [
+	{ y: 14, no: '1', title: 'ACMにドメインを入力', sub: '検証方法は「DNS検証」' },
+	{ y: 102, no: '2', title: 'ACMが確認用の値を出す', sub: 'CNAMEレコードが1件' },
+	{ y: 190, no: '3', title: 'Route 53に置く', sub: 'ボタン1つで自動作成' },
+	{ y: 278, no: '4', title: '確認できたら発行済み', sub: 'これで証明書ができる' },
+];
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 346;
+---
+
+<figure class="acm-validation">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="acm-validation-title acm-validation-desc">
+		<title id="acm-validation-title">ACMのDNS検証で証明書が発行されるまで</title>
+		<desc id="acm-validation-desc">
+			1. ACMにドメイン名を入力し、検証方法としてDNS検証を選ぶ。2. ACMが確認用の値としてCNAMEレコードを1件出す。3. そのレコードをRoute 53に置く（ボタン1つで自動作成される）。4. ACMがそのレコードを確認できたら、証明書が発行済みになる。
+		</desc>
+		<defs>
+			<filter id="acm-validation-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="27"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#acm-validation-sketch)">
+			{
+				steps.map((s) => (
+					<g class="av-box">
+						<rect x={BOX_X} y={s.y} width={BOX_W} height={BOX_H} rx="10" />
+						<circle cx={BOX_X + 28} cy={s.y + BOX_H / 2} r="14" />
+					</g>
+				))
+			}
+			<path class="av-arrow" d={arrow(70, 98)} />
+			<path class="av-arrow" d={arrow(158, 186)} />
+			<path class="av-arrow" d={arrow(246, 274)} />
+			<!-- 発行済みの印（チェック） -->
+			<path class="av-check" d="M286 306l7 8 13-16" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			steps.map((s) => (
+				<g>
+					<text class="av-no" x={BOX_X + 28} y={s.y + BOX_H / 2} text-anchor="middle" dominant-baseline="central">
+						{s.no}
+					</text>
+					<text class="av-title" x={BOX_X + 56} y={s.y + 24}>
+						{s.title}
+					</text>
+					<text class="av-sub" x={BOX_X + 56} y={s.y + 44}>
+						{s.sub}
+					</text>
+				</g>
+			))
+		}
+	</svg>
+	<figcaption>ACMのDNS検証。レコードを置けるか＝ドメインの持ち主か、という確認</figcaption>
+</figure>
+
+<style>
+	.acm-validation svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.av-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.av-box circle {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 1.8;
+	}
+	.av-arrow,
+	.av-check {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.av-check {
+		stroke: var(--c-accent);
+		stroke-width: 2.6;
+	}
+	.av-no {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.av-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.av-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

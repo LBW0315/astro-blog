@@ -1,0 +1,152 @@
+---
+/*
+  記事「Route 53でドメインを買ってみた」専用の図解
+  独自ドメインでHTTPSにするまでの現在地（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+
+  色と線の意味は、ほかの記事とそろえています。
+  - できている部分：青磁の実線
+  - これからの部分：灰桜の点線＋「これから」のラベル
+*/
+type Row = { y: number; title: string; sub: string; icon: string; planned?: boolean };
+
+const BOX_X = 40;
+const BOX_W = 280;
+const BOX_H = 56;
+const CX = 180; // 矢印の横位置
+
+const rows: Row[] = [
+	{ y: 14, title: 'ドメインを取る', sub: 'Route 53で買った', icon: 'globe' },
+	{ y: 110, title: '証明書を作る', sub: 'ACM（us-east-1）', icon: 'cert', planned: true },
+	{ y: 198, title: 'CloudFrontに付ける', sub: '独自ドメインを設定', icon: 'cloud', planned: true },
+	{ y: 286, title: 'ドメインを向ける', sub: 'Route 53のレコード', icon: 'arrows', planned: true },
+];
+
+// アイコン（28×28 のマス目の手描き線）
+const ICONS: Record<string, string> = {
+	globe: 'M14 2a12 12 0 1 0 0 24a12 12 0 1 0 0-24z M14 2c-7 7-7 17 0 24 M14 2c7 7 7 17 0 24 M2 14h24',
+	cert: 'M4 3h20v16H4z M8 8h12 M8 13h8 M14 19v6 M10 23l4 2 4-2',
+	cloud: 'M7 22h15a5 5 0 0 0 0-10a7 7 0 0 0-13-2a6 6 0 0 0-2 12z',
+	arrows: 'M3 14h18 M16 9l5 5-5 5 M3 6h8 M3 22h8',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 358;
+---
+
+<figure class="https-roadmap">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="https-roadmap-title https-roadmap-desc">
+		<title id="https-roadmap-title">独自ドメインでHTTPSにするまでの現在地</title>
+		<desc id="https-roadmap-desc">
+			1つ目のドメインを取る（Route 53で購入）は完了。ここから先はこれからの作業で、ACM（us-east-1）で証明書を作り、CloudFrontに独自ドメインと証明書を設定し、最後にRoute 53のレコードでドメインをCloudFrontに向ける。
+		</desc>
+		<defs>
+			<filter id="https-roadmap-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="21"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#https-roadmap-sketch)">
+			<rect class="hr-group" x="20" y="94" width="320" height="254" rx="16" />
+			{
+				rows.map((r) => (
+					<g class:list={['hr-box', { 'hr-box--planned': r.planned }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="hr-icon" transform={`translate(${BOX_X + 14} ${r.y + 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="hr-arrow" d={arrow(70, 106)} />
+			<path class="hr-arrow" d={arrow(166, 194)} />
+			<path class="hr-arrow" d={arrow(254, 282)} />
+			<g class="hr-tag">
+				<rect x="256" y="83" width="70" height="22" rx="11" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="hr-title" x={BOX_X + 56} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class="hr-sub" x={BOX_X + 56} y={r.y + 44}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+		<text class="hr-tag-text" x="291" y="94" text-anchor="middle" dominant-baseline="central">これから</text>
+		<text class="hr-done" x="40" y="86">↑ ここまでできた</text>
+	</svg>
+	<figcaption>独自ドメインでHTTPSにするまで（実線はできた部分、点線はこれから）</figcaption>
+</figure>
+
+<style>
+	.https-roadmap svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.hr-group {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.hr-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.hr-box--planned rect {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 7 5;
+	}
+	.hr-icon,
+	.hr-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.hr-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.hr-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.hr-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.hr-done {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.hr-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.hr-tag-text {
+		fill: var(--c-accent2);
+		font-size: 13px;
+		font-weight: 700;
+	}
+</style>

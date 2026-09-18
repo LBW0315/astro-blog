@@ -1,0 +1,117 @@
+---
+/*
+  記事「Route 53でドメインを買ってみた」専用の図解
+  ドメイン名を打ってからページが届くまで（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  ここは全部「すでに動いている仕組み」の話なので、青磁の実線だけで描いています。
+*/
+type Row = { y: number; title: string; sub: string; icon: string };
+
+const BOX_X = 40;
+const BOX_W = 280;
+const BOX_H = 56;
+const CX = 180; // 矢印の横位置
+
+const rows: Row[] = [
+	{ y: 14, title: '「bun-bou.com」と打つ', sub: 'ブラウザのアドレス欄に', icon: 'browser' },
+	{ y: 102, title: 'DNSに聞く', sub: 'この名前の番号は？', icon: 'book' },
+	{ y: 190, title: '番号（IPアドレス）が返る', sub: '例：203.0.113.25', icon: 'tag' },
+	{ y: 278, title: '番号の場所へ取りに行く', sub: 'CloudFront → S3', icon: 'cloud' },
+];
+
+// アイコン（28×28 のマス目の手描き線）
+const ICONS: Record<string, string> = {
+	browser: 'M1 3h26v22H1z M1 9h26 M5 6h.5 M9 6h.5',
+	book: 'M4 3h18a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H4z M8 9h10 M8 14h10 M8 19h6',
+	tag: 'M3 14L14 3h10v10L13 24z M19 8h.5',
+	cloud: 'M7 22h15a5 5 0 0 0 0-10a7 7 0 0 0-13-2a6 6 0 0 0-2 12z',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 346;
+---
+
+<figure class="domain-lookup">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="domain-lookup-title domain-lookup-desc">
+		<title id="domain-lookup-title">ドメイン名を打ってからページが届くまで</title>
+		<desc id="domain-lookup-desc">
+			ブラウザのアドレス欄に bun-bou.com と打つと、DNSに「この名前の番号は？」と問い合わせが行く。203.0.113.25 のようなIPアドレス（番号）が返ってきて、ブラウザはその番号の場所、つまりCloudFrontとS3へページを取りに行く。
+		</desc>
+		<defs>
+			<filter id="domain-lookup-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="17"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#domain-lookup-sketch)">
+			{
+				rows.map((r) => (
+					<g class="dl-box">
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="dl-icon" transform={`translate(${BOX_X + 14} ${r.y + 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="dl-arrow" d={arrow(70, 98)} />
+			<path class="dl-arrow" d={arrow(158, 186)} />
+			<path class="dl-arrow" d={arrow(246, 274)} />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="dl-title" x={BOX_X + 56} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class="dl-sub" x={BOX_X + 56} y={r.y + 44}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+	</svg>
+	<figcaption>ドメイン名は、番号（IPアドレス）を引くための名前。その対応表がDNS</figcaption>
+</figure>
+
+<style>
+	.domain-lookup svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.dl-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.dl-icon,
+	.dl-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.dl-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.dl-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.dl-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

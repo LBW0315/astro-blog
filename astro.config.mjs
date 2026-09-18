@@ -7,7 +7,8 @@ import { a11yCodeTransformer } from './src/lib/shiki-a11y.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	// サイトの公開URL。サイトマップ・RSS・OGP の URL がここから作られる
+	site: 'https://bun-bou.com',
 	integrations: [mdx(), sitemap()],
 
 	// ページ遷移時に、次のページへ移動しそうなリンクを先読みして表示を速くする

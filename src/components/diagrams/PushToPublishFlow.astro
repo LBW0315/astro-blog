@@ -1,0 +1,129 @@
+---
+/*
+  記事「Astroブログを git push だけで公開する」専用の図解
+  git push してから記事が読まれるまでの流れ（手描き風）
+
+  前の記事の DeployFlow.astro では「これから」だった自動化の部分が、
+  この記事で全部つながったので、すべて青磁の実線で描いています。
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+*/
+type Row = { y: number; h: number; title: string; subs: string[]; icon: string };
+
+const BOX_X = 40;
+const BOX_W = 280;
+const CX = 180; // 矢印の横位置
+
+const rows: Row[] = [
+	{ y: 14, h: 56, title: 'ローカル', subs: ['git push するだけ'], icon: 'push' },
+	{ y: 102, h: 56, title: 'GitHub Actions', subs: ['ビルドしてS3へ同期'], icon: 'box' },
+	{ y: 190, h: 56, title: 'S3', subs: ['直接は公開しない'], icon: 'bucket' },
+	{ y: 278, h: 56, title: 'CloudFront', subs: ['HTTPSで世界に配信'], icon: 'cloud' },
+	{ y: 366, h: 56, title: '読む人', subs: ['1分後には新しい記事'], icon: 'browser' },
+];
+
+// アイコン（28×28 のマス目の手描き線）
+const ICONS: Record<string, string> = {
+	push: 'M14 19V3 M8 9l6-6 6 6 M3 17v8h22v-8',
+	box: 'M3 8l11-6 11 6v13l-11 6-11-6z M3 8l11 6 11-6 M14 14v13',
+	bucket: 'M3 7l3 18h16l3-18 M3 7c0 4 22 4 22 0c0-4-22-4-22 0z',
+	cloud: 'M7 22h15a5 5 0 0 0 0-10a7 7 0 0 0-13-2a6 6 0 0 0-2 12z',
+	browser: 'M1 3h26v22H1z M1 9h26 M5 6h.5 M9 6h.5',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 432;
+---
+
+<figure class="push-flow">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="push-flow-title push-flow-desc">
+		<title id="push-flow-title">git push してから記事が読まれるまでの流れ</title>
+		<desc id="push-flow-desc">
+			ローカルで git push すると、GitHub Actions がビルドしてS3へ同期する。S3は直接は公開せず、CloudFrontだけが読める状態のまま。CloudFrontがHTTPSで世界に配信し、読む人には1分後には新しい記事が届く。
+		</desc>
+		<defs>
+			<filter id="push-flow-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#push-flow-sketch)">
+			{
+				rows.map((r) => (
+					<g class="pf-box">
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={r.h} rx="10" />
+						<path class="pf-icon" transform={`translate(${BOX_X + 14} ${r.y + r.h / 2 - 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="pf-arrow" d={arrow(70, 98)} />
+			<path class="pf-arrow" d={arrow(158, 186)} />
+			<path class="pf-arrow" d={arrow(246, 274)} />
+			<path class="pf-arrow" d={arrow(334, 362)} />
+
+			<!-- S3 は公開しない（鍵） -->
+			<path class="pf-icon pf-icon--key" transform="translate(286 204)" d="M1 12h18v14H1z M5 12V8a5 5 0 0 1 10 0v4" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="pf-title" x={BOX_X + 56} y={r.y + 24}>
+						{r.title}
+					</text>
+					{r.subs.map((s, i) => (
+						<text class="pf-sub" x={BOX_X + 56} y={r.y + 44 + i * 20}>
+							{s}
+						</text>
+					))}
+				</g>
+			))
+		}
+	</svg>
+	<figcaption>git push してから記事が読まれるまでの流れ（自分でやるのは一番上だけ）</figcaption>
+</figure>
+
+<style>
+	.push-flow svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.pf-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.pf-icon,
+	.pf-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.pf-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.pf-icon--key {
+		stroke: var(--c-accent);
+	}
+	.pf-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.pf-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

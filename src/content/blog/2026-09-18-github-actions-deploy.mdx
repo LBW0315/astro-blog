@@ -1,0 +1,358 @@
+---
+title: '手動アップロードに挫折した私が、GitHub Actions に仕事を任せるまで ― deploy.yml 日本語訳付き'
+description: '記事を直すたびに、ビルドしてS3にアップロードしてキャッシュを消す。この手作業が面倒すぎて、前に一度ブログを挫折しました。今回はGitHub Actionsに任せます。設定ファイル deploy.yml を、上から順に日本語に訳しました。'
+pubDate: 2026-09-18
+category: tech
+---
+
+import Callout from '../../components/Callout.astro';
+import ManualVsAuto from '../../components/diagrams/ManualVsAuto.astro';
+import PushToPublishFlow from '../../components/diagrams/PushToPublishFlow.astro';
+
+`git push` すると、1分後にはブログが更新されている。
+
+今はその状態になりました。ただ、ここに来るまでに一度、同じ構成で挫折しています。
+
+普段の仕事はQAで、スマホを手で叩くテストが本業です。コードは1行も書きません。そういう立場から見た GitHub Actions の話を書きます。
+
+<Callout type="note">
+	構成そのものを選んだ理由は、前回の[noteでもWordPressでもなく、Astro + S3 + CloudFrontでブログを書く理由](/blog/2026-09-17-why-astro-blog/)に書きました。この記事は、その中で「これから」と書いた自動デプロイの部分です。
+</Callout>
+
+## 実は、一度挫折している
+
+Astro + S3 + CloudFront でブログを作るのは、実は今回が初めてではありません。前にも一度作って、続きませんでした。
+
+理由ははっきりしていて、**公開するのが面倒すぎた**からです。
+
+記事を1本直すたびに、毎回これをやっていました。
+
+<ManualVsAuto />
+
+書くより、公開するほうが疲れる。しかも誤字を1文字直すだけでも、同じ4つをやり直しです。そのうち「これは明日でいいか」になって、更新が止まりました。
+
+技術的に難しかったわけではありません。ただ面倒だった。**それだけで人は続けられなくなる**、というのが前回の学びです。
+
+## 自動化してみたい
+
+今回また同じ構成を選んだので、放っておくと同じところで挫折します。
+
+やりたいことは1つだけでした。**記事を書いたら、あとは勝手に公開されてほしい。**
+
+ビルドもアップロードもキャッシュ削除も、毎回まったく同じ作業です。同じことを同じ順番でやるなら、機械のほうが速いし間違えない。人間がやる意味がありません。
+
+そこで GitHub Actions を使いました。
+
+## GitHub Actions とは？
+
+ざっくり言うと、**GitHubの中にいる「言われた作業をやってくれる係」**です。
+
+- `git push` などをきっかけに、勝手に動き出す
+- 動くのは自分のPCではなく、GitHubが用意する使い捨てのLinuxマシン
+- 作業が終わると、そのマシンごと消える
+- 個人のパブリックリポジトリなら無料
+
+大事なのは、**自分のPCが関係ない**ところです。極端な話、出先でGitHubのWeb画面から誤字を直しても、そこから先は同じように公開まで進みます。
+
+CI/CDという言葉は資格の勉強で見ていましたが、「テストが自動で走るやつ」くらいの理解でした。実物はこれか、というのが正直な感想です。
+
+### おまけ：AWSで運用しているのに、デプロイはGitになる
+
+自動化のおまけなのですが、この形にすると**デプロイの操作が、AWSのコンソールではなくGitになります。**
+
+置き場所はS3とCloudFrontなのに、私が触るのは `git add` と `git commit` と `git push` だけ。AWSの画面はほとんど開きません。
+
+Gitを日常的に使う機会が今はほとんどないので、これは自分にとってちょうどいい練習になります。記事を書けば書くほど、勝手にGitを触ることになる。前回の記事で「Gitの練習をしたかった」と書きましたが、その部分がここで回収できました。
+
+## 動かすには、決まった場所にファイルを1枚置く
+
+GitHub Actions に「何をしてほしいか」を伝える方法は、設定画面ではなく**ファイル**です。
+
+```text
+リポジトリ/
+└── .github/
+    └── workflows/
+        └── deploy.yml   ← これを置く
+```
+
+置き場所が決まっていて、`.github/workflows/` の下にある `.yml` ファイルを、GitHubが勝手に見つけて実行します。ファイル名（`deploy`）のほうは自由です。
+
+つまり、**このファイルを置いてpushした時点で、自動化は始まります。** 私がやったのも、結局はこれだけでした。
+
+### ymlって、Dockerでも見たやつ
+
+拡張子の `.yml` を見て、あ、これ知ってる、となりました。Dockerを触ったときに出てきた `docker-compose.yml` と同じ形式です。
+
+YAMLという書き方で、字下げで親子関係を表す、設定を書くためのものです。中身がプログラムというより**箇条書きのメモに近い**ので、コードを書かない人間でも読めます。
+
+DockerにもGitHub Actionsにも出てくるということは、**自動化まわりでは何かとこれが出てくる**ということなんだと思います。覚えておいて損はなさそうです。
+
+## まず、deploy.yml の全容
+
+訳す前に、まずファイルまるごとを載せます。これが今回追加した1枚です。
+
+```yaml
+name: Deploy to S3
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-northeast-1
+  S3_BUCKET: バケット名
+  DISTRIBUTION_ID: ディストリビューションID
+  ROLE_ARN: arn:aws:iam::アカウントID:role/gha-astro-deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload hashed assets
+        run: |
+          aws s3 sync ./dist/ s3://${{ env.S3_BUCKET }}/ \
+            --cache-control "public,max-age=31536000,immutable" \
+            --exclude "*" --include "_astro/*"
+
+      - name: Upload HTML and others
+        run: |
+          aws s3 sync ./dist/ s3://${{ env.S3_BUCKET }}/ --delete \
+            --cache-control "public,max-age=0,must-revalidate" \
+            --exclude "_astro/*"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.DISTRIBUTION_ID }} \
+            --paths "/*"
+```
+
+これで全部です。60行もありません。
+
+最初に見たときは記号だらけで身構えましたが、**大きく4つのことしか書いていません。**
+
+| ブロック | 書いてあること |
+| --- | --- |
+| `on:` | いつ動くか |
+| `permissions:` | 何をしてよいか |
+| `env:` | 使い回す値 |
+| `jobs:` | どのマシンで、何を順番にやるか |
+
+## deploy.yml を日本語に訳す
+
+では、上から順に訳していきます。
+
+### ① この自動化の名前
+
+```yaml
+name: Deploy to S3
+```
+
+GitHubの画面に出る表示名です。動作には関係ないので、自分が分かる名前で大丈夫です。
+
+### ② いつ動くか
+
+```yaml
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+```
+
+- `push:` `branches: [main]` — mainブランチにpushされたら動く
+- `workflow_dispatch:` — GitHubの画面から手動でも動かせるようにする（実行ボタンが出ます）
+
+日本語にすると「**mainにpushされたとき、あとはボタンを押されたときに動いて**」です。
+
+### ③ この作業に渡す権限
+
+```yaml
+permissions:
+  id-token: write
+  contents: read
+```
+
+- `id-token: write` — 「身分証」を発行してよい（後半のOIDCで使います）
+- `contents: read` — リポジトリの中身は読むだけ。書き換えはさせない
+
+「**必要なことだけできる状態で動いて**」という指定です。
+
+<Callout type="warning" title="id-token: write を忘れない">
+	この1行が無いとGitHubが身分証を発行してくれず、AWSに繋ぐところで必ず失敗します。**忘れやすさナンバーワンの行**です。
+</Callout>
+
+### ④ 使い回す値に名前を付ける
+
+```yaml
+env:
+  AWS_REGION: ap-northeast-1
+  S3_BUCKET: バケット名
+  DISTRIBUTION_ID: ディストリビューションID
+  ROLE_ARN: arn:aws:iam::アカウントID:role/gha-astro-deploy
+```
+
+このあと何度も出てくる値に、先に名前を付けています。「東京リージョンの、このバケットに、このCloudFrontで、この役割を借りて」。引っ越しや作り直しがあっても、直すのはここだけで済みます。
+
+なお、ここに書いているのはパスワードの類ではないので、ファイルに直接書いています。秘密にしたい値は GitHub の Secrets に入れる仕組みがありますが、**今回は1つも使いません。**
+
+### ⑤ どのマシンで動かすか
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+```
+
+`jobs:` が作業のまとまり、`deploy` はそれに付けた名前です。`runs-on: ubuntu-latest` は「最新のUbuntuの使い捨てマシンでやって」。
+
+この下の `steps:` に、やってほしい手順を上から並べていきます。ここから先は、**私が手でやっていた4つとほぼ同じ**です。
+
+### ⑥ 記事を取ってきて、Nodeを用意する
+
+```yaml
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+```
+
+- `Checkout` — まっさらなマシンに、リポジトリの中身をコピーする
+- `Setup Node` — Node.js 22 を入れる。`cache: npm` は「前回ダウンロードしたものを使い回して、速くして」
+
+`uses:` は**他の人が作った部品を借りる**という意味です。この2つは定番なので、名前を書くだけで済みます。
+
+### ⑦ ビルドする
+
+```yaml
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+```
+
+`run:` は「このコマンドを打って」。手元でやっていた `npm run build` と同じものが、使い捨てマシンの中で走ります。
+
+`npm ci` は、`package-lock.json` のとおりに部品を入れ直すインストールです。これで `dist/` ができあがります。**手作業の1つ目が終わりました。**
+
+### ⑧ AWSに入る鍵を借りる
+
+```yaml
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+```
+
+④で名前を付けた役割（ロール）を借りて、AWSを操作できる状態にします。
+
+見てのとおり、**アクセスキーは1文字も書いていません。** ここが今回のもう1つのポイントなので、あとでまとめて書きます。
+
+### ⑨ S3にアップロードする（2回に分ける）
+
+```yaml
+      - name: Upload hashed assets
+        run: |
+          aws s3 sync ./dist/ s3://${{ env.S3_BUCKET }}/ \
+            --cache-control "public,max-age=31536000,immutable" \
+            --exclude "*" --include "_astro/*"
+
+      - name: Upload HTML and others
+        run: |
+          aws s3 sync ./dist/ s3://${{ env.S3_BUCKET }}/ --delete \
+            --cache-control "public,max-age=0,must-revalidate" \
+            --exclude "_astro/*"
+```
+
+`aws s3 sync` は「このフォルダと同じ状態にS3を揃えて」。**手作業の2つ目**です。
+
+同じことを2回やっているように見えますが、分けているのは**キャッシュの持たせ方が違う**からです。
+
+| 対象 | キャッシュ | 理由 |
+| --- | --- | --- |
+| `_astro/` の中 | 1年 | ファイル名にハッシュが入るので、中身が変われば名前も変わる。古いものを掴む心配がない |
+| HTMLなど | 毎回確認 | 更新したら、すぐ反映されてほしい |
+
+性質が違うものを、別々に扱っています。
+
+もう1つ、後半にだけ `--delete` が付いています。これは「ローカルに無いファイルは、S3からも消して」。記事を削除したときに、残骸が残りません。
+
+### ⑩ 古いキャッシュを消す
+
+```yaml
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.DISTRIBUTION_ID }} \
+            --paths "/*"
+```
+
+CloudFrontが世界中に配っている古いコピーを、捨てさせます。`--paths "/*"` は「全部」という意味です。**手作業の3つ目**がこれで終わりです。
+
+これで、最初に載せた全文を上から最後までたどったことになります。この1枚で、私が毎回手でやっていた作業が、まるごと置き換わりました。
+
+## アクセスキーを置かなくていい（OIDC）
+
+⑧で飛ばした「鍵を借りる」部分です。
+
+ふつうは、AWSのアクセスキーを GitHub の Secrets に保存して使います。ただ、保存している以上は漏れる可能性がありますし、自分で消さない限りずっと有効です。リポジトリはパブリックにしたかったので、できれば置きたくありませんでした。
+
+そこで **OIDC** という仕組みを使いました。やっていることは、こんなイメージです。
+
+1. 実行のたびに、GitHubが「これは○○さんの、このリポジトリの、mainブランチの作業です」という身分証を出す
+2. AWSがそれを確認して、合っていれば**1時間だけ有効な鍵**を貸す
+3. 作業が終われば、その鍵は勝手に切れる
+
+**保存する鍵がないので、漏れる鍵もありません。** 事前にAWS側で「GitHubを信用します」という登録と、貸し出す役割（ロール）を1つ作っておくだけです。
+
+<Callout type="note">
+	この登録まわりで見事にハマって2時間ほど溶かしたのですが、長くなるので別の記事に分けます。
+</Callout>
+
+## できあがったもの
+
+<PushToPublishFlow />
+
+いま記事を公開するときにやっているのは、この3行だけです。
+
+```bash
+git add .
+git commit -m "記事を追加"
+git push
+```
+
+30秒から1分で、公開まで終わります。誤字を1文字直すときも同じ。前回挫折した原因が、まるごと無くなりました。
+
+**面倒だからやらない、が起きない。** 今度は続きそうです。

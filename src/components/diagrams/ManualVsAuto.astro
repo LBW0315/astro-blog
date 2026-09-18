@@ -1,0 +1,165 @@
+---
+/*
+  記事「手動アップロードに挫折した私が、GitHub Actions に仕事を任せるまで」専用の図解
+  以前の手作業と、今の git push だけの対比（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+
+  色だけで区別しないように、次の組み合わせにしています。
+  - 以前の手作業：グレーの実線＋「もうやらない」のラベル
+  - 今のやり方：青磁の実線
+*/
+type Step = { y: number; no: string; text: string };
+
+const BOX_X = 40;
+const BOX_W = 280;
+const STEP_H = 40;
+
+const steps: Step[] = [
+	{ y: 40, no: '1', text: 'npm run build' },
+	{ y: 88, no: '2', text: 'dist/ をS3にアップロード' },
+	{ y: 136, no: '3', text: 'CloudFrontのキャッシュを消す' },
+	{ y: 184, no: '4', text: 'ブラウザで表示を確認' },
+];
+
+const H = 380;
+---
+
+<figure class="manual-auto">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="manual-auto-title manual-auto-desc">
+		<title id="manual-auto-title">以前の手作業と、今の git push だけの対比</title>
+		<desc id="manual-auto-desc">
+			以前は記事を直すたびに、1. npm run build、2. dist をS3にアップロード、3. CloudFrontのキャッシュを消す、4. ブラウザで表示を確認、の4つを毎回手でやっていた。今は git push するだけで、あとは GitHub Actions が同じことをやってくれる。
+		</desc>
+		<defs>
+			<filter id="manual-auto-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="9"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#manual-auto-sketch)">
+			<rect class="ma-group" x="20" y="26" width="320" height="206" rx="14" />
+			{
+				steps.map((s) => (
+					<g class="ma-step">
+						<rect x={BOX_X} y={s.y} width={BOX_W} height={STEP_H} rx="8" />
+						<circle cx={BOX_X + 22} cy={s.y + STEP_H / 2} r="12" />
+					</g>
+				))
+			}
+			<path class="ma-arrow" d="M180 240q3 14 0 28 M174 261l6 7 6-7" />
+			<rect class="ma-now" x={BOX_X} y="298" width={BOX_W} height="66" rx="10" />
+			<path class="ma-icon" transform="translate(54 318)" d="M14 19V3 M8 9l6-6 6 6 M3 17v8h22v-8" />
+			<g class="ma-tag">
+				<rect x="246" y="6" width="94" height="22" rx="11" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="ma-label" x="20" y="20">以前：毎回ぜんぶ手で</text>
+		<text class="ma-tag-text" x="293" y="17" text-anchor="middle" dominant-baseline="central">もうやらない</text>
+		{
+			steps.map((s) => (
+				<g>
+					<text class="ma-no" x={BOX_X + 22} y={s.y + STEP_H / 2} text-anchor="middle" dominant-baseline="central">
+						{s.no}
+					</text>
+					<text class="ma-step-text" x={BOX_X + 44} y={s.y + 25}>
+						{s.text}
+					</text>
+				</g>
+			))
+		}
+		<text class="ma-label ma-label--now" x="20" y="292">今：これだけ</text>
+		<text class="ma-now-title" x="96" y="326">git push するだけ</text>
+		<text class="ma-now-sub" x="96" y="348">あとは GitHub Actions がやる</text>
+	</svg>
+	<figcaption>以前は記事を直すたびに4つの手作業。今は git push だけ</figcaption>
+</figure>
+
+<style>
+	.manual-auto svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.ma-group {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.ma-step rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
+	}
+	.ma-step circle {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
+	}
+	.ma-now {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.ma-icon,
+	.ma-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ma-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.ma-icon {
+		stroke: var(--c-accent);
+	}
+	.ma-tag rect {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.2;
+	}
+	.ma-tag-text {
+		fill: var(--c-text-sub);
+		font-size: 13px;
+		font-weight: 700;
+	}
+	.ma-label {
+		fill: var(--c-text-sub);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.ma-label--now {
+		fill: var(--c-accent);
+	}
+	.ma-no {
+		fill: var(--c-text-sub);
+		font-family: var(--font-heading);
+		font-size: 13px;
+		font-weight: 700;
+	}
+	.ma-step-text {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+	.ma-now-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.ma-now-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

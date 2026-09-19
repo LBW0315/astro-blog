@@ -1,0 +1,128 @@
+---
+// お問い合わせページ（フォームは置かず、SNSのDMで受け付ける）
+import Icon from '../components/Icon.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { AUTHOR_NAME, SITE_TITLE, SNS_ACCOUNT, SNS_LINKS } from '../consts';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="お問い合わせ"
+	description={`${SITE_TITLE}へのご連絡は、X・Instagram・Threadsのダイレクトメッセージで受け付けています。`}
+>
+	<PageHeader
+		icon="chat"
+		title="お問い合わせ"
+		lead="記事のご感想や、間違いのご指摘などがありましたら、SNSのDMからお気軽にどうぞ。"
+	/>
+
+	<div class="container container--narrow contact">
+		<div class="prose" data-reveal>
+			<p>
+				当サイトではお問い合わせフォームを設けていません。ご連絡は、下記いずれかのSNSのダイレクトメッセージ（DM）でお願いします。どのアカウントも{
+					AUTHOR_NAME
+				}本人が見ています。
+			</p>
+		</div>
+
+		<ul class="sns">
+			{
+				SNS_LINKS.map((sns, i) => (
+					<li data-reveal style={`--i: ${i}`}>
+						<a href={sns.href} target="_blank" rel="me noopener noreferrer" class="sns__link">
+							<span class="sns__icon">
+								<Icon name="chat" size={24} />
+							</span>
+							<span class="sns__body">
+								<span class="sns__label">{sns.label}</span>
+								<span class="sns__handle">@{SNS_ACCOUNT}</span>
+							</span>
+							<Icon name="arrow-right" size={18} class="sns__arrow" />
+						</a>
+					</li>
+				))
+			}
+		</ul>
+
+		<div class="prose" data-reveal>
+			<h2>ご連絡の前に</h2>
+			<ul>
+				<li>
+					いただいたメッセージにはできる限り目を通しますが、<strong>返信をお約束することはできません。</strong>
+					個人で運営しているため、内容によってはお返事できない場合があります
+				</li>
+				<li>記事の内容に間違いを見つけた場合は、該当の記事名を添えていただけると助かります</li>
+				<li>
+					広告掲載や記事執筆のご依頼、営業目的のご連絡にはお応えしていません
+				</li>
+			</ul>
+			<p>
+				個人情報の取り扱いについては、<a href="/privacy/">プライバシーポリシー</a>をご覧ください。
+			</p>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.contact {
+		display: grid;
+		gap: var(--sp-7);
+	}
+
+	.sns {
+		display: grid;
+		gap: var(--sp-3);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.sns__link {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-4);
+		min-height: var(--tap);
+		padding: var(--sp-4);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-md);
+		background: var(--c-surface-raised);
+		color: inherit;
+		text-decoration: none;
+		transition:
+			border-color var(--dur-fast) var(--ease-soft),
+			transform var(--dur-press) var(--ease-soft);
+	}
+	.sns__link:hover {
+		border-color: var(--c-accent);
+		transform: translateY(-2px);
+	}
+	.sns__icon {
+		display: grid;
+		place-items: center;
+		flex-shrink: 0;
+		width: 44px;
+		height: 44px;
+		border-radius: var(--radius-pill);
+		background: var(--c-accent-wash);
+		color: var(--c-accent);
+	}
+	.sns__body {
+		flex: 1;
+	}
+	.sns__label {
+		display: block;
+		color: var(--c-heading);
+		font-family: var(--font-heading);
+		font-weight: 700;
+		line-height: 1.5;
+	}
+	.sns__handle {
+		display: block;
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+		line-height: 1.5;
+	}
+	.sns__arrow {
+		flex-shrink: 0;
+		color: var(--c-text-faint);
+	}
+</style>

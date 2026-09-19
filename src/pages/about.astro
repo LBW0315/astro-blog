@@ -17,6 +17,22 @@ const favorites: { icon: IconName; label: string; note: string }[] = [
 ];
 
 const skills = ['React', 'Flutter', 'AWS', 'Linux'];
+
+// 持っている資格
+const certifications = [
+	'AWS Certified Cloud Practitioner',
+	'AWS Certified Solutions Architect – Associate',
+	'AWS Certified CloudOps Engineer – Associate',
+];
+
+// このブログで書くこと
+const topics = [
+	'AWS（S3・CloudFront・Route 53 など、実際に運用して分かったこと）',
+	'Astro でのブログづくりと、デザインの試行錯誤',
+	'GitHub Actions による自動化、個人開発の記録',
+	'資格の勉強と、そのあとに触ってみた感想',
+	'好きな道具のこと、子育ての中で考えたこと',
+];
 ---
 
 <BaseLayout title="プロフィール" description="このブログを書いている人の紹介です。">
@@ -81,6 +97,27 @@ const skills = ['React', 'Flutter', 'AWS', 'Linux'];
 			</ul>
 		</section>
 
+		<!-- 保有資格 -->
+		<section aria-labelledby="cert-title">
+			<h2 id="cert-title" class="section-title"><Icon name="check" />持っている資格</h2>
+			<ul class="tags" data-reveal>
+				{certifications.map((c) => <li>{c}</li>)}
+			</ul>
+		</section>
+
+		<!-- このブログで書くこと -->
+		<section aria-labelledby="topics-title">
+			<h2 id="topics-title" class="section-title"><Icon name="notebook" />このブログで書くこと</h2>
+			<div class="prose" data-reveal>
+				<p>
+					実際に手を動かして、つまずいたところと、そのとき調べたことを書いています。分からないままにしたことは、分からないまま書きます。
+				</p>
+				<ul>
+					{topics.map((t) => <li>{t}</li>)}
+				</ul>
+			</div>
+		</section>
+
 		<!-- 好きなもの -->
 		<section aria-labelledby="fav-title">
 			<h2 id="fav-title" class="section-title"><Icon name="lightbulb" />好きなもの</h2>
@@ -138,6 +175,23 @@ const skills = ['React', 'Flutter', 'AWS', 'Linux'];
 				<p>今はQAエンジニアとして、画面を見て、触って、確かめる仕事をしています。</p>
 			</div>
 		</section>
+
+		<!-- 運営についてのおことわり -->
+		<section class="notice" aria-labelledby="notice-title" data-reveal>
+			<h2 id="notice-title" class="section-title"><Icon name="info" />このサイトについて</h2>
+			<div class="prose">
+				<p>
+					{SITE_TITLE} は、{AUTHOR_NAME}が個人で運営しているブログです。<strong
+						>記載している内容はすべて個人の見解であり、所属する組織とは一切関係がありません。</strong
+					>
+				</p>
+				<p>
+					ご連絡は<a href="/contact/">お問い合わせ</a>から、個人情報の取り扱いについては<a
+						href="/privacy/">プライバシーポリシー</a
+					>をご覧ください。
+				</p>
+			</div>
+		</section>
 	</div>
 </BaseLayout>
 
@@ -178,6 +232,15 @@ const skills = ['React', 'Flutter', 'AWS', 'Linux'];
 	}
 	.intro__text {
 		margin-top: var(--sp-4);
+	}
+
+	/* 運営についてのおことわり：本文より少し控えめに、囲みで区切る */
+	.notice .prose {
+		padding: var(--sp-5);
+		border: 1px solid var(--c-line);
+		border-radius: var(--radius-md);
+		background: var(--c-surface);
+		font-size: var(--fs-sm);
 	}
 	@media (min-width: 640px) {
 		.intro {

@@ -33,3 +33,19 @@ export const NAV_LINKS = [
 	{ href: '/categories/', label: 'ジャンル', icon: 'grid' },
 	{ href: '/about/', label: 'プロフィール', icon: 'user' },
 ] as const;
+
+// フッターに小さく並べる、サイトの決まりごとのページ
+// （ヘッダーのナビには出さず、フッターだけに置く）
+export const FOOTER_LINKS = [
+	{ href: '/privacy/', label: 'プライバシーポリシー' },
+	{ href: '/contact/', label: 'お問い合わせ' },
+] as const;
+
+// ===== SNS（お問い合わせページで使用）=====
+// 3つとも同じアカウント名なので、名前だけを1か所に置いてURLを組み立てる
+export const SNS_ACCOUNT = 'lbw_0797';
+export const SNS_LINKS = [
+	{ label: 'X', href: `https://x.com/${SNS_ACCOUNT}` },
+	{ label: 'Instagram', href: `https://www.instagram.com/${SNS_ACCOUNT}/` },
+	{ label: 'Threads', href: `https://www.threads.com/@${SNS_ACCOUNT}` },
+] as const;

@@ -14,6 +14,22 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description, image = FallbackImage } = Astro.props;
+
+// アクセス解析（Google Analytics 4）の測定 ID。ページのソースに出る公開情報なので、そのまま書いています
+const GA_ID = 'G-7N06JTSXTQ';
+// 読み込み直後に動かす小さなスクリプト（下の <script set:html> で出力する）
+const gaScript = `
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+gtag('js', new Date());
+gtag('config', '${GA_ID}', { send_page_view: false });
+if (!window.__gaPageView) {
+	window.__gaPageView = true;
+	document.addEventListener('astro:page-load', function () {
+		gtag('event', 'page_view', { page_title: document.title, page_location: location.href });
+	});
+}
+`.trim();
 ---
 
 <!-- 基本情報 -->
@@ -65,3 +81,20 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="og:image" content={new URL(image.src, Astro.url)} />
 <meta property="og:locale" content="ja_JP" />
 <meta name="twitter:card" content="summary_large_image" />
+
+<!--
+  アクセス解析（Google Analytics 4）
+  ・測定 ID はページのソースに出る公開情報なので、そのまま書いています
+  ・import.meta.env.PROD で本番ビルドのときだけ出力する（npm run dev では計測しない）
+  ・このサイトは View Transitions でページを移動するので、読み込みは最初の1回だけ。
+    そのままだと2ページ目以降が数えられないため、自動のページビュー送信は切って、
+    astro:page-load（初回表示とページ遷移のたびに起きる）で自分で送っています
+-->
+{
+	import.meta.env.PROD && (
+		<Fragment>
+			<script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+			<script is:inline set:html={gaScript} />
+		</Fragment>
+	)
+}

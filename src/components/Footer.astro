@@ -1,6 +1,6 @@
 ---
 // サイト下部のフッター
-import { NAV_LINKS, SITE_MOTTO, SITE_SUBTITLE_EN, SITE_SUBTITLE_JA, SITE_TITLE } from '../consts';
+import { FOOTER_LINKS, NAV_LINKS, SITE_MOTTO, SITE_SUBTITLE_EN, SITE_SUBTITLE_JA, SITE_TITLE } from '../consts';
 import CoffeeSteam from './CoffeeSteam.astro';
 import Icon from './Icon.astro';
 
@@ -34,6 +34,19 @@ const year = new Date().getFullYear();
 						RSS
 					</a>
 				</li>
+			</ul>
+		</nav>
+
+		<!-- サイトの決まりごと（プライバシーポリシー・お問い合わせ） -->
+		<nav class="site-footer__sub" aria-label="サイトの決まりごと">
+			<ul class="site-footer__links site-footer__links--sub">
+				{
+					FOOTER_LINKS.map((link) => (
+						<li>
+							<a href={link.href}>{link.label}</a>
+						</li>
+					))
+				}
 			</ul>
 		</nav>
 
@@ -101,6 +114,13 @@ const year = new Date().getFullYear();
 		padding-inline: var(--sp-3);
 		font-size: var(--fs-sm);
 	}
+	/* 決まりごとのリンクは、メニューより一段控えめに */
+	.site-footer__links--sub a {
+		min-height: auto;
+		padding-block: var(--sp-2);
+		color: var(--c-text-sub);
+		font-size: var(--fs-xs);
+	}
 	.site-footer__copy {
 		color: var(--c-text-sub);
 		font-size: var(--fs-sm);
@@ -109,6 +129,9 @@ const year = new Date().getFullYear();
 		.site-footer__inner {
 			grid-template-columns: 1fr auto;
 			align-items: center;
+		}
+		.site-footer__sub {
+			grid-column: 1 / -1;
 		}
 		.site-footer__copy {
 			grid-column: 1 / -1;

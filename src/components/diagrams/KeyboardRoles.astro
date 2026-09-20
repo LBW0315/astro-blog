@@ -1,0 +1,151 @@
+---
+/*
+  記事「リアルフォースから分割キーボード！？」専用の図解
+  二刀流の2台と、REALFORCE RS1 の立ち位置（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+
+  線と色の意味は、ほかの記事とそろえています。
+  - 今使っているもの：青磁の実線
+  - 手元に無いもの：灰桜の点線＋ラベル（ここでは「今回は見送り」）
+*/
+type Row = { y: number; title: string; role: string; note: string; icon: string; skip?: boolean };
+
+const BOX_X = 40;
+const BOX_W = 280;
+const BOX_H = 68;
+
+const rows: Row[] = [
+	{ y: 40, title: 'Keychron Q11 Ultra', role: 'ふだん使い', note: '分割・無線・キーマップ自由', icon: 'split' },
+	{ y: 124, title: 'HHKB Type-S', role: '打鍵感を楽しむ日', note: 'Topreの静けさ', icon: 'board' },
+	{ y: 248, title: 'REALFORCE RS1', role: '分割＋Topre', note: '有線・キーマップは固定', icon: 'split', skip: true },
+];
+
+// アイコン（28×28 のマス目の手描き線）
+const ICONS: Record<string, string> = {
+	split: 'M1 8h11v13H1z M16 8h11v13H16z M4 12h5 M19 12h5 M4 17h5 M19 17h5',
+	board: 'M1 7h26v14H1z M5 11h4 M12 11h4 M19 11h4 M7 16h14',
+};
+
+const H = 328;
+---
+
+<figure class="kb-roles">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="kb-roles-title kb-roles-desc">
+		<title id="kb-roles-title">二刀流の2台と、REALFORCE RS1 の立ち位置</title>
+		<desc id="kb-roles-desc">
+			今は2台の二刀流。Keychron Q11 Ultra はふだん使いで、分割・無線のうえキーマップを自由に変えられる。HHKB Type-S は打鍵感を楽しむ日に使い、Topreの静けさがある。REALFORCE RS1 は分割とTopreの両方を満たすが、有線でキーマップも変えられないため、今回は見送り。
+		</desc>
+		<defs>
+			<filter id="kb-roles-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="37"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#kb-roles-sketch)">
+			<rect class="kr-group" x="20" y="26" width="320" height="180" rx="16" />
+			{
+				rows.map((r) => (
+					<g class:list={['kr-box', { 'kr-box--skip': r.skip }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="kr-icon" transform={`translate(${BOX_X + 12} ${r.y + 20})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<g class="kr-tag">
+				<rect x="228" y="236" width="98" height="22" rx="11" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="kr-group-label" x="36" y="20">今の二刀流</text>
+		<text class="kr-tag-text" x="277" y="247" text-anchor="middle" dominant-baseline="central">今回は見送り</text>
+		{
+			rows.map((r) => (
+				<g>
+					<text class="kr-title" x={BOX_X + 52} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class:list={['kr-role', { 'kr-role--skip': r.skip }]} x={BOX_X + 52} y={r.y + 44}>
+						{r.role}
+					</text>
+					<text class="kr-note" x={BOX_X + 52} y={r.y + 60}>
+						{r.note}
+					</text>
+				</g>
+			))
+		}
+	</svg>
+	<figcaption>今の二刀流と、RS1の立ち位置（点線は持っていないもの）</figcaption>
+</figure>
+
+<style>
+	.kb-roles svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.kr-group {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.kr-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.kr-box--skip rect {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 7 5;
+	}
+	.kr-icon {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.kr-box--skip .kr-icon {
+		stroke: var(--c-text-sub);
+	}
+	.kr-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.kr-role {
+		fill: var(--c-accent);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.kr-role--skip {
+		fill: var(--c-accent2);
+	}
+	.kr-note {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.kr-group-label {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.kr-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.kr-tag-text {
+		fill: var(--c-accent2);
+		font-size: 13px;
+		font-weight: 700;
+	}
+</style>

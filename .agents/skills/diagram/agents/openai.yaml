@@ -1,0 +1,7 @@
+interface:
+  display_name: "BUNBOU図解作成"
+  short_description: "記事の図解マーカーを手描き風SVGコンポーネントに置き換えます"
+  default_prompt: "Use $diagram to turn the DIAGRAM markers in a BUNBOU article into SVG components."
+
+policy:
+  allow_implicit_invocation: false

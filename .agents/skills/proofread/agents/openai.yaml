@@ -1,0 +1,7 @@
+interface:
+  display_name: "BUNBOU記事チェック"
+  short_description: "公開前の記事を点検し、指摘だけを出します（書き換えません）"
+  default_prompt: "Use $proofread to review a BUNBOU article before publishing."
+
+policy:
+  allow_implicit_invocation: false

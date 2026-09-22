@@ -1,7 +1,0 @@
-interface:
-  display_name: "BUNBOU記事作成"
-  short_description: "メモや体験談からBUNBOUのMDX記事を作成します"
-  default_prompt: "Use $write to turn my theme or notes into a BUNBOU blog article."
-
-policy:
-  allow_implicit_invocation: false

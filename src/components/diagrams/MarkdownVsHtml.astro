@@ -1,0 +1,248 @@
+---
+/*
+  記事「マークダウン、読みにくくないですか」専用の図解
+  同じ内容が、マークダウンのソースとブラウザ表示でどう違って見えるか。
+
+  手描き風のゆらぎは線と図形だけにかけ、文字にはかけない。
+  色だけに頼らず、「記号が並ぶ」「見た目で分かる」のラベルでも違いを示す。
+
+  スマホ幅では2枚が縦に積まれる（35rem以下）。
+  各SVGの viewBox 幅は260なので、375px画面（本文約335px）では
+  約1.29倍に拡大され、14pxの文字が実寸18px程度で表示される。
+*/
+
+// 左：マークダウンのソース。記号がそのまま見えている状態
+const source = [
+	{ y: 92, text: '# 進め方', sym: true },
+	{ y: 116, text: '## 文章', sym: true },
+	{ y: 140, text: '- **太字**で強調する', sym: true },
+	{ y: 164, text: '- `code` を使う', sym: true },
+	{ y: 196, text: '| 項目 | 内容 |', sym: true },
+	{ y: 220, text: '| --- | --- |', sym: true },
+	{ y: 244, text: '| 文体 | 残す |', sym: true },
+];
+---
+
+<figure class="mvh">
+	<svg viewBox="0 0 260 300" role="img" aria-labelledby="mvh-md-title mvh-md-desc">
+		<title id="mvh-md-title">マークダウンのソースは記号が並んで見える</title>
+		<desc id="mvh-md-desc">
+			マークダウンのソースでは、シャープ、アスタリスク、ハイフン、パイプといった記号が文章に混ざって並んでいる。見出しも本文も表も同じ大きさ、同じ太さで表示されるため、どこが見出しでどこが本文なのかが一目では分からない。
+		</desc>
+		<defs>
+			<filter id="mvh-source-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="17"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#mvh-source-sketch)">
+			<rect class="mvh__panel mvh__panel--source" x="8" y="38" width="244" height="254" rx="15" />
+			<g class="mvh__tag-shape mvh__tag-shape--source">
+				<rect x="120" y="49" width="116" height="24" rx="12" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="mvh__heading mvh__heading--source" x="130" y="24" text-anchor="middle">.md をそのまま</text>
+		<text class="mvh__tag-text mvh__tag-text--source" x="178" y="61" text-anchor="middle" dominant-baseline="central">記号が並ぶ</text>
+		{
+			source.map((line) => (
+				<text class="mvh__code" x="24" y={line.y}>{line.text}</text>
+			))
+		}
+		<text class="mvh__note mvh__note--source" x="130" y="277" text-anchor="middle">どれも同じ大きさ・同じ重み</text>
+	</svg>
+
+	<svg viewBox="0 0 260 300" role="img" aria-labelledby="mvh-html-title mvh-html-desc">
+		<title id="mvh-html-title">HTMLにするとブラウザで構造が見える</title>
+		<desc id="mvh-html-desc">
+			同じ内容をHTMLにしてブラウザで開くと、見出しは大きな文字になり、記号は消えて太字は太字として表示され、表は列が揃って見える。書いてある内容は同じだが、どこが見出しでどこが本文かが見た目で分かる。
+		</desc>
+		<defs>
+			<filter id="mvh-render-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="41"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#mvh-render-sketch)">
+			<rect class="mvh__panel mvh__panel--render" x="8" y="38" width="244" height="254" rx="15" />
+
+			<!-- 見出しの下線。大見出しだけ長く引く -->
+			<path class="mvh__rule" d="M24 100h96" />
+
+			<!-- 箇条書きの点 -->
+			<circle class="mvh__bullet" cx="30" cy="160" r="2.5" />
+			<circle class="mvh__bullet" cx="30" cy="184" r="2.5" />
+
+			<!-- 表。罫線で列が揃っているとわかる形にする -->
+			<rect class="mvh__table" x="24" y="204" width="212" height="60" rx="6" />
+			<path class="mvh__table-line" d="M24 224h212 M130 204v60" />
+
+			<g class="mvh__tag-shape mvh__tag-shape--render">
+				<rect x="104" y="49" width="132" height="24" rx="12" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="mvh__heading mvh__heading--render" x="130" y="24" text-anchor="middle">.html で開く</text>
+		<text class="mvh__tag-text mvh__tag-text--render" x="170" y="61" text-anchor="middle" dominant-baseline="central">見た目で分かる</text>
+
+		<text class="mvh__h1" x="24" y="94">進め方</text>
+		<text class="mvh__h2" x="24" y="128">文章</text>
+		<text class="mvh__body" x="42" y="165">太字で強調する</text>
+		<text class="mvh__body" x="42" y="189">code を使う</text>
+
+		<text class="mvh__th" x="36" y="220">項目</text>
+		<text class="mvh__th" x="142" y="220">内容</text>
+		<text class="mvh__td" x="36" y="248">文体</text>
+		<text class="mvh__td" x="142" y="248">残す</text>
+
+		<text class="mvh__note mvh__note--render" x="130" y="277" text-anchor="middle">中身はそのまま、見え方だけ</text>
+	</svg>
+
+	<figcaption>同じ内容でも、ソースのままと、ブラウザで開いたときとでは読む体力がまるで違う</figcaption>
+</figure>
+
+<style>
+	.mvh {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+	.mvh svg {
+		display: block;
+		flex: 1 1 0;
+		min-width: 0;
+		height: auto;
+		font-family: var(--font-body);
+	}
+	.mvh figcaption {
+		flex: 0 0 100%;
+	}
+
+	/* 枠 */
+	.mvh__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.mvh__panel--source {
+		stroke: var(--c-accent2);
+	}
+	.mvh__panel--render {
+		stroke: var(--c-accent);
+	}
+
+	/* 見出しの下線・箇条書きの点・表の罫線 */
+	.mvh__rule,
+	.mvh__table-line {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+	.mvh__table-line {
+		stroke: var(--c-line-strong);
+		stroke-width: 1.4;
+	}
+	.mvh__table {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
+	}
+	.mvh__bullet {
+		fill: var(--c-accent);
+	}
+
+	/* タグ */
+	.mvh__tag-shape rect {
+		stroke-width: 1.2;
+	}
+	.mvh__tag-shape--source rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.mvh__tag-shape--render rect {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.mvh__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.mvh__tag-text--source {
+		fill: var(--c-accent2);
+	}
+	.mvh__tag-text--render {
+		fill: var(--c-accent);
+	}
+
+	/* パネルの見出し */
+	.mvh__heading {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.mvh__heading--source {
+		fill: var(--c-accent2);
+	}
+	.mvh__heading--render {
+		fill: var(--c-accent);
+	}
+
+	/* 左：ソース。すべて同じ大きさ・同じ重みにする */
+	.mvh__code {
+		fill: var(--c-text-sub);
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: 14px;
+	}
+
+	/* 右：ブラウザ表示。大きさと太さで階層をつける */
+	.mvh__h1 {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 22px;
+	}
+	.mvh__h2 {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 17px;
+	}
+	.mvh__body {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+	.mvh__th {
+		fill: var(--c-heading);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.mvh__td {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+
+	.mvh__note {
+		font-size: 14px;
+	}
+	.mvh__note--source {
+		fill: var(--c-accent2);
+	}
+	.mvh__note--render {
+		fill: var(--c-accent);
+	}
+
+	/* スマホ幅では縦に積む */
+	@media (max-width: 35rem) {
+		.mvh svg {
+			flex-basis: 100%;
+		}
+	}
+</style>

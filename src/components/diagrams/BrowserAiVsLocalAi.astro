@@ -1,0 +1,215 @@
+---
+/*
+  記事「Obsidianを入れてみた」専用の図解
+  ブラウザで動くAIと、手元（Mac）で動くAIで、フォルダに届くかどうかが違うという話。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  色だけに頼らないよう、ラベル（「コピペで渡す」「直接読める」）と
+  ×マークでも違いが分かるようにしている。
+  ※この図の点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため、
+    届かないことは灰桜の線＋×マークで表す。
+
+  スマホ幅（35rem以下）では2枚が縦に積まれる。
+  viewBox 幅は260なので、375px画面（本文約335px）では約1.29倍。
+  14pxの文字が実寸18px程度になる。
+*/
+
+// 28×28 のマス目で描く、線だけのアイコン
+const ICONS = {
+	chat: 'M3 4h22v15H12l-6 5v-5H3z',
+	terminal: 'M2 4h24v20H2z M2 9h24 M7 14l4 3.5-4 3.5 M14 21h7',
+	folder: 'M2 7h9l3 3h12v14H2z M16 16h6 M16 20h6',
+};
+---
+
+<figure class="bvl">
+	<svg viewBox="0 0 260 272" role="img" aria-labelledby="bvl-browser-title bvl-browser-desc">
+		<title id="bvl-browser-title">ブラウザで動くAIは、Macのフォルダが見えない</title>
+		<desc id="bvl-browser-desc">
+			ブラウザで動くChatGPTやClaudeのチャットと、Macのフォルダの間には線が通っておらず、途中に×印が付いている。フォルダの中を自分で探してもらうことはできないため、必要なものは自分で選んで渡すことになる。
+		</desc>
+		<defs>
+			<filter id="bvl-browser-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="23"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#bvl-browser-sketch)">
+			<rect class="bvl__panel bvl__panel--far" x="8" y="38" width="244" height="216" rx="15" />
+			<g class="bvl__tag-shape bvl__tag-shape--far">
+				<rect x="138" y="49" width="98" height="24" rx="12" />
+			</g>
+			<path class="bvl__icon" transform="translate(24 84)" d={ICONS.chat} />
+			<path class="bvl__icon" transform="translate(24 180)" d={ICONS.folder} />
+			<!-- 届かない道。途中で×になる -->
+			<path class="bvl__link bvl__link--cut" d="M38 120v52" />
+			<path class="bvl__cross" d="M31 139l14 14 M45 139l-14 14" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="bvl__heading bvl__heading--far" x="130" y="24" text-anchor="middle">ブラウザで動くAI</text>
+		<text class="bvl__tag-text bvl__tag-text--far" x="187" y="61" text-anchor="middle" dominant-baseline="central">自分で渡す</text>
+		<text class="bvl__label" x="60" y="103">ChatGPT / Claude</text>
+		<text class="bvl__note bvl__note--far" x="56" y="151">見えない</text>
+		<text class="bvl__label" x="60" y="199">Macのフォルダ</text>
+		<text class="bvl__note bvl__note--far" x="130" y="236" text-anchor="middle">フォルダの中は探せない</text>
+	</svg>
+
+	<svg viewBox="0 0 260 272" role="img" aria-labelledby="bvl-local-title bvl-local-desc">
+		<title id="bvl-local-title">手元で動くAIは、Macのフォルダを直接読める</title>
+		<desc id="bvl-local-desc">
+			Macの中で動くClaude CodeとMacのフォルダが、上下両向きの矢印でつながっている。ファイルをそのまま読むだけでなく、書き込むこともできる。
+		</desc>
+		<defs>
+			<filter id="bvl-local-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="59"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#bvl-local-sketch)">
+			<rect class="bvl__panel bvl__panel--near" x="8" y="38" width="244" height="216" rx="15" />
+			<g class="bvl__tag-shape bvl__tag-shape--near">
+				<rect x="138" y="49" width="98" height="24" rx="12" />
+			</g>
+			<path class="bvl__icon" transform="translate(24 84)" d={ICONS.terminal} />
+			<path class="bvl__icon" transform="translate(24 180)" d={ICONS.folder} />
+			<!-- 通っている道。読むだけでなく書き込みもできるので両向き -->
+			<path class="bvl__link bvl__link--open" d="M38 120v52 M32 126l6-6 6 6 M32 166l6 6 6-6" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="bvl__heading bvl__heading--near" x="130" y="24" text-anchor="middle">手元で動くAI</text>
+		<text class="bvl__tag-text bvl__tag-text--near" x="187" y="61" text-anchor="middle" dominant-baseline="central">直接読める</text>
+		<text class="bvl__label" x="60" y="103">Claude Code</text>
+		<text class="bvl__note bvl__note--near" x="56" y="151">そのまま</text>
+		<text class="bvl__label" x="60" y="199">Macのフォルダ</text>
+		<text class="bvl__note bvl__note--near" x="130" y="236" text-anchor="middle">読み書きまでできる</text>
+	</svg>
+
+	<figcaption>同じAIでも、手元で動くものはフォルダの中を直接読める</figcaption>
+</figure>
+
+<style>
+	.bvl {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+	.bvl svg {
+		display: block;
+		flex: 1 1 0;
+		min-width: 0;
+		height: auto;
+		font-family: var(--font-body);
+	}
+	.bvl figcaption {
+		flex: 0 0 100%;
+	}
+
+	/* 枠 */
+	.bvl__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.bvl__panel--far {
+		stroke: var(--c-accent2);
+	}
+	.bvl__panel--near {
+		stroke: var(--c-accent);
+	}
+
+	/* アイコン */
+	.bvl__icon {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	/* つながり */
+	.bvl__link {
+		fill: none;
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.bvl__link--cut {
+		stroke: var(--c-accent2);
+	}
+	.bvl__link--open {
+		stroke: var(--c-accent);
+	}
+	.bvl__cross {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.6;
+		stroke-linecap: round;
+	}
+
+	/* タグ */
+	.bvl__tag-shape rect {
+		stroke-width: 1.2;
+	}
+	.bvl__tag-shape--far rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.bvl__tag-shape--near rect {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.bvl__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.bvl__tag-text--far {
+		fill: var(--c-accent2);
+	}
+	.bvl__tag-text--near {
+		fill: var(--c-accent);
+	}
+
+	/* パネルの見出し */
+	.bvl__heading {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.bvl__heading--far {
+		fill: var(--c-accent2);
+	}
+	.bvl__heading--near {
+		fill: var(--c-accent);
+	}
+
+	.bvl__label {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+	.bvl__note {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.bvl__note--far {
+		fill: var(--c-accent2);
+	}
+	.bvl__note--near {
+		fill: var(--c-accent);
+	}
+
+	/* スマホ幅では縦に積む */
+	@media (max-width: 35rem) {
+		.bvl svg {
+			flex-basis: 100%;
+		}
+	}
+</style>

@@ -1,0 +1,173 @@
+---
+/*
+  記事「Obsidianを入れてみた」専用の図解
+  保管庫（長くてよい・必要な時だけ読まれる）と CLAUDE.md（短く・毎回読まれる）の2層構造。
+
+  手描き風のゆらぎは線と図形だけにかけ、文字にはかけない。
+
+  色だけに頼らないように、次の組み合わせにしている。
+  - できている部分：青磁の実線
+  - これからの部分：灰桜の点線＋「これから」のラベル
+
+  viewBox 幅は330なので、375px画面（本文約335px）ではほぼ等倍。
+  図の中の文字は14px以上にしている。
+*/
+type Row = { y: number; title: string; sub: string; icon: string; planned?: boolean };
+
+const BOX_X = 40;
+const BOX_W = 250;
+const BOX_H = 62;
+const CX = 165; // 矢印の横位置
+
+// 28×28 のマス目で描く、線だけのアイコン
+const ICONS: Record<string, string> = {
+	chat: 'M3 4h22v15H12l-6 5v-5H3z',
+	folder: 'M2 7h9l3 3h12v14H2z M16 16h6 M16 20h6',
+	file: 'M6 2h11l6 6v18H6z M17 2v6h6 M10 15h9 M10 20h6',
+	terminal: 'M2 4h24v20H2z M2 9h24 M7 14l4 3.5-4 3.5 M14 21h7',
+};
+
+const rows: Row[] = [
+	{ y: 8, title: 'チャット履歴', sub: 'ChatGPT・Claude', icon: 'chat', planned: true },
+	{ y: 110, title: '保管庫（Obsidian）', sub: '長くてよい・必要な時だけ', icon: 'folder' },
+	{ y: 212, title: 'CLAUDE.md', sub: '短く・毎回読まれる', icon: 'file', planned: true },
+	{ y: 314, title: 'Claude Code', sub: '自分向けの返事になる', icon: 'terminal' },
+];
+
+// 矢印（縦。先端に矢羽を付ける）
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}v${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const steps = [
+	{ y1: 70, y2: 106, label: 'エクスポート' },
+	{ y1: 172, y2: 208, label: '要点だけ' },
+	{ y1: 274, y2: 310, label: '毎回読む' },
+];
+
+const H = 392;
+---
+
+<figure class="ocl">
+	<svg viewBox={`0 0 330 ${H}`} role="img" aria-labelledby="ocl-title ocl-desc">
+		<title id="ocl-title">保管庫とCLAUDE.mdの2層構造</title>
+		<desc id="ocl-desc">
+			上から順に4つの箱が縦に並んでいる。1つ目はChatGPTやClaudeのチャット履歴（これから取り込む部分）。エクスポートして、2つ目の保管庫（Obsidian）へ入れる。保管庫は長くてよく、必要な時だけ読まれる。そこから要点だけを、3つ目のCLAUDE.md（これから作る部分）に書き写す。CLAUDE.mdは短く、毎回読まれる。最後に4つ目のClaude Codeがそれを毎回読み、自分向けの返事になる。
+		</desc>
+		<defs>
+			<filter id="ocl-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#ocl-sketch)">
+			{
+				rows.map((r) => (
+					<g class:list={['ocl__box', { 'ocl__box--planned': r.planned }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="ocl__icon" transform={`translate(${BOX_X + 14} ${r.y + 17})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			{steps.map((s) => <path class="ocl__arrow" d={arrow(s.y1, s.y2)} />)}
+			{
+				rows
+					.filter((r) => r.planned)
+					.map((r) => (
+						<g class="ocl__tag-shape">
+							<rect x="208" y={r.y + 9} width="68" height="22" rx="11" />
+						</g>
+					))
+			}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="ocl__title" x={BOX_X + 56} y={r.y + 26}>
+						{r.title}
+					</text>
+					<text class="ocl__sub" x={BOX_X + 56} y={r.y + 48}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+		{
+			rows
+				.filter((r) => r.planned)
+				.map((r) => (
+					<text class="ocl__tag-text" x="242" y={r.y + 20} text-anchor="middle" dominant-baseline="central">
+						これから
+					</text>
+				))
+		}
+		{
+			steps.map((s) => (
+				<text class="ocl__step" x={CX + 12} y={(s.y1 + s.y2) / 2 + 5}>
+					{s.label}
+				</text>
+			))
+		}
+	</svg>
+	<figcaption>保管庫は長くてよく、CLAUDE.mdは短く保つ（点線は、これから作る部分）</figcaption>
+</figure>
+
+<style>
+	.ocl svg {
+		display: block;
+		width: 100%;
+		max-width: 26rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.ocl__box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.ocl__box--planned rect {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 7 5;
+	}
+	.ocl__icon {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ocl__arrow {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ocl__title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.ocl__sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.ocl__step {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.ocl__tag-shape rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.ocl__tag-text {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

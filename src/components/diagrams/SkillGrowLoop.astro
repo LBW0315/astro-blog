@@ -1,0 +1,146 @@
+---
+/*
+  記事「CLAUDE.md に全部書くのをやめた」専用の図解
+  スキルを作り、使い、気づきを戻しながら育てる循環。
+
+  手描き風のゆらぎは線と図形だけにかけ、文字にはかけない。
+  「使ってみる → 気になったところを伝える」を灰桜の太い線とラベルで強調する。
+*/
+---
+
+<figure class="sgl">
+	<svg viewBox="0 0 360 390" role="img" aria-labelledby="sgl-title sgl-desc">
+		<title id="sgl-title">スキルを使いながら育てていく循環</title>
+		<desc id="sgl-desc">
+			やりたいことを話すとSKILL.mdができる。実際に使ってみて、気になったところを伝え、またやりたいことを話すところへ戻る。この循環でスキルが少しずつ育つ。特に、使ってみてから気になったところを伝える戻りが大切。
+		</desc>
+		<defs>
+			<filter id="skill-grow-loop-sketch" x="-7%" y="-7%" width="114%" height="114%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="41"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#skill-grow-loop-sketch)">
+			<rect class="sgl__paper" x="14" y="12" width="332" height="358" rx="18" />
+			<path class="sgl__paper-margin" d="M42 12v358" />
+			{[48, 112, 176, 240, 304, 350].map((y) => <circle class="sgl__hole" cx="28" cy={y} r="4" />)}
+
+			<rect class="sgl__step" x="91" y="34" width="180" height="58" rx="11" />
+			<path class="sgl__icon" d="M111 53h31v21h-18l-9 7 3-7h-7z M119 61h15 M119 67h10" />
+
+			<rect class="sgl__step" x="204" y="130" width="134" height="68" rx="11" />
+			<path class="sgl__icon" d="M212 145h22l8 8v30h-30z M234 145v8h8 M218 163h17 M218 170h17 M218 177h11" />
+
+			<rect class="sgl__step sgl__step--try" x="91" y="238" width="180" height="58" rx="11" />
+			<path class="sgl__icon" d="M111 253h31v25h-31z M111 260h31 M117 256h.5 M122 256h.5 M118 267l5 4-5 4 M127 275h8" />
+
+			<rect class="sgl__step sgl__step--feedback" x="22" y="130" width="164" height="68" rx="11" />
+			<path class="sgl__icon" d="M37 146h26v24H49l-10 8 3-8h-5z M44 154h13 M44 161h9" />
+
+			<!-- 時計回りの循環 -->
+			<path class="sgl__arrow" d="M271 63q48 14 35 67 M299 121l7 9 5-10" />
+			<path class="sgl__arrow" d="M306 198q-3 30-35 52 M278 240l-7 10 12-1" />
+			<!-- 使ってみる → 伝える、を強調 -->
+			<path class="sgl__arrow sgl__arrow--feedback" d="M91 267q-51-6-51-69 M34 207l6-9 6 9" />
+			<path class="sgl__arrow" d="M72 130q-1-35 35-48 M97 80l10 2-5 9" />
+
+			<g class="sgl__tag-shape">
+				<rect x="43" y="216" width="106" height="24" rx="12" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="sgl__step-title" x="159" y="59">やりたいことを</text>
+		<text class="sgl__step-title" x="159" y="78">話す</text>
+
+		<text class="sgl__step-title" x="251" y="158">SKILL.mdが</text>
+		<text class="sgl__step-title" x="251" y="178">できる</text>
+
+		<text class="sgl__step-title" x="159" y="263">実際に</text>
+		<text class="sgl__step-title" x="159" y="282">使ってみる</text>
+
+		<text class="sgl__step-title" x="74" y="157">気になった</text>
+		<text class="sgl__step-title" x="74" y="177">ところを伝える</text>
+
+		<text class="sgl__center-title" x="181" y="327" text-anchor="middle">使うたびに、自分のやり方へ近づく</text>
+		<text class="sgl__tag-text" x="96" y="228" text-anchor="middle" dominant-baseline="central">ここを繰り返す</text>
+	</svg>
+	<figcaption>作って終わりではなく、使って、伝えて、少しずつ育てていく</figcaption>
+</figure>
+
+<style>
+	.sgl svg {
+		display: block;
+		width: 100%;
+		max-width: 32rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.sgl__paper {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.2;
+	}
+	.sgl__paper-margin {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+		stroke-dasharray: 5 5;
+	}
+	.sgl__hole {
+		fill: var(--c-bg);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.1;
+	}
+	.sgl__step {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.sgl__step--try,
+	.sgl__step--feedback {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.sgl__icon,
+	.sgl__arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.sgl__icon {
+		stroke-width: 1.6;
+	}
+	.sgl__arrow {
+		stroke: var(--c-accent);
+		stroke-width: 2.2;
+	}
+	.sgl__arrow--feedback {
+		stroke: var(--c-accent2);
+		stroke-width: 3.4;
+	}
+	.sgl__tag-shape rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.sgl__step-title,
+	.sgl__center-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.sgl__center-title {
+		font-size: 15px;
+	}
+	.sgl__tag-text {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

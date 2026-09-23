@@ -1,0 +1,237 @@
+---
+/*
+  記事「CLAUDE.md に全部書くのをやめた」専用の図解
+  CLAUDE.md とスキルが読まれるタイミングの違い。
+
+  手描き風のゆらぎは線と図形だけにかけ、文字にはかけない。
+  色だけに頼らず、接続線と「毎回」「呼んだときだけ」のラベルでも違いを示す。
+*/
+const tasks = [
+	{ y: 150, label: '記事を書く' },
+	{ y: 207, label: 'CSSを直す' },
+	{ y: 264, label: 'ビルドを調べる' },
+];
+---
+
+<figure class="avod">
+	<svg viewBox="0 0 260 340" role="img" aria-labelledby="avod-always-title avod-always-desc">
+		<title id="avod-always-title">CLAUDE.mdはすべての作業で毎回読まれる</title>
+		<desc id="avod-always-desc">
+			CLAUDE.mdは常に読み込まれ、記事を書く、CSSを直す、ビルドを調べる、という3つすべての作業で毎回読まれる。
+		</desc>
+		<defs>
+			<filter id="always-panel-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="23"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#always-panel-sketch)">
+			<rect class="avod__panel avod__panel--always" x="8" y="38" width="244" height="294" rx="15" />
+			<rect class="avod__source avod__source--always" x="24" y="64" width="212" height="58" rx="10" />
+			<path class="avod__doc-icon avod__doc-icon--always" d="M38 78h18l7 7v25H38z M56 78v7h7 M43 93h14 M43 99h14 M43 105h9" />
+
+			<!-- CLAUDE.md からは、すべての作業へつながる -->
+			<path class="avod__line avod__line--always" d="M130 122v15H34v147 M34 170h14 M34 227h14 M34 284h14" />
+			<path class="avod__arrow avod__arrow--always" d="M41 164l7 6-7 6 M41 221l7 6-7 6 M41 278l7 6-7 6" />
+
+			{
+				tasks.map((task) => (
+					<rect class="avod__task avod__task--always" x="48" y={task.y} width="188" height="40" rx="9" />
+				))
+			}
+			<g class="avod__tag-shape avod__tag-shape--always">
+				<rect x="172" y="49" width="64" height="24" rx="12" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="avod__heading avod__heading--always" x="130" y="24" text-anchor="middle">CLAUDE.md</text>
+		<text class="avod__source-title" x="74" y="90">CLAUDE.md</text>
+		<text class="avod__source-sub" x="74" y="111">常に読み込む</text>
+		{
+			tasks.map((task) => (
+				<text class="avod__task-text" x="142" y={task.y + 20} text-anchor="middle" dominant-baseline="central">{task.label}</text>
+			))
+		}
+		<text class="avod__tag-text avod__tag-text--always" x="204" y="61" text-anchor="middle" dominant-baseline="central">毎回</text>
+	</svg>
+
+	<svg viewBox="0 0 260 340" role="img" aria-labelledby="avod-on-demand-title avod-on-demand-desc">
+		<title id="avod-on-demand-title">スキルは呼び出した作業だけで読まれる</title>
+		<desc id="avod-on-demand-desc">
+			スキルのSKILL.mdは、スラッシュwriteと入力して記事を書くときだけ読まれ、CSSを直すときやビルドを調べるときは読まれない。
+		</desc>
+		<defs>
+			<filter id="on-demand-panel-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="23"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#on-demand-panel-sketch)">
+			<rect class="avod__panel avod__panel--on-demand" x="8" y="38" width="244" height="294" rx="15" />
+			<rect class="avod__source avod__source--on-demand" x="24" y="64" width="212" height="58" rx="10" />
+			<path class="avod__doc-icon avod__doc-icon--on-demand" d="M38 78h18l7 7v25H38z M56 78v7h7 M43 93h14 M43 99h14 M43 105h9" />
+
+			<!-- スキルからは、呼び出した作業だけへつながる -->
+			<path class="avod__line avod__line--on-demand" d="M130 122v28" />
+			<path class="avod__arrow avod__arrow--on-demand" d="M123 143l7 7 7-7" />
+
+			{
+				tasks.map((task, index) => (
+					<rect class:list={['avod__task', index === 0 ? 'avod__task--on-demand' : 'avod__task--skipped']} x="24" y={task.y} width="212" height="40" rx="9" />
+				))
+			}
+			<path class="avod__skip-mark" d="M210 220l14 14 M224 220l-14 14 M210 277l14 14 M224 277l-14 14" />
+			<g class="avod__tag-shape avod__tag-shape--on-demand">
+				<rect x="110" y="49" width="124" height="24" rx="12" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="avod__heading avod__heading--on-demand" x="130" y="24" text-anchor="middle">スキル</text>
+		<text class="avod__source-title" x="74" y="90">/write</text>
+		<text class="avod__source-sub" x="74" y="111">SKILL.md</text>
+		{
+			tasks.map((task, index) => (
+				<text class="avod__task-text" x={index === 0 ? 130 : 114} y={task.y + 20} text-anchor="middle" dominant-baseline="central">{task.label}</text>
+			))
+		}
+		<text class="avod__tag-text avod__tag-text--on-demand" x="172" y="61" text-anchor="middle" dominant-baseline="central">呼んだときだけ</text>
+		<text class="avod__skip-text" x="130" y="324" text-anchor="middle">ほかの作業では読まない</text>
+	</svg>
+
+	<figcaption>CLAUDE.mdは毎回、スキルは呼んだときだけ読まれる</figcaption>
+</figure>
+
+<style>
+	.avod {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+	.avod svg {
+		display: block;
+		flex: 1 1 0;
+		min-width: 0;
+		height: auto;
+		font-family: var(--font-body);
+	}
+	.avod figcaption {
+		flex: 0 0 100%;
+	}
+	.avod__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.avod__panel--always {
+		stroke: var(--c-accent);
+	}
+	.avod__panel--on-demand {
+		stroke: var(--c-accent2);
+	}
+	.avod__source,
+	.avod__task {
+		fill: var(--c-surface-raised);
+		stroke-width: 1.8;
+	}
+	.avod__source--always,
+	.avod__task--always {
+		stroke: var(--c-accent);
+	}
+	.avod__source--on-demand,
+	.avod__task--on-demand {
+		stroke: var(--c-accent2);
+	}
+	.avod__task--skipped {
+		stroke: var(--c-line-strong);
+		stroke-dasharray: 5 5;
+	}
+	.avod__doc-icon,
+	.avod__line,
+	.avod__arrow,
+	.avod__skip-mark {
+		fill: none;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.avod__doc-icon {
+		stroke-width: 1.6;
+	}
+	.avod__doc-icon--always,
+	.avod__line--always,
+	.avod__arrow--always {
+		stroke: var(--c-accent);
+	}
+	.avod__doc-icon--on-demand,
+	.avod__line--on-demand,
+	.avod__arrow--on-demand {
+		stroke: var(--c-accent2);
+	}
+	.avod__line,
+	.avod__arrow {
+		stroke-width: 2.2;
+	}
+	.avod__skip-mark {
+		stroke: var(--c-line-strong);
+		stroke-width: 1.8;
+	}
+	.avod__tag-shape rect {
+		stroke-width: 1.2;
+	}
+	.avod__tag-shape--always rect {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.avod__tag-shape--on-demand rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.avod__heading,
+	.avod__source-title {
+		font-family: var(--font-heading);
+		font-weight: 700;
+	}
+	.avod__heading {
+		font-size: 16px;
+	}
+	.avod__heading--always {
+		fill: var(--c-accent);
+	}
+	.avod__heading--on-demand {
+		fill: var(--c-accent2);
+	}
+	.avod__source-title {
+		fill: var(--c-heading);
+		font-size: 15px;
+	}
+	.avod__source-sub,
+	.avod__task-text,
+	.avod__skip-text {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.avod__task-text {
+		fill: var(--c-text);
+	}
+	.avod__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.avod__tag-text--always {
+		fill: var(--c-accent);
+	}
+	.avod__tag-text--on-demand {
+		fill: var(--c-accent2);
+	}
+	@media (max-width: 35rem) {
+		.avod svg {
+			flex-basis: 100%;
+		}
+	}
+</style>

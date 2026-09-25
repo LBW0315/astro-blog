@@ -1,0 +1,215 @@
+---
+/*
+  記事「1日数人でも、読まれていた」専用の図解
+  自宅のIPアドレスを除外する前と後で、閲覧数の中身がどう変わるかを並べた図。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  色だけに頼らないよう、見出し（「設定する前」「設定したあと」）とタグ、
+  それに「自分」というラベルと×マークでも違いが分かるようにしている。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  スマホ幅（35rem以下）では2枚が縦に積まれる。
+  viewBox 幅は260なので、375px画面（本文約335px）では約1.29倍。
+  14pxの文字が実寸18px程度になる。
+*/
+
+// 24×24 のマス目で描く、線だけの人アイコン
+const PERSON = 'M12 4a4.5 4.5 0 1 0 0 9a4.5 4.5 0 1 0 0-9 M3.5 22c0-5 3.8-7.5 8.5-7.5s8.5 2.5 8.5 7.5';
+---
+
+<figure class="itf">
+	<svg viewBox="0 0 260 240" role="img" aria-labelledby="itf-before-title itf-before-desc">
+		<title id="itf-before-title">除外を設定する前は、閲覧数に自分が混ざっている</title>
+		<desc id="itf-before-desc">
+			「きょう来た人の数」と書かれた枠の中に人が4人並んでいる。左端の1人には「自分」というラベルが付いていて、自分でページを開いた分も数に入っていることを表している。
+		</desc>
+		<defs>
+			<filter id="itf-before-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="41"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#itf-before-sketch)">
+			<rect class="itf__panel itf__panel--before" x="8" y="34" width="244" height="196" rx="15" />
+			<rect class="itf__tag-shape itf__tag-shape--before" x="148" y="45" width="92" height="24" rx="12" />
+			<rect class="itf__box" x="24" y="98" width="208" height="72" rx="10" />
+			<path class="itf__person itf__person--me" transform="translate(44 106)" d={PERSON} />
+			<path class="itf__person" transform="translate(92 106)" d={PERSON} />
+			<path class="itf__person" transform="translate(140 106)" d={PERSON} />
+			<path class="itf__person" transform="translate(188 106)" d={PERSON} />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="itf__heading itf__heading--before" x="130" y="24" text-anchor="middle">設定する前</text>
+		<text class="itf__tag-text itf__tag-text--before" x="194" y="57" text-anchor="middle" dominant-baseline="central"
+			>自分も1人</text
+		>
+		<text class="itf__label" x="24" y="88">きょう来た人の数</text>
+		<text class="itf__me" x="56" y="160" text-anchor="middle">自分</text>
+		<text class="itf__note itf__note--before" x="130" y="200" text-anchor="middle">4人のうち1人は自分</text>
+	</svg>
+
+	<svg viewBox="0 0 260 240" role="img" aria-labelledby="itf-after-title itf-after-desc">
+		<title id="itf-after-title">除外を設定したあとは、自分の分が数から抜ける</title>
+		<desc id="itf-after-desc">
+			「きょう来た人の数」と書かれた枠の中に人が4人並んでいるが、左端の「自分」には×印が付いていて数に入らない。残りの3人だけが数えられることを表している。
+		</desc>
+		<defs>
+			<filter id="itf-after-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="83"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#itf-after-sketch)">
+			<rect class="itf__panel itf__panel--after" x="8" y="34" width="244" height="196" rx="15" />
+			<rect class="itf__tag-shape itf__tag-shape--after" x="130" y="45" width="110" height="24" rx="12" />
+			<rect class="itf__box" x="24" y="98" width="208" height="72" rx="10" />
+			<!-- 自分は枠の中にいるが、×が付いていて数に入らない -->
+			<path class="itf__person itf__person--me" transform="translate(44 106)" d={PERSON} />
+			<path class="itf__cross" d="M46 108l20 20 M66 108l-20 20" />
+			<path class="itf__person itf__person--kept" transform="translate(92 106)" d={PERSON} />
+			<path class="itf__person itf__person--kept" transform="translate(140 106)" d={PERSON} />
+			<path class="itf__person itf__person--kept" transform="translate(188 106)" d={PERSON} />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="itf__heading itf__heading--after" x="130" y="24" text-anchor="middle">設定したあと</text>
+		<text class="itf__tag-text itf__tag-text--after" x="185" y="57" text-anchor="middle" dominant-baseline="central"
+			>自分は入らない</text
+		>
+		<text class="itf__label" x="24" y="88">きょう来た人の数</text>
+		<text class="itf__me" x="56" y="160" text-anchor="middle">自分</text>
+		<text class="itf__note itf__note--after" x="130" y="200" text-anchor="middle">数に入るのは外の3人</text>
+	</svg>
+
+	<figcaption>除外するまでは、自分がページを開いた分も数に入っている</figcaption>
+</figure>
+
+<style>
+	.itf {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+	.itf svg {
+		display: block;
+		flex: 1 1 0;
+		min-width: 0;
+		height: auto;
+		font-family: var(--font-body);
+	}
+	.itf figcaption {
+		flex: 0 0 100%;
+	}
+
+	/* 枠 */
+	.itf__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.itf__panel--before {
+		stroke: var(--c-accent2);
+	}
+	.itf__panel--after {
+		stroke: var(--c-accent);
+	}
+
+	/* 閲覧数の入れ物 */
+	.itf__box {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 1.4;
+	}
+
+	/* 人 */
+	.itf__person {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.itf__person--kept {
+		stroke: var(--c-accent);
+	}
+	.itf__person--me {
+		stroke: var(--c-accent2);
+	}
+	.itf__cross {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.6;
+		stroke-linecap: round;
+	}
+
+	/* タグ */
+	.itf__tag-shape {
+		stroke-width: 1.2;
+	}
+	.itf__tag-shape--before {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.itf__tag-shape--after {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.itf__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.itf__tag-text--before {
+		fill: var(--c-accent2);
+	}
+	.itf__tag-text--after {
+		fill: var(--c-accent);
+	}
+
+	/* パネルの見出し */
+	.itf__heading {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.itf__heading--before {
+		fill: var(--c-accent2);
+	}
+	.itf__heading--after {
+		fill: var(--c-accent);
+	}
+
+	.itf__label {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+	.itf__me {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.itf__note {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.itf__note--before {
+		fill: var(--c-accent2);
+	}
+	.itf__note--after {
+		fill: var(--c-accent);
+	}
+
+	/* スマホ幅では縦に積む（横並びのままだと図の中の文字が小さくなりすぎるため） */
+	@media (max-width: 35rem) {
+		.itf svg {
+			flex-basis: 100%;
+		}
+	}
+</style>

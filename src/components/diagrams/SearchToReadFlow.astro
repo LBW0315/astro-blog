@@ -1,0 +1,179 @@
+---
+/*
+  記事「1日数人でも、読まれていた」専用の図解
+  検索されてから読まれるまでの一本道を、Search Console と Googleアナリティクスの
+  どちらが見ているかで上下に分けた図。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  色だけに頼らないよう、上下のパネルにそれぞれ見出しとタグ（「検索結果まで」
+  「開いたあと」）を付けて、文字でも読み分けられるようにしている。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  viewBox 幅は300なので、375px画面（本文約335px）では約1.12倍。
+  14pxの文字が実寸15.6px程度になる。
+*/
+
+// 28×28 のマス目で描く、線だけのアイコン
+const ICONS = {
+	search: 'M13 4a9 9 0 1 0 0 18a9 9 0 1 0 0-18 M19.5 19.5l6.5 6.5',
+	cursor: 'M6 3v18l4.5-4.5 3 7 3.5-1.5-3-6.5 6.5-0.5z',
+	window: 'M2 6h24v16H2z M2 11h24 M5.5 8.5h1.5 M9.5 8.5h1.5',
+	bars: 'M3 25h22 M8 25v-9 M14 25v-15 M20 25v-6',
+};
+---
+
+<figure class="str">
+	<svg viewBox="0 0 300 442" role="img" aria-labelledby="str-title str-desc">
+		<title id="str-title">Search Console と Googleアナリティクスが見ている場所の違い</title>
+		<desc id="str-desc">
+			検索されてから読まれるまでを一本道として上下に並べた図。上の枠はSearch
+			Consoleの受け持ちで、「検索結果に出た」と「クリックされた」の2つが入っている。下の枠はGoogleアナリティクスの受け持ちで、「ブログを開いた」と「どのページを見た」の2つが入っている。2つの枠は「クリック」と書かれた下向きの矢印でつながっていて、クリックを境に見ている道具が入れ替わることを表している。
+		</desc>
+		<defs>
+			<filter id="str-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="17"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#str-sketch)">
+			<!-- 上：Search Console の受け持ち -->
+			<rect class="str__panel str__panel--gsc" x="8" y="34" width="284" height="156" rx="15" />
+			<rect class="str__tag-shape str__tag-shape--gsc" x="176" y="45" width="106" height="24" rx="12" />
+			<path class="str__icon" transform="translate(24 80)" d={ICONS.search} />
+			<path class="str__icon" transform="translate(24 130)" d={ICONS.cursor} />
+
+			<!-- クリックを境に、見ている道具が入れ替わる -->
+			<path class="str__arrow" d="M150 196v34 M144 222l6 8 6-8" />
+
+			<!-- 下：Googleアナリティクスの受け持ち -->
+			<rect class="str__panel str__panel--ga" x="8" y="272" width="284" height="156" rx="15" />
+			<rect class="str__tag-shape str__tag-shape--ga" x="176" y="283" width="106" height="24" rx="12" />
+			<path class="str__icon" transform="translate(24 318)" d={ICONS.window} />
+			<path class="str__icon" transform="translate(24 368)" d={ICONS.bars} />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="str__heading str__heading--gsc" x="150" y="24" text-anchor="middle">Search Console</text>
+		<text class="str__tag-text str__tag-text--gsc" x="229" y="57" text-anchor="middle" dominant-baseline="central"
+			>検索結果まで</text
+		>
+		<text class="str__label" x="62" y="99">検索結果に出た</text>
+		<text class="str__label" x="62" y="149">クリックされた</text>
+		<text class="str__note str__note--gsc" x="150" y="177" text-anchor="middle">まだ誰も来ていない段階</text>
+
+		<text class="str__arrow-text" x="166" y="217">クリック</text>
+
+		<text class="str__heading str__heading--ga" x="150" y="262" text-anchor="middle">Googleアナリティクス</text>
+		<text class="str__tag-text str__tag-text--ga" x="229" y="295" text-anchor="middle" dominant-baseline="central"
+			>開いたあと</text
+		>
+		<text class="str__label" x="62" y="337">ブログを開いた</text>
+		<text class="str__label" x="62" y="387">どのページを見た</text>
+		<text class="str__note str__note--ga" x="150" y="415" text-anchor="middle">ここから先が中の話</text>
+	</svg>
+
+	<figcaption>クリックを境に、見ている道具が入れ替わる</figcaption>
+</figure>
+
+<style>
+	.str {
+		max-width: 24rem;
+		margin-inline: auto;
+	}
+	.str svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		font-family: var(--font-body);
+	}
+
+	/* 枠 */
+	.str__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.str__panel--gsc {
+		stroke: var(--c-accent2);
+	}
+	.str__panel--ga {
+		stroke: var(--c-accent);
+	}
+
+	/* アイコン */
+	.str__icon {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	/* 2つの枠をつなぐ道 */
+	.str__arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.str__arrow-text {
+		fill: var(--c-text);
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	/* タグ */
+	.str__tag-shape {
+		stroke-width: 1.2;
+	}
+	.str__tag-shape--gsc {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.str__tag-shape--ga {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.str__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.str__tag-text--gsc {
+		fill: var(--c-accent2);
+	}
+	.str__tag-text--ga {
+		fill: var(--c-accent);
+	}
+
+	/* パネルの見出し */
+	.str__heading {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.str__heading--gsc {
+		fill: var(--c-accent2);
+	}
+	.str__heading--ga {
+		fill: var(--c-accent);
+	}
+
+	.str__label {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+	.str__note {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.str__note--gsc {
+		fill: var(--c-accent2);
+	}
+	.str__note--ga {
+		fill: var(--c-accent);
+	}
+</style>

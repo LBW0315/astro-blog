@@ -1,0 +1,242 @@
+---
+/*
+  記事「Keychron製トラックボールが熱い」専用の図解
+  ボタンの割り当てがPC側にあるか、マウス側にあるかで、
+  別のPCに挿したときの結果が変わるという話。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  左右で行の位置をまったく同じにして、違うのは「設定」の札がどこに付くかと、
+  その結果の文言だけにしている。
+  色だけに頼らないよう、見出し・タグ・×マーク・結果の文言でも読み分けられるようにした。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  スマホ幅（35rem以下）では2枚が縦に積まれる。
+  viewBox 幅は260なので、375px画面（本文約335px）では約1.29倍。
+  14pxの文字が実寸18px程度になる。
+*/
+
+// 28×28 のマス目で描く、線だけのアイコン
+const ICONS = {
+	pc: 'M3 5h22v14H3z M11 19v4 M17 19v4 M8 23h12',
+	mouse: 'M14 2a8 8 0 0 0-8 8v8a8 8 0 0 0 16 0v-8a8 8 0 0 0-8-8z M14 2v5 M7.5 14a3 3 0 1 0 6 0a3 3 0 1 0-6 0',
+};
+---
+
+<figure class="ssl">
+	<svg viewBox="0 0 260 258" role="img" aria-labelledby="ssl-pc-title ssl-pc-desc">
+		<title id="ssl-pc-title">設定がPCの中にある場合</title>
+		<desc id="ssl-pc-desc">
+			自宅のPCには「設定」の札が付いていて、そのとおりに動く。職場のPCには札がなく×が付いていて、デフォルトに戻る。いちばん下のマウスには何も入っていない。
+		</desc>
+		<defs>
+			<filter id="ssl-pc-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="37"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#ssl-pc-sketch)">
+			<rect class="ssl__panel ssl__panel--pc" x="8" y="34" width="244" height="212" rx="15" />
+			<rect class="ssl__tag-shape ssl__tag-shape--pc" x="144" y="45" width="96" height="24" rx="12" />
+			<path class="ssl__icon" transform="translate(24 80)" d={ICONS.pc} />
+			<rect class="ssl__chip ssl__chip--pc" x="180" y="82" width="50" height="22" rx="11" />
+			<path class="ssl__icon" transform="translate(24 138)" d={ICONS.pc} />
+			<path class="ssl__cross" d="M188 146l14 14 M202 146l-14 14" />
+			<line class="ssl__rule" x1="24" y1="190" x2="236" y2="190" />
+			<path class="ssl__icon" transform="translate(24 202)" d={ICONS.mouse} />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="ssl__heading ssl__heading--pc" x="130" y="24" text-anchor="middle">設定はPCの中</text>
+		<text class="ssl__tag-text ssl__tag-text--pc" x="192" y="57" text-anchor="middle" dominant-baseline="central"
+			>ソフトが要る</text
+		>
+		<text class="ssl__chip-text ssl__chip-text--pc" x="205" y="93" text-anchor="middle" dominant-baseline="central"
+			>設定</text
+		>
+		<text class="ssl__label" x="62" y="93">自宅のPC</text>
+		<text class="ssl__note ssl__note--ok" x="62" y="113">設定どおり動く</text>
+		<text class="ssl__label" x="62" y="151">職場のPC</text>
+		<text class="ssl__note ssl__note--pc" x="62" y="171">デフォルトに戻る</text>
+		<text class="ssl__label" x="62" y="221">マウスの中は空っぽ</text>
+	</svg>
+
+	<svg viewBox="0 0 260 258" role="img" aria-labelledby="ssl-mouse-title ssl-mouse-desc">
+		<title id="ssl-mouse-title">設定がマウスの中にある場合</title>
+		<desc id="ssl-mouse-desc">
+			自宅のPCも職場のPCも、どちらもそのとおりに動く。「設定」の札はいちばん下のマウスに付いていて、PC側には何も要らない。
+		</desc>
+		<defs>
+			<filter id="ssl-mouse-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="89"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#ssl-mouse-sketch)">
+			<rect class="ssl__panel ssl__panel--mouse" x="8" y="34" width="244" height="212" rx="15" />
+			<rect class="ssl__tag-shape ssl__tag-shape--mouse" x="116" y="45" width="124" height="24" rx="12" />
+			<path class="ssl__icon" transform="translate(24 80)" d={ICONS.pc} />
+			<path class="ssl__icon" transform="translate(24 138)" d={ICONS.pc} />
+			<line class="ssl__rule" x1="24" y1="190" x2="236" y2="190" />
+			<path class="ssl__icon" transform="translate(24 202)" d={ICONS.mouse} />
+			<rect class="ssl__chip ssl__chip--mouse" x="180" y="205" width="50" height="22" rx="11" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="ssl__heading ssl__heading--mouse" x="130" y="24" text-anchor="middle">設定はマウスの中</text>
+		<text class="ssl__tag-text ssl__tag-text--mouse" x="178" y="57" text-anchor="middle" dominant-baseline="central"
+			>ソフトは要らない</text
+		>
+		<text class="ssl__label" x="62" y="93">自宅のPC</text>
+		<text class="ssl__note ssl__note--ok" x="62" y="113">設定どおり動く</text>
+		<text class="ssl__label" x="62" y="151">職場のPC</text>
+		<text class="ssl__note ssl__note--ok" x="62" y="171">設定どおり動く</text>
+		<text class="ssl__label" x="62" y="221">マウスが覚える</text>
+		<text class="ssl__chip-text ssl__chip-text--mouse" x="205" y="216" text-anchor="middle" dominant-baseline="central"
+			>設定</text
+		>
+	</svg>
+
+	<figcaption>同じ操作をしても、設定がどこにあるかで職場のPCでの結果が変わる</figcaption>
+</figure>
+
+<style>
+	.ssl {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+	.ssl svg {
+		display: block;
+		flex: 1 1 0;
+		min-width: 0;
+		height: auto;
+		font-family: var(--font-body);
+	}
+	.ssl figcaption {
+		flex: 0 0 100%;
+	}
+
+	/* 枠 */
+	.ssl__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.ssl__panel--pc {
+		stroke: var(--c-accent2);
+	}
+	.ssl__panel--mouse {
+		stroke: var(--c-accent);
+	}
+
+	/* アイコン */
+	.ssl__icon {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	/* 仕切り線 */
+	.ssl__rule {
+		stroke: var(--c-line);
+		stroke-width: 1.4;
+	}
+
+	/* 「設定」の札 */
+	.ssl__chip {
+		stroke-width: 1.4;
+	}
+	.ssl__chip--pc {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.ssl__chip--mouse {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.ssl__chip-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.ssl__chip-text--pc {
+		fill: var(--c-accent2);
+	}
+	.ssl__chip-text--mouse {
+		fill: var(--c-accent);
+	}
+
+	/* 設定が届かないことを示す× */
+	.ssl__cross {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.6;
+		stroke-linecap: round;
+	}
+
+	/* タグ */
+	.ssl__tag-shape {
+		stroke-width: 1.2;
+	}
+	.ssl__tag-shape--pc {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.ssl__tag-shape--mouse {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.ssl__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.ssl__tag-text--pc {
+		fill: var(--c-accent2);
+	}
+	.ssl__tag-text--mouse {
+		fill: var(--c-accent);
+	}
+
+	/* パネルの見出し */
+	.ssl__heading {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.ssl__heading--pc {
+		fill: var(--c-accent2);
+	}
+	.ssl__heading--mouse {
+		fill: var(--c-accent);
+	}
+
+	.ssl__label {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+	.ssl__note {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.ssl__note--pc {
+		fill: var(--c-accent2);
+	}
+	.ssl__note--ok {
+		fill: var(--c-accent);
+	}
+
+	/* スマホ幅では縦に積む（横並びのままだと図の中の文字が小さくなりすぎるため） */
+	@media (max-width: 35rem) {
+		.ssl svg {
+			flex-basis: 100%;
+		}
+	}
+</style>

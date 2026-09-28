@@ -1,0 +1,187 @@
+---
+/*
+  記事「ObsidianにChatGPTとClaudeのチャットのやり取りをぶちこんでみた」専用の図解
+  実際のグラフビューを、分類名（大きい点）だけ残して描き直したもの。
+
+  個別の会話タイトルは意図的にすべて落としている。
+  ブログに書いていない個人的な話題（経歴・資格・家族・住宅・収入など）が
+  ラベルに出てしまうため、分類の名前より細かい粒度は描かない。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  すでに手元にあるものなので、線はすべて青磁の実線。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  viewBox 幅は320なので、375px画面（本文約335px）では約1.05倍。
+  14pxの文字が実寸14.7px程度になる。これ以上ハブを増やすと文字が小さくなるので、
+  分類は6つに絞っている。
+*/
+
+const CENTER = { x: 158, y: 226 };
+
+// 分類（大きい点）。label の anchor と位置は、文字が枠からはみ出さないように個別に決めている
+const HUBS = [
+	{ x: 70, y: 80, label: '道具・ガジェット', lx: 70, ly: 58, anchor: 'middle' },
+	{ x: 238, y: 74, label: 'ブログ・発信', lx: 238, ly: 52, anchor: 'middle' },
+	{ x: 272, y: 168, label: 'インフラ・技術学習', lx: 314, ly: 146, anchor: 'end' },
+	{ x: 244, y: 320, label: 'キャリア・働き方', lx: 244, ly: 346, anchor: 'middle' },
+	{ x: 78, y: 330, label: '個人開発・AI活用', lx: 78, ly: 356, anchor: 'middle' },
+	{ x: 50, y: 190, label: '家族・子育て', lx: 50, ly: 168, anchor: 'middle' },
+];
+
+// 各分類にぶら下がる会話。名前は出さず、点だけ置く
+const LEAVES = [
+	[
+		{ x: 24, y: 100 },
+		{ x: 40, y: 126 },
+		{ x: 74, y: 126 },
+		{ x: 106, y: 110 },
+		{ x: 108, y: 74 },
+	],
+	[
+		{ x: 204, y: 104 },
+		{ x: 236, y: 118 },
+		{ x: 270, y: 106 },
+		{ x: 294, y: 76 },
+		{ x: 298, y: 46 },
+	],
+	[
+		{ x: 308, y: 194 },
+		{ x: 300, y: 228 },
+		{ x: 266, y: 212 },
+		{ x: 312, y: 162 },
+	],
+	[
+		{ x: 274, y: 290 },
+		{ x: 302, y: 316 },
+		{ x: 308, y: 352 },
+		{ x: 220, y: 292 },
+	],
+	[
+		{ x: 38, y: 298 },
+		{ x: 22, y: 332 },
+		{ x: 44, y: 384 },
+		{ x: 108, y: 298 },
+		{ x: 126, y: 376 },
+	],
+	[
+		{ x: 16, y: 216 },
+		{ x: 30, y: 248 },
+		{ x: 64, y: 242 },
+		{ x: 14, y: 184 },
+	],
+];
+
+// 分類どうしのつながり（実際のグラフでも、分類をまたいで線が通っている）
+const BRIDGES = [
+	[1, 2],
+	[3, 4],
+	[0, 1],
+];
+---
+
+<figure class="vgo">
+	<svg viewBox="0 0 320 400" role="img" aria-labelledby="vgo-title vgo-desc">
+		<title id="vgo-title">保管庫のグラフビューを、分類名だけ残して描き直した図</title>
+		<desc id="vgo-desc">
+			中央に「関心と思考の分析」という大きな点があり、そこから「道具・ガジェット」「ブログ・発信」「インフラ・技術学習」「キャリア・働き方」「個人開発・AI活用」「家族・子育て」の6つの分類へ線が伸びている。各分類のまわりには、名前を伏せた小さな点が4〜5個ずつぶら下がって塊を作っている。分類どうしをつなぐ線も何本かある。
+		</desc>
+		<defs>
+			<filter id="vgo-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="97"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#vgo-sketch)">
+			<!-- 中央から各分類へ -->
+			{HUBS.map((h) => <line class="vgo__link vgo__link--main" x1={CENTER.x} y1={CENTER.y} x2={h.x} y2={h.y} />)}
+			<!-- 分類どうし -->
+			{
+				BRIDGES.map(([a, b]) => (
+					<line class="vgo__link" x1={HUBS[a].x} y1={HUBS[a].y} x2={HUBS[b].x} y2={HUBS[b].y} />
+				))
+			}
+			<!-- 分類から個々の会話へ -->
+			{
+				LEAVES.map((group, i) =>
+					group.map((n) => <line class="vgo__link" x1={HUBS[i].x} y1={HUBS[i].y} x2={n.x} y2={n.y} />)
+				)
+			}
+			<!-- 点。小さいものから先に描いて、大きいものを上に重ねる -->
+			{LEAVES.map((group) => group.map((n) => <circle class="vgo__dot" cx={n.x} cy={n.y} r="4.5" />))}
+			{HUBS.map((h) => <circle class="vgo__dot vgo__dot--hub" cx={h.x} cy={h.y} r="9" />)}
+			<circle class="vgo__dot vgo__dot--center" cx={CENTER.x} cy={CENTER.y} r="13"></circle>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			HUBS.map((h) => (
+				<text class="vgo__label" x={h.lx} y={h.ly} text-anchor={h.anchor}>
+					{h.label}
+				</text>
+			))
+		}
+		<text class="vgo__label vgo__label--center" x={CENTER.x} y={CENTER.y + 26} text-anchor="middle"
+			>関心と思考の分析</text
+		>
+	</svg>
+
+	<figcaption>実際のグラフを、分類の名前だけ残して描き直したもの。個々の会話は点だけにしている</figcaption>
+</figure>
+
+<style>
+	.vgo {
+		max-width: 22rem;
+		margin-inline: auto;
+	}
+	.vgo svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		font-family: var(--font-body);
+	}
+
+	/* ノートどうしをつなぐ線 */
+	.vgo__link {
+		stroke: var(--c-accent);
+		stroke-width: 1.2;
+		stroke-linecap: round;
+		opacity: 0.55;
+	}
+	.vgo__link--main {
+		stroke-width: 1.8;
+		opacity: 0.8;
+	}
+
+	/* ノートのまる。参照が多いものほど大きい（Obsidianの挙動に合わせている） */
+	.vgo__dot {
+		fill: var(--c-surface);
+		stroke: var(--c-accent);
+		stroke-width: 1.5;
+	}
+	.vgo__dot--hub {
+		fill: var(--c-accent-wash);
+		stroke-width: 2;
+	}
+	.vgo__dot--center {
+		fill: var(--c-accent-wash);
+		stroke-width: 2.4;
+	}
+
+	.vgo__label {
+		fill: var(--c-text);
+		font-size: 14px;
+		font-weight: 700;
+		/* 線が文字を横切っても読めるように、背景色で縁取りしてから塗る */
+		paint-order: stroke fill;
+		stroke: var(--c-bg);
+		stroke-width: 4px;
+		stroke-linejoin: round;
+	}
+	.vgo__label--center {
+		fill: var(--c-accent);
+	}
+</style>

@@ -1,0 +1,129 @@
+---
+/*
+  記事「ObsidianにChatGPTとClaudeのチャットのやり取りをぶちこんでみた」専用の図解
+  エクスポートしたファイルが、保管庫のノートになるまでの一本道。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  4段とも「やり終えたこと」なので、線はすべて青磁の実線。
+  最後の1段だけ薄い塗りを入れて、ここが行き先だと分かるようにしている。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  viewBox 幅は300なので、375px画面（本文約335px）では約1.12倍。
+  14pxの文字が実寸15.6px程度になる。
+*/
+
+// 28×28 のマス目で描く、線だけのアイコン
+const ICONS = {
+	chat: 'M3 5h22v14h-9l-6 4v-4H3z M9 12h0.01 M14 12h0.01 M19 12h0.01',
+	file: 'M6 2h11l6 6v18H6z M17 2v6h6 M10 15h9 M10 20h9',
+	terminal: 'M2 4h24v20H2z M2 9h24 M7 14l4 3.5-4 3.5 M14 21h7',
+	folder: 'M2 7h9l3 3h12v14H2z M16 16h6 M16 20h6',
+};
+---
+
+<figure class="cev">
+	<svg viewBox="0 0 300 386" role="img" aria-labelledby="cev-title cev-desc">
+		<title id="cev-title">チャット履歴が保管庫のノートになるまでの流れ</title>
+		<desc id="cev-desc">
+			上から下へ4段の流れ。1段目はChatGPTとClaudeの設定からエクスポートすること、2段目は届いたzipの中に会話がまとめて入ったファイルがあり、そのままでは読めない形だということ、3段目はClaude
+			Codeで1会話＝1ノートに分けること、4段目は関連するノートにリンクが付いた状態で保管庫に置かれることを表している。各段は下向きの矢印でつながっている。
+		</desc>
+		<defs>
+			<filter id="cev-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="13"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#cev-sketch)">
+			<rect class="cev__card" x="8" y="8" width="284" height="76" rx="14" />
+			<path class="cev__icon" transform="translate(26 32)" d={ICONS.chat} />
+			<path class="cev__arrow" d="M150 88v14 M144 96l6 6 6-6" />
+
+			<rect class="cev__card" x="8" y="106" width="284" height="76" rx="14" />
+			<path class="cev__icon" transform="translate(26 130)" d={ICONS.file} />
+			<path class="cev__arrow" d="M150 186v14 M144 194l6 6 6-6" />
+
+			<rect class="cev__card" x="8" y="204" width="284" height="76" rx="14" />
+			<path class="cev__icon" transform="translate(26 228)" d={ICONS.terminal} />
+			<path class="cev__arrow" d="M150 284v14 M144 292l6 6 6-6" />
+
+			<rect class="cev__card cev__card--goal" x="8" y="302" width="284" height="76" rx="14" />
+			<path class="cev__icon" transform="translate(26 326)" d={ICONS.folder} />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="cev__label" x="68" y="40">ChatGPT と Claude</text>
+		<text class="cev__note" x="68" y="62">設定からエクスポート</text>
+
+		<text class="cev__label" x="68" y="138">会話がまとめて入ったファイル</text>
+		<text class="cev__note" x="68" y="160">そのままでは読めない形</text>
+
+		<text class="cev__label" x="68" y="236">Claude Code で変換</text>
+		<text class="cev__note" x="68" y="258">1会話＝1ノートに分ける</text>
+
+		<text class="cev__label" x="68" y="334">保管庫（Obsidian）</text>
+		<text class="cev__note cev__note--goal" x="68" y="356">関連するノートにリンク付き</text>
+	</svg>
+
+	<figcaption>人が読める形に直すところだけ、AIに任せた</figcaption>
+</figure>
+
+<style>
+	.cev {
+		max-width: 24rem;
+		margin-inline: auto;
+	}
+	.cev svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		font-family: var(--font-body);
+	}
+
+	/* 各段のカード */
+	.cev__card {
+		fill: var(--c-surface);
+		stroke: var(--c-accent);
+		stroke-width: 1.5;
+	}
+	/* 行き先だけ薄く塗る */
+	.cev__card--goal {
+		fill: var(--c-accent-wash);
+	}
+
+	/* アイコン */
+	.cev__icon {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	/* 段をつなぐ矢印 */
+	.cev__arrow {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.cev__label {
+		fill: var(--c-text);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.cev__note {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.cev__note--goal {
+		fill: var(--c-accent);
+		font-weight: 700;
+	}
+</style>

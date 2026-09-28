@@ -1,0 +1,219 @@
+---
+/*
+  記事「ObsidianにChatGPTとClaudeのチャットのやり取りをぶちこんでみた」専用の図解
+  同じノートの並びでも、リンクがあるかないかでグラフの見え方が変わるという話。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  左右で点の位置はまったく同じにして、違うのは線とまるの大きさだけにしている。
+  色だけに頼らないよう、見出しとタグ（「ただ並ぶだけ」「話題ごとに寄る」）でも
+  読み分けられるようにしている。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  スマホ幅（35rem以下）では2枚が縦に積まれる。
+  viewBox 幅は260なので、375px画面（本文約335px）では約1.29倍。
+  14pxの文字が実寸18px程度になる。
+*/
+
+// 左右で共通の点の位置。ハブ（線が集まる点）と、その周りの点
+const HUBS = [
+	{ x: 64, y: 116 },
+	{ x: 166, y: 112 },
+	{ x: 118, y: 168 },
+];
+const LEAVES = [
+	{ x: 38, y: 94, hub: 0 },
+	{ x: 92, y: 96, hub: 0 },
+	{ x: 44, y: 144, hub: 0 },
+	{ x: 142, y: 88, hub: 1 },
+	{ x: 198, y: 94, hub: 1 },
+	{ x: 194, y: 140, hub: 1 },
+	{ x: 88, y: 184, hub: 2 },
+	{ x: 150, y: 186, hub: 2 },
+];
+// ハブどうしのつながり
+const BRIDGES = [
+	[0, 1],
+	[1, 2],
+];
+---
+
+<figure class="lng">
+	<svg viewBox="0 0 260 240" role="img" aria-labelledby="lng-flat-title lng-flat-desc">
+		<title id="lng-flat-title">リンクがないと、点が並ぶだけになる</title>
+		<desc id="lng-flat-desc">
+			同じ大きさのまるが11個、枠の中に散らばっている。まるどうしをつなぐ線は1本もなく、どのノートが近い話なのかは見ただけでは分からない。
+		</desc>
+		<defs>
+			<filter id="lng-flat-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="29"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#lng-flat-sketch)">
+			<rect class="lng__panel lng__panel--flat" x="8" y="34" width="244" height="196" rx="15" />
+			<rect class="lng__tag-shape lng__tag-shape--flat" x="146" y="45" width="94" height="24" rx="12" />
+			{HUBS.map((n) => <circle class="lng__dot lng__dot--flat" cx={n.x} cy={n.y} r="6" />)}
+			{LEAVES.map((n) => <circle class="lng__dot lng__dot--flat" cx={n.x} cy={n.y} r="6" />)}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="lng__heading lng__heading--flat" x="130" y="24" text-anchor="middle">リンクがないと</text>
+		<text class="lng__tag-text lng__tag-text--flat" x="193" y="57" text-anchor="middle" dominant-baseline="central"
+			>ただ並ぶだけ</text
+		>
+		<text class="lng__note lng__note--flat" x="130" y="213" text-anchor="middle">どれが近い話か分からない</text>
+	</svg>
+
+	<svg viewBox="0 0 260 240" role="img" aria-labelledby="lng-linked-title lng-linked-desc">
+		<title id="lng-linked-title">リンクがあると、話題ごとに固まって見える</title>
+		<desc id="lng-linked-desc">
+			左と同じ位置にある11個のまるが線でつながっている。線が集まる3つのまるは他より大きく描かれ、その周りに小さいまるがぶら下がって3つの塊になっている。塊どうしも線でつながっている。
+		</desc>
+		<defs>
+			<filter id="lng-linked-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="71"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#lng-linked-sketch)">
+			<rect class="lng__panel lng__panel--linked" x="8" y="34" width="244" height="196" rx="15" />
+			<rect class="lng__tag-shape lng__tag-shape--linked" x="134" y="45" width="106" height="24" rx="12" />
+			{
+				BRIDGES.map(([a, b]) => (
+					<line class="lng__link" x1={HUBS[a].x} y1={HUBS[a].y} x2={HUBS[b].x} y2={HUBS[b].y} />
+				))
+			}
+			{
+				LEAVES.map((n) => (
+					<line class="lng__link" x1={HUBS[n.hub].x} y1={HUBS[n.hub].y} x2={n.x} y2={n.y} />
+				))
+			}
+			{LEAVES.map((n) => <circle class="lng__dot lng__dot--linked" cx={n.x} cy={n.y} r="6" />)}
+			{HUBS.map((n) => <circle class="lng__dot lng__dot--linked lng__dot--hub" cx={n.x} cy={n.y} r="9" />)}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="lng__heading lng__heading--linked" x="130" y="24" text-anchor="middle">リンクがあると</text>
+		<text class="lng__tag-text lng__tag-text--linked" x="187" y="57" text-anchor="middle" dominant-baseline="central"
+			>話題ごとに寄る</text
+		>
+		<text class="lng__note lng__note--linked" x="130" y="213" text-anchor="middle">近い話どうしが固まる</text>
+	</svg>
+
+	<figcaption>点の位置は左右とも同じ。違うのは線があるかどうかだけ</figcaption>
+</figure>
+
+<style>
+	.lng {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+	.lng svg {
+		display: block;
+		flex: 1 1 0;
+		min-width: 0;
+		height: auto;
+		font-family: var(--font-body);
+	}
+	.lng figcaption {
+		flex: 0 0 100%;
+	}
+
+	/* 枠 */
+	.lng__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.lng__panel--flat {
+		stroke: var(--c-accent2);
+	}
+	.lng__panel--linked {
+		stroke: var(--c-accent);
+	}
+
+	/* ノートのまる */
+	.lng__dot {
+		stroke-width: 1.8;
+	}
+	.lng__dot--flat {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.lng__dot--linked {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.lng__dot--hub {
+		stroke-width: 2.2;
+	}
+
+	/* ノートどうしをつなぐ線 */
+	.lng__link {
+		stroke: var(--c-accent);
+		stroke-width: 1.6;
+		stroke-linecap: round;
+	}
+
+	/* タグ */
+	.lng__tag-shape {
+		stroke-width: 1.2;
+	}
+	.lng__tag-shape--flat {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.lng__tag-shape--linked {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.lng__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.lng__tag-text--flat {
+		fill: var(--c-accent2);
+	}
+	.lng__tag-text--linked {
+		fill: var(--c-accent);
+	}
+
+	/* パネルの見出し */
+	.lng__heading {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.lng__heading--flat {
+		fill: var(--c-accent2);
+	}
+	.lng__heading--linked {
+		fill: var(--c-accent);
+	}
+
+	.lng__note {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.lng__note--flat {
+		fill: var(--c-accent2);
+	}
+	.lng__note--linked {
+		fill: var(--c-accent);
+	}
+
+	/* スマホ幅では縦に積む（横並びのままだと図の中の文字が小さくなりすぎるため） */
+	@media (max-width: 35rem) {
+		.lng svg {
+			flex-basis: 100%;
+		}
+	}
+</style>

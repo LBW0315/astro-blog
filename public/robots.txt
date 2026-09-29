@@ -1,0 +1,9 @@
+# 検索エンジンのクローラー向けの案内。
+# これを置かないとS3が「Access Denied（403）」を返してしまい、
+# Search Console のレポートで「取得できませんでした」と出る。
+# （403でもクロール自体は止まらないが、エラーに見えるので置いておく）
+
+User-agent: *
+Allow: /
+
+Sitemap: https://bun-bou.com/sitemap-index.xml

@@ -2,11 +2,12 @@
 // ジャンル一覧ページ
 import Icon from '../../components/Icon.astro';
 import PageHeader from '../../components/PageHeader.astro';
-import { categories } from '../../data/categories';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getPosts } from '../../lib/posts';
+import { getPosts, getUsedCategories } from '../../lib/posts';
 
 const posts = await getPosts();
+// 記事が1本もないジャンルは出さない
+const usedCategories = getUsedCategories(posts);
 const count = (slug: string) => posts.filter((p) => p.data.category === slug).length;
 ---
 
@@ -16,7 +17,7 @@ const count = (slug: string) => posts.filter((p) => p.data.category === slug).le
 	<div class="container">
 		<ul class="genres">
 			{
-				categories.map((c, i) => (
+				usedCategories.map((c, i) => (
 					<li data-reveal style={`--i: ${i % 2}`}>
 						<a href={`/categories/${c.slug}/`} class="genre">
 							<span class="genre__icon">

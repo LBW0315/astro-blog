@@ -1,0 +1,139 @@
+---
+/*
+  記事「我が家のエアコンはダイキンEシリーズに決定！」の冒頭に置く飾りのイラスト。
+  壁掛けエアコンから、涼しい風がゆらゆら流れてくる絵。
+
+  線の太さ・丸い端・やわらかい塗りは、既存の Pekingese.astro・CoffeeSteam.astro に
+  そろえている。図解ではなく飾りなので、手描き風のゆらぎフィルターはかけていない。
+
+  顔は小さくすると「吹き出し口の点々」に見えてしまうので、
+  本体を縦に厚くして、目・口・ほっぺを離して置いている。
+
+  風は CoffeeSteam の湯気と同じ考え方で、3本を少しずつずらして繰り返す。
+  「動きを減らす」設定（prefers-reduced-motion）のときは止める。
+
+  中身を説明する図ではないので aria-hidden。記事の情報は本文が持っている。
+*/
+---
+
+<figure class="acill">
+	<svg viewBox="0 0 240 150" width="240" height="150" aria-hidden="true" focusable="false">
+		<!-- 涼しい風。下にいくほど大きく広がる -->
+		<g class="acill__winds">
+			<path class="acill__wind" d="M79 92q13.5 11 27 0t27 0t27 0" />
+			<path class="acill__wind" d="M70 108q16.7 12 33.3 0t33.3 0t33.3 0" />
+			<path class="acill__wind" d="M61 124q19.7 13 39.3 0t39.3 0t39.3 0" />
+		</g>
+
+		<!-- 本体 -->
+		<g class="acill__body">
+			<!-- 壁のライン -->
+			<path class="acill__wall" d="M10 18h220" />
+			<!-- 箱 -->
+			<rect class="acill__case" x="45" y="24" width="150" height="54" rx="18" />
+			<!-- 吹き出し口 -->
+			<path class="acill__louver" d="M62 70h116" />
+			<!-- 運転ランプ（顔と離して右上に） -->
+			<circle class="acill__lamp" cx="178" cy="36" r="2.8" />
+			<!-- 顔 -->
+			<ellipse class="acill__cheek" cx="92" cy="54" rx="6" ry="3.4" />
+			<ellipse class="acill__cheek" cx="148" cy="54" rx="6" ry="3.4" />
+			<circle class="acill__eye" cx="104" cy="44" r="4" />
+			<circle class="acill__eye" cx="136" cy="44" r="4" />
+			<path class="acill__mouth" d="M113 55q7 7 14 0" />
+		</g>
+	</svg>
+</figure>
+
+<style>
+	.acill {
+		margin: 0 0 var(--sp-6);
+		text-align: center;
+	}
+	.acill svg {
+		display: block;
+		width: min(240px, 100%);
+		height: auto;
+		margin-inline: auto;
+	}
+
+	/* 壁 */
+	.acill__wall {
+		fill: none;
+		stroke: var(--c-line);
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+
+	/* 本体の箱 */
+	.acill__case {
+		fill: var(--c-surface);
+		stroke: var(--c-text-sub);
+		stroke-width: 2;
+	}
+	.acill__louver {
+		fill: none;
+		stroke: var(--c-line);
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+
+	/* 顔 */
+	.acill__eye {
+		fill: var(--c-text-sub);
+	}
+	.acill__mouth {
+		fill: none;
+		stroke: var(--c-text-sub);
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+	.acill__cheek {
+		fill: var(--c-accent2);
+		opacity: 0.4;
+	}
+	.acill__lamp {
+		fill: var(--c-accent);
+	}
+
+	/* 涼しい風 */
+	.acill__wind {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		opacity: 0;
+		animation: acill-wind 4.5s var(--ease-inout) infinite;
+	}
+	.acill__wind:nth-child(2) {
+		animation-delay: 1.2s;
+	}
+	.acill__wind:nth-child(3) {
+		animation-delay: 2.4s;
+	}
+
+	@keyframes acill-wind {
+		0% {
+			opacity: 0;
+			transform: translateY(-7px);
+		}
+		25% {
+			opacity: 0.9;
+		}
+		65% {
+			opacity: 0.55;
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+	}
+
+	/* 動きを減らす設定のときは、流れを止めて3本とも静かに見せる */
+	@media (prefers-reduced-motion: reduce) {
+		.acill__wind {
+			animation: none;
+			opacity: 0.55;
+		}
+	}
+</style>

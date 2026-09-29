@@ -1,0 +1,207 @@
+---
+/*
+  記事「我が家のエアコンはダイキンEシリーズに決定！」専用の図解
+  同じ「18畳用」でも、家の断熱性能によって必要な能力が変わるという話。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  色だけに頼らないよう、矢印の長さ（熱の逃げる量）と、見出し・タグ・
+  下の文言でも違いが分かるようにしている。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  スマホ幅（35rem以下）では2枚が縦に積まれる。
+  viewBox 幅は260なので、375px画面（本文約335px）では約1.29倍。
+  14pxの文字が実寸18px程度になる。
+*/
+
+// 家の形（両方のパネルで同じ）
+const HOUSE = 'M85 138 L130 100 L175 138 L175 170 L85 170 Z';
+---
+
+<figure class="trg">
+	<svg viewBox="0 0 260 240" role="img" aria-labelledby="trg-old-title trg-old-desc">
+		<title id="trg-old-title">畳数表記が想定している、断熱の弱い家</title>
+		<desc id="trg-old-desc">
+			18畳と書かれた家から、上下左右に長い矢印が伸びていて、熱がどんどん逃げていく様子を表している。逃げる分が多いので、大きな能力のエアコンが必要になる。
+		</desc>
+		<defs>
+			<filter id="trg-old-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="61"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#trg-old-sketch)">
+			<rect class="trg__panel trg__panel--old" x="8" y="34" width="244" height="196" rx="15" />
+			<rect class="trg__tag-shape trg__tag-shape--old" x="140" y="45" width="100" height="24" rx="12" />
+			<path class="trg__house" d={HOUSE} />
+			<!-- 逃げていく熱。長い矢印 -->
+			<g class="trg__leak trg__leak--old">
+				<path d="M130 96v-18 M124 86l6-8 6 8" />
+				<path d="M82 152h-30 M58 146l-6 6 6 6" />
+				<path d="M178 152h30 M202 146l6 6-6 6" />
+				<path d="M130 174v18 M124 184l6 8 6-8" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="trg__heading trg__heading--old" x="130" y="24" text-anchor="middle">畳数表記が想定する家</text>
+		<text class="trg__tag-text trg__tag-text--old" x="190" y="57" text-anchor="middle" dominant-baseline="central"
+			>断熱なしの前提</text
+		>
+		<text class="trg__house-text" x="130" y="156" text-anchor="middle">18畳</text>
+		<text class="trg__note trg__note--old" x="130" y="216" text-anchor="middle">熱がどんどん逃げる</text>
+	</svg>
+
+	<svg viewBox="0 0 260 240" role="img" aria-labelledby="trg-new-title trg-new-desc">
+		<title id="trg-new-title">いま建てている、気密と断熱のある家</title>
+		<desc id="trg-new-desc">
+			同じ18畳の家から伸びる矢印が、左の図よりずっと短い。熱が逃げにくいので、同じ広さでも必要な能力は小さくなる。
+		</desc>
+		<defs>
+			<filter id="trg-new-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#trg-new-sketch)">
+			<rect class="trg__panel trg__panel--new" x="8" y="34" width="244" height="196" rx="15" />
+			<rect class="trg__tag-shape trg__tag-shape--new" x="152" y="45" width="88" height="24" rx="12" />
+			<path class="trg__house" d={HOUSE} />
+			<!-- 逃げにくい熱。短い矢印 -->
+			<g class="trg__leak trg__leak--new">
+				<path d="M130 96v-8 M124 94l6-6 6 6" />
+				<path d="M82 152h-14 M72 146l-6 6 6 6" />
+				<path d="M178 152h14 M188 146l6 6-6 6" />
+				<path d="M130 174v8 M124 176l6 6 6-6" />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="trg__heading trg__heading--new" x="130" y="24" text-anchor="middle">これから建てる家</text>
+		<text class="trg__tag-text trg__tag-text--new" x="196" y="57" text-anchor="middle" dominant-baseline="central"
+			>気密・断熱あり</text
+		>
+		<text class="trg__house-text" x="130" y="156" text-anchor="middle">18畳</text>
+		<text class="trg__note trg__note--new" x="130" y="216" text-anchor="middle">熱が逃げにくい</text>
+	</svg>
+
+	<figcaption>広さが同じでも、逃げる熱の量が違えば、必要な能力も変わる</figcaption>
+</figure>
+
+<style>
+	.trg {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+	.trg svg {
+		display: block;
+		flex: 1 1 0;
+		min-width: 0;
+		height: auto;
+		font-family: var(--font-body);
+	}
+	.trg figcaption {
+		flex: 0 0 100%;
+	}
+
+	/* 枠 */
+	.trg__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.trg__panel--old {
+		stroke: var(--c-accent2);
+	}
+	.trg__panel--new {
+		stroke: var(--c-accent);
+	}
+
+	/* 家 */
+	.trg__house {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linejoin: round;
+	}
+	.trg__house-text {
+		fill: var(--c-text);
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	/* 逃げていく熱 */
+	.trg__leak path {
+		fill: none;
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.trg__leak--old path {
+		stroke: var(--c-accent2);
+	}
+	.trg__leak--new path {
+		stroke: var(--c-accent);
+	}
+
+	/* タグ */
+	.trg__tag-shape {
+		stroke-width: 1.2;
+	}
+	.trg__tag-shape--old {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.trg__tag-shape--new {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.trg__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.trg__tag-text--old {
+		fill: var(--c-accent2);
+	}
+	.trg__tag-text--new {
+		fill: var(--c-accent);
+	}
+
+	/* パネルの見出し */
+	.trg__heading {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.trg__heading--old {
+		fill: var(--c-accent2);
+	}
+	.trg__heading--new {
+		fill: var(--c-accent);
+	}
+
+	.trg__note {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.trg__note--old {
+		fill: var(--c-accent2);
+	}
+	.trg__note--new {
+		fill: var(--c-accent);
+	}
+
+	/* スマホ幅では縦に積む（横並びのままだと図の中の文字が小さくなりすぎるため） */
+	@media (max-width: 35rem) {
+		.trg svg {
+			flex-basis: 100%;
+		}
+	}
+</style>

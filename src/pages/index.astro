@@ -6,15 +6,16 @@ import Icon from '../components/Icon.astro';
 import PostGrid from '../components/PostGrid.astro';
 import ProfileCard from '../components/ProfileCard.astro';
 import { SITE_DESCRIPTION, SITE_SUBTITLE_EN, SITE_SUBTITLE_JA, SITE_TITLE } from '../consts';
-import { categories } from '../data/categories';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getPosts } from '../lib/posts';
+import { getPosts, getUsedCategories } from '../lib/posts';
 
 const posts = await getPosts();
 const latest = posts.slice(0, 6);
+// 記事が1本もないジャンルは出さない
+const usedCategories = getUsedCategories(posts);
 // ジャンルごとの記事数
 const counts = Object.fromEntries(
-	categories.map((c) => [c.slug, posts.filter((p) => p.data.category === c.slug).length]),
+	usedCategories.map((c) => [c.slug, posts.filter((p) => p.data.category === c.slug).length]),
 );
 ---
 
@@ -63,7 +64,7 @@ const counts = Object.fromEntries(
 			</h2>
 			<ul class="home__genres" data-reveal>
 				{
-					categories.map((c) => (
+					usedCategories.map((c) => (
 						<li>
 							<CategoryChip slug={c.slug} count={counts[c.slug]} />
 						</li>

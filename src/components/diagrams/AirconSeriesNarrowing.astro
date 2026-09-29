@@ -1,0 +1,195 @@
+---
+/*
+  記事「我が家のエアコンはダイキンEシリーズに決定！」専用の図解
+  たくさんあるシリーズを、2回のふるいにかけてEに絞り込むまでの流れ。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  色の意味：青磁＝残ったもの、灰桜＝外したもの。
+  色だけに頼らないよう、枠が段ごとに狭くなる形（絞り込み）と、
+  矢印の横に外した理由を書くことでも分かるようにしている。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  viewBox 幅は300なので、375px画面（本文約335px）では約1.12倍。
+  14pxの文字が実寸15.6px程度になる。
+*/
+
+// 1段目のシリーズ。keep が false のものは、この段で外れる
+const STAGE1 = [
+	{ name: 'R', x: 24, keep: false },
+	{ name: 'A', x: 89, keep: false },
+	{ name: 'F', x: 154, keep: true },
+	{ name: 'E', x: 219, keep: true },
+];
+const STAGE2 = [
+	{ name: 'F', x: 88, keep: false },
+	{ name: 'E', x: 153, keep: true },
+];
+---
+
+<figure class="asn">
+	<svg viewBox="0 0 300 336" role="img" aria-labelledby="asn-title asn-desc">
+		<title id="asn-title">ダイキンのシリーズをEに絞り込むまで</title>
+		<desc id="asn-desc">
+			3段の絞り込み。1段目は候補のR・A・F・Eの4つ。「高い・機能が多すぎる」という理由でRとAが外れ、2段目にFとEが残る。「差額に何を期待するか」を考えてFが外れ、3段目にEシリーズだけが残る。枠は下の段ほど狭くなっている。
+		</desc>
+		<defs>
+			<filter id="asn-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="53"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#asn-sketch)">
+			<rect class="asn__stage" x="8" y="8" width="284" height="76" rx="14" />
+			{
+				STAGE1.map((s) => (
+					<rect
+						class:list={['asn__chip', s.keep ? 'asn__chip--keep' : 'asn__chip--drop']}
+						x={s.x}
+						y="46"
+						width="58"
+						height="26"
+						rx="13"
+					/>
+				))
+			}
+			<path class="asn__arrow" d="M150 90v14 M144 98l6 6 6-6" />
+
+			<rect class="asn__stage" x="36" y="130" width="228" height="76" rx="14" />
+			{
+				STAGE2.map((s) => (
+					<rect
+						class:list={['asn__chip', s.keep ? 'asn__chip--keep' : 'asn__chip--drop']}
+						x={s.x}
+						y="168"
+						width="58"
+						height="26"
+						rx="13"
+					/>
+				))
+			}
+			<path class="asn__arrow" d="M150 212v14 M144 220l6 6 6-6" />
+
+			<rect class="asn__stage asn__stage--goal" x="52" y="252" width="196" height="76" rx="14" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="asn__caption" x="24" y="33">はじめの候補</text>
+		{
+			STAGE1.map((s) => (
+				<text
+					class:list={['asn__chip-text', s.keep ? 'asn__chip-text--keep' : 'asn__chip-text--drop']}
+					x={s.x + 29}
+					y="59"
+					text-anchor="middle"
+					dominant-baseline="central"
+				>
+					{s.name}
+				</text>
+			))
+		}
+		<text class="asn__reason" x="150" y="122" text-anchor="middle">高い・機能が多すぎる</text>
+
+		<text class="asn__caption" x="52" y="155">残った2つ</text>
+		{
+			STAGE2.map((s) => (
+				<text
+					class:list={['asn__chip-text', s.keep ? 'asn__chip-text--keep' : 'asn__chip-text--drop']}
+					x={s.x + 29}
+					y="181"
+					text-anchor="middle"
+					dominant-baseline="central"
+				>
+					{s.name}
+				</text>
+			))
+		}
+		<text class="asn__reason" x="150" y="244" text-anchor="middle">差額に何を期待するか</text>
+
+		<text class="asn__goal" x="150" y="288" text-anchor="middle">Eシリーズ</text>
+		<text class="asn__goal-note" x="150" y="312" text-anchor="middle">基本の冷暖房で足りる</text>
+	</svg>
+
+	<figcaption>2回ふるいにかけて、Eシリーズに落ち着いた</figcaption>
+</figure>
+
+<style>
+	.asn {
+		max-width: 24rem;
+		margin-inline: auto;
+	}
+	.asn svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		font-family: var(--font-body);
+	}
+
+	/* 各段の枠。下の段ほど狭くなる */
+	.asn__stage {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.5;
+	}
+	.asn__stage--goal {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+
+	/* シリーズの札 */
+	.asn__chip {
+		stroke-width: 1.5;
+	}
+	.asn__chip--keep {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+	}
+	.asn__chip--drop {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+	}
+	.asn__chip-text {
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.asn__chip-text--keep {
+		fill: var(--c-accent);
+	}
+	.asn__chip-text--drop {
+		fill: var(--c-accent2);
+	}
+
+	/* 段をつなぐ矢印と、外した理由 */
+	.asn__arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.asn__reason {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	.asn__caption {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.asn__goal {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 18px;
+		font-weight: 700;
+	}
+	.asn__goal-note {
+		fill: var(--c-accent);
+		font-size: 14px;
+	}
+</style>

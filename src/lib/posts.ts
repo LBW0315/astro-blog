@@ -3,7 +3,7 @@
   ページごとに同じ処理を書かなくて済むよう、ここにまとめています。
 */
 import { type CollectionEntry, getCollection } from 'astro:content';
-import type { CategorySlug } from '../data/categories';
+import { type Category, categories, type CategorySlug } from '../data/categories';
 
 export type Post = CollectionEntry<'blog'>;
 
@@ -16,6 +16,17 @@ export async function getPosts(): Promise<Post[]> {
 // 指定したジャンルの記事だけを返す
 export async function getPostsByCategory(slug: CategorySlug): Promise<Post[]> {
 	return (await getPosts()).filter((post) => post.data.category === slug);
+}
+
+/*
+  記事が1本以上あるジャンルだけを返す。
+  記事が0本のジャンルは、ページを作らずリンクもしない。
+  中身のないページを検索エンジンにクロールさせないため。
+  ジャンルの定義（src/data/categories.ts）は消さないので、
+  記事を1本書けば、そのジャンルのページとリンクは自動で復活する。
+*/
+export function getUsedCategories(posts: Post[]): Category[] {
+	return categories.filter((c) => posts.some((p) => p.data.category === c.slug));
 }
 
 // 読了時間の目安（分）。日本語はおよそ1分500文字として計算

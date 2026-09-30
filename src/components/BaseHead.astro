@@ -2,7 +2,6 @@
 // <head> の中身（すべてのページで共通）
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
 import { AUTHOR_NAME, SITE_TITLE } from '../consts';
 import { fontCssVersion } from '../lib/font-css';
 
@@ -10,10 +9,13 @@ interface Props {
 	title: string;
 	description: string;
 	image?: ImageMetadata;
+	ogImagePath?: string; // ビルド時に作る OGP 画像のパス（例：/og/記事名.png）
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const { title, description, image = FallbackImage } = Astro.props;
+const { title, description, image, ogImagePath } = Astro.props;
+// 記事ページはその記事用に作った画像、それ以外のページはサイト共通の画像を使う
+const ogImageURL = new URL(ogImagePath ?? image?.src ?? '/og/site.png', Astro.url);
 
 // アクセス解析（Google Analytics 4）の測定 ID。ページのソースに出る公開情報なので、そのまま書いています
 const GA_ID = 'G-7N06JTSXTQ';
@@ -78,7 +80,7 @@ if (!window.__gaPageView) {
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image.src, Astro.url)} />
+<meta property="og:image" content={ogImageURL} />
 <meta property="og:locale" content="ja_JP" />
 <meta name="twitter:card" content="summary_large_image" />
 

@@ -30,7 +30,12 @@ const minutes = getReadingMinutes(post.body);
 const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<BaseLayout title={title} description={description} image={heroImage}>
+<BaseLayout
+	title={title}
+	description={description}
+	image={heroImage}
+	ogImagePath={`/og/${post.id}.png`}
+>
 	<ReadingProgress slot="before-header" />
 
 	<div class:list={['container', 'post', { 'post--toc': hasToc }]}>

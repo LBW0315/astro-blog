@@ -1,0 +1,157 @@
+---
+/*
+  記事「はたらく！キッズDAYに行ってみようと思う！」専用の図解
+  参加に必要なこと（手描き風）
+
+  公式サイトに書かれているのは参加条件の3つだけで、当日の順番までは書かれていません。
+  そのため、図でも順番は断定せず、事前と当日の区別だけを示しています。
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 事前にやること：青磁の実線
+  - 当日やること：灰桜の点線の枠＋「当日」のラベル
+*/
+type Row = { y: number; title: string; sub: string; icon: string; onsite?: boolean };
+
+const BOX_X = 44;
+const BOX_W = 272;
+const BOX_H = 56;
+const CX = 180;
+
+const rows: Row[] = [
+	{ y: 14, title: 'ネットで予約', sub: 'お仕事と時間を選ぶ', icon: 'calendar' },
+	{ y: 104, title: 'モデルハウス見学', sub: '2棟以上まわる', icon: 'house', onsite: true },
+	{ y: 194, title: 'アンケートに回答', sub: 'センターハウスで', icon: 'pencil', onsite: true },
+	{ y: 284, title: 'お仕事体験！', sub: '11時／13時／15時', icon: 'star', onsite: true },
+];
+
+const ICONS: Record<string, string> = {
+	calendar: 'M3 6h22v20H3z M3 12h22 M8 2v6 M20 2v6 M9 18h4',
+	house: 'M2 12L14 3l12 9 M5 10v16h18V10 M11 26v-8h6v8',
+	pencil: 'M4 24l-1 4 4-1L25 9l-3-3z M19 6l3 3 M3 28h24',
+	star: 'M14 2l4 8 9 1-6.5 6 1.5 9-8-4.5L6 26l1.5-9L1 11l9-1z',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 364;
+---
+
+<figure class="kd-steps">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="kd-steps-title kd-steps-desc">
+		<title id="kd-steps-title">はたらく！キッズDAYに参加するために必要なこと</title>
+		<desc id="kd-steps-desc">
+			事前に、公式サイトでお仕事と時間を選んで予約する。当日は、モデルハウスを2棟以上見学することと、センターハウスでアンケートに回答することが条件で、お仕事体験は11時・13時・15時のいずれか。見学とアンケートのどちらを先にするかは、公式サイトに記載がない。
+		</desc>
+		<defs>
+			<filter id="kidsday-steps-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="5"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#kidsday-steps-sketch)">
+			<!-- 当日やることのまとまり -->
+			<rect class="ks-group" x="20" y="92" width="320" height="256" rx="16"></rect>
+			{
+				rows.map((r) => (
+					<g class:list={['ks-box', { 'ks-box--onsite': r.onsite }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="ks-icon" transform={`translate(${BOX_X + 16} ${r.y + 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="ks-arrow" d={arrow(74, 100)}></path>
+			<path class="ks-arrow" d={arrow(254, 280)}></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="ks-title" x={BOX_X + 60} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class="ks-sub" x={BOX_X + 60} y={r.y + 44}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+
+		<!-- 見学とアンケートは、どちらが先かまでは公式に書かれていないので「＋」でつなぐ -->
+		<text class="ks-plus" x={CX} y="179" text-anchor="middle" dominant-baseline="central">＋</text>
+
+		<!-- 「当日」ラベル -->
+		<g class="ks-tag">
+			<rect x="286" y="81" width="48" height="22" rx="11"></rect>
+			<text x="310" y="92" text-anchor="middle" dominant-baseline="central">当日</text>
+		</g>
+	</svg>
+	<figcaption>
+		参加に必要なこと（点線の枠は、当日会場でやること。見学とアンケートの順番は公式サイトに記載がないので、当日の案内に従ってください）
+	</figcaption>
+</figure>
+
+<style>
+	.kd-steps svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.ks-group {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.ks-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.ks-box--onsite rect {
+		stroke: var(--c-line-strong);
+	}
+	.ks-icon,
+	.ks-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ks-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.ks-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.ks-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.ks-plus {
+		fill: var(--c-text-sub);
+		font-size: 20px;
+		font-weight: 700;
+	}
+	.ks-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.ks-tag text {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

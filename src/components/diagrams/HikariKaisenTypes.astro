@@ -1,0 +1,158 @@
+---
+/*
+  記事「佐賀の新築戸建てで光回線を選んだ話」専用の図解
+  福岡・佐賀で選べる光回線を、3つの種類に分けて並べたもの（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、アイコンの線だけにかけています（文字にはかけない）。
+  回線名は HTML 側に置いているので、スマホでも小さくならず、読み上げ・コピーもできます。
+*/
+type Group = { kind: string; icon: string; note: string; lines: string[] };
+
+const groups: Group[] = [
+	{
+		kind: '独自回線',
+		icon: 'tower',
+		note: '自社の回線網を使う。混雑に強い傾向',
+		lines: ['NURO光（福岡・佐賀の一部）', 'BBIQ（九州7県）'],
+	},
+	{
+		kind: '光コラボ（NTT西日本の回線）',
+		icon: 'share',
+		note: 'エリアが広い。光コラボ同士なら工事なしで乗り換えられる',
+		lines: [
+			'GMOとくとくBB光',
+			'BIGLOBE光',
+			'楽天ひかり',
+			'BB.excite光 MEC',
+			'ドコモ光',
+			'ソフトバンク光',
+		],
+	},
+	{
+		kind: '地元ケーブルテレビ',
+		icon: 'tv',
+		note: 'テレビとまとめたい人向け',
+		lines: ['ぶんぶん光（佐賀市ほか）'],
+	},
+];
+
+// 32×32 のます目に、少ない線で描いたアイコン
+const ICONS: Record<string, string> = {
+	tower: 'M16 13v16 M10 29h12 M11 16q-4-5 0-10 M21 16q4-5 0-10 M7 18q-6-7 0-14 M25 18q6-7 0-14 M16 11a2.5 2.5 0 1 0 0-.01',
+	share: 'M16 4v8 M16 20v8 M6 16h20 M16 16a3 3 0 1 0 0-.01 M6 12v8 M26 12v8',
+	tv: 'M4 10h24v16H4z M11 4l5 6 5-6 M10 29h12',
+};
+---
+
+<figure class="hk-types">
+	<!-- 手描き風のゆらぎ（この図の中のアイコンだけに使う） -->
+	<svg class="hk-defs" aria-hidden="true" focusable="false">
+		<defs>
+			<filter id="hikari-types-sketch" x="-8%" y="-8%" width="116%" height="116%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+	</svg>
+
+	<ul class="hk-list">
+		{
+			groups.map((g) => (
+				<li class="hk-group">
+					<div class="hk-head">
+						<svg
+							class="hk-icon"
+							viewBox="0 0 32 32"
+							role="img"
+							aria-label={`${g.kind}のイラスト`}
+							focusable="false"
+						>
+							<path filter="url(#hikari-types-sketch)" d={ICONS[g.icon]} />
+						</svg>
+						<div>
+							<p class="hk-kind">{g.kind}</p>
+							<p class="hk-note">{g.note}</p>
+						</div>
+					</div>
+					<ul class="hk-chips">
+						{g.lines.map((line) => (
+							<li>{line}</li>
+						))}
+					</ul>
+				</li>
+			))
+		}
+	</ul>
+	<figcaption>
+		福岡・佐賀の戸建てで選べる光回線の全体像（2026年10月時点で調べた範囲）。ケーブルテレビは市町村ごとに事業者が違うので、ここでは佐賀市のものだけ挙げています。独自回線もケーブルテレビも、同じ市内でも住所によって使えないことがあるので、エリア検索で確かめてください。
+	</figcaption>
+</figure>
+
+<style>
+	.hk-defs {
+		position: absolute;
+		width: 0;
+		height: 0;
+	}
+	.hk-list {
+		display: grid;
+		gap: var(--sp-4);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.hk-group {
+		padding: var(--sp-4) var(--sp-5);
+		border: 2px solid var(--c-accent);
+		border-radius: var(--radius-md);
+		background: var(--c-surface-raised);
+	}
+	.hk-head {
+		display: flex;
+		align-items: center;
+		gap: var(--sp-3);
+	}
+	.hk-icon {
+		flex: none;
+		width: 48px;
+		height: 48px;
+		overflow: visible;
+	}
+	.hk-icon path {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.hk-kind {
+		margin: 0;
+		color: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: var(--fs-body);
+		font-weight: 700;
+		line-height: var(--lh-tight);
+	}
+	.hk-note {
+		margin: var(--sp-1) 0 0;
+		color: var(--c-text-sub);
+		font-size: var(--fs-sm);
+		line-height: var(--lh-tight);
+	}
+	.hk-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--sp-2);
+		margin: var(--sp-3) 0 0;
+		padding: 0;
+		list-style: none;
+	}
+	.hk-chips li {
+		padding: 4px 12px;
+		border-radius: 999px;
+		background: var(--c-accent-wash);
+		color: var(--c-accent);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

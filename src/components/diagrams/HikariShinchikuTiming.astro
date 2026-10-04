@@ -1,0 +1,139 @@
+---
+/*
+  記事「佐賀の新築戸建てで光回線を選んだ話」専用の図解
+  新築で光回線を申し込むタイミング（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 余裕のあるタイミング：青磁の実線
+  - 自分が実際に動いたタイミング：灰桜の点線＋「ギリギリ」のラベル
+*/
+type Row = { y: number; title: string; sub: string; icon: string; late?: boolean };
+
+const BOX_X = 44;
+const BOX_W = 272;
+const BOX_H = 56;
+const CX = 180;
+
+const rows: Row[] = [
+	{ y: 14, title: '引き渡しの2〜3ヶ月前', sub: '申し込みの目安', icon: 'calendar' },
+	{ y: 104, title: '引き渡しの1ヶ月前', sub: '自分が申し込んだのはここ', icon: 'alert', late: true },
+	{ y: 194, title: '引き渡し', sub: '正式な住所が確定する', icon: 'key' },
+	{ y: 284, title: '開通工事', sub: '立ち会いが必要', icon: 'wifi' },
+];
+
+const ICONS: Record<string, string> = {
+	calendar: 'M3 6h22v20H3z M3 12h22 M8 2v6 M20 2v6 M9 18h4',
+	alert: 'M14 3L2 25h24z M14 11v7 M14 21v.5',
+	key: 'M2 12L14 3l12 9 M5 10v16h18V10 M11 26v-8h6v8',
+	wifi: 'M2 10q12-10 24 0 M6 15q8-7 16 0 M10 20q4-4 8 0 M14 25v.5',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 364;
+---
+
+<figure class="hk-timing">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="hk-timing-title hk-timing-desc">
+		<title id="hk-timing-title">新築で光回線を申し込むタイミング</title>
+		<desc id="hk-timing-desc">
+			申し込みの目安は引き渡しの2〜3ヶ月前。自分が申し込んだのは引き渡しの1ヶ月前でギリギリだった。そのあと引き渡しで正式な住所が確定し、立ち会いのうえ開通工事を受ける。
+		</desc>
+		<defs>
+			<filter id="hikari-timing-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="9"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#hikari-timing-sketch)">
+			{
+				rows.map((r) => (
+					<g class:list={['ht-box', { 'ht-box--late': r.late }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="ht-icon" transform={`translate(${BOX_X + 16} ${r.y + 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="ht-arrow" d={arrow(74, 100)}></path>
+			<path class="ht-arrow" d={arrow(164, 190)}></path>
+			<path class="ht-arrow" d={arrow(254, 280)}></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="ht-title" x={BOX_X + 60} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class="ht-sub" x={BOX_X + 60} y={r.y + 44}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+
+		<!-- 「ギリギリ」ラベル -->
+		<g class="ht-tag">
+			<rect x="268" y="92" width="72" height="22" rx="11"></rect>
+			<text x="304" y="103" text-anchor="middle" dominant-baseline="central">ギリギリ</text>
+		</g>
+	</svg>
+	<figcaption>新築で光回線を申し込むタイミング（点線の枠は、自分が実際に動いたタイミング）</figcaption>
+</figure>
+
+<style>
+	.hk-timing svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.ht-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.ht-box--late rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-dasharray: 8 6;
+	}
+	.ht-icon,
+	.ht-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ht-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.ht-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.ht-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.ht-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.ht-tag text {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

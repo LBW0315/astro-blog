@@ -1,0 +1,548 @@
+---
+/*
+  記事「ウーロン盤棍をご存じだろうか？」専用の図解
+  棒を持った人の線画が、動きをくり返す（パラパラ漫画ふうの動くSVG）
+
+  使い方（.mdx ファイルの中で）：
+    <StickExercise move="twist" />
+  move：twist（担いでひねる）／bow（前に倒す）／side（横に倒す）
+        ／coilLeft・coilRight（体の左側・右側で回す）／bentTwist（前屈して左右）
+        ／pass（肩回し）／lunge（足を前後に開いて肩甲骨）／seesaw（背中で左右交互）
+
+  しくみ
+  - 体を「関節の位置（3次元）」で持ち、動きごとに24コマぶんの姿勢を計算して、コマを順番に見せている
+  - 手は棒を握る位置から、ひじ・ひざの位置を逆算している（腕や脚の長さが変わらないように）
+  - 手描き風のゆらぎは SVG フィルターで、線と図形だけにかけている
+
+  色の意味は、ほかの記事とそろえています。
+  - 棒（この記事の主役）：青磁の実線
+  - 体：本文色の線
+
+  「動きを減らす」設定（prefers-reduced-motion）のときは、動かさずに代表の1コマだけを見せる。
+  図の下のボタンで、いつでも止めたり動かしたりできる。
+*/
+type V = [number, number, number]; // x：画面の右（正面から見たとき）／y：上／z：体の正面
+type MoveName = 'twist' | 'bow' | 'side' | 'coilLeft' | 'bentTwist' | 'coilRight' | 'pass' | 'lunge' | 'seesaw';
+
+interface Props {
+	move: MoveName;
+}
+
+const { move } = Astro.props;
+
+/* ---------- ベクトルの小道具 ---------- */
+const add = (a: V, b: V): V => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+const sub = (a: V, b: V): V => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const mul = (a: V, k: number): V => [a[0] * k, a[1] * k, a[2] * k];
+const dot = (a: V, b: V) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const len = (a: V) => Math.hypot(a[0], a[1], a[2]);
+const norm = (a: V): V => mul(a, 1 / (len(a) || 1));
+const lerp = (a: V, b: V, k: number): V => add(a, mul(sub(b, a), k));
+const rad = (deg: number) => (deg * Math.PI) / 180;
+// 縦軸まわりに回す（プラスで、顔が x のプラス側を向く）
+const rotY = (p: V, a: number): V => [p[0] * Math.cos(a) + p[2] * Math.sin(a), p[1], -p[0] * Math.sin(a) + p[2] * Math.cos(a)];
+// 横に倒す
+const rotZ = (p: V, a: number, pivot: V): V => {
+	const x = p[0] - pivot[0];
+	const y = p[1] - pivot[1];
+	return [pivot[0] + x * Math.cos(a) - y * Math.sin(a), pivot[1] + x * Math.sin(a) + y * Math.cos(a), p[2]];
+};
+// 前に倒す
+const rotX = (p: V, a: number, pivot: V): V => {
+	const y = p[1] - pivot[1];
+	const z = p[2] - pivot[2];
+	return [p[0], pivot[1] + y * Math.cos(a) - z * Math.sin(a), pivot[2] + y * Math.sin(a) + z * Math.cos(a)];
+};
+// 行って戻る動きを、端でゆっくりにする
+const ease = (k: number) => k * k * (3 - 2 * k);
+const wave = (t: number) => Math.sin(2 * Math.PI * t); // -1〜1 を行き来
+const swing = (t: number) => (1 - Math.cos(2 * Math.PI * t)) / 2; // 0〜1 を行き来
+// 端で少し止まる -1〜1 の行き来
+const holdWave = (t: number) => {
+	const s = wave(t);
+	return Math.sign(s) * ease(ease(Math.abs(s)));
+};
+
+/* ---------- 体の寸法（単位は SVG の px） ---------- */
+const HIP_Y = 98;
+const SHOULDER_Y = 165;
+const HIP_W = 14;
+const SHOULDER_W = 26;
+const UPPER_ARM = 34;
+const FOREARM = 32;
+const THIGH = 49.5;
+const SHIN = 49.5;
+const HEAD_R = 15;
+const STICK_HALF = 96;
+
+// 関節が2つある腕・脚で、付け根と先端から「間の関節」の位置を求める
+function midJoint(root: V, tip: V, l1: number, l2: number, hint: V): V {
+	const d = Math.min(len(sub(tip, root)), l1 + l2 - 0.01);
+	const dir = norm(sub(tip, root));
+	const along = (l1 * l1 - l2 * l2 + d * d) / (2 * d);
+	const h = Math.sqrt(Math.max(l1 * l1 - along * along, 0));
+	const side = norm(sub(hint, mul(dir, dot(hint, dir))));
+	return add(root, add(mul(dir, along), mul(side, h)));
+}
+
+/* ---------- 動きの定義 ----------
+   t は 0〜1 で1周。手の位置などは「まっすぐ立った上半身」から見た座標で決め、
+   あとから ひねり（twist）・横倒し（bend）・前倒し（lean）・腰の移動をまとめてかける。 */
+interface Pose {
+	handL: V; // x がマイナス側の手
+	handR: V; // x がプラス側の手
+	hintL?: V; // ひじを向けたい方向
+	hintR?: V;
+	twist?: number; // 上半身を縦軸まわりに回す角度（度）
+	bend?: number; // 上半身を横に倒す角度（度）
+	lean?: number; // 上半身を前に倒す角度（度）
+	shift?: number; // 腰を左右に動かす量
+}
+interface Move {
+	title: string;
+	desc: string;
+	caption: string;
+	yaw: number; // 見る向き（0＝正面、180＝真後ろ）
+	pitch: number; // 少し上から見下ろす角度
+	dur: number; // 1周の秒数
+	key: number; // 「動きを減らす」設定のときに見せるコマ
+	hipY?: number; // 腰の高さ（足を開くほど低くなる）
+	hipZ?: number; // 腰の前後の位置
+	feet?: [V, V]; // 足を置く位置（x がマイナス側、プラス側の順）
+	pose: (t: number) => Pose;
+}
+
+// 足を左右に開いたときの、足の位置と腰の高さ
+const stance = (half: number) => ({
+	feet: [
+		[-half, 0, 0],
+		[half, 0, 0],
+	] as [V, V],
+	hipY: Math.sqrt((THIGH + SHIN - 1) ** 2 - (half - HIP_W) ** 2),
+});
+
+// 棒を肩に担いで、両腕を棒に沿わせた形
+const onShoulders = (): Pick<Pose, 'handL' | 'handR' | 'hintL' | 'hintR'> => ({
+	handR: [73, 168, -11],
+	handL: [-73, 168, -11],
+	hintR: [0.2, -1, -0.5],
+	hintL: [-0.2, -1, -0.5],
+});
+
+// 決めた姿勢を順番になめらかにつなぐ（最後は最初に戻る）
+function through(keys: number[][], t: number): number[] {
+	const n = keys.length;
+	const pos = (((t % 1) + 1) % 1) * n;
+	const i = Math.floor(pos);
+	const u = pos - i;
+	const k = (j: number) => keys[(((i + j) % n) + n) % n];
+	const [p0, p1, p2, p3] = [k(-1), k(0), k(1), k(2)];
+	return p1.map(
+		(_, c) =>
+			0.5 *
+			(2 * p1[c] +
+				(-p0[c] + p2[c]) * u +
+				(2 * p0[c] - 5 * p1[c] + 4 * p2[c] - p3[c]) * u * u +
+				(-p0[c] + 3 * p1[c] - 3 * p2[c] + p3[c]) * u * u * u),
+	);
+}
+
+// 体の片側で棒を大きく回す動き。side は 1（x のプラス側）か -1（マイナス側）
+// 腰の後ろで横 → 背中で縦 → 頭の上を越えて体の前 → 頭の上で横 → 腰の後ろへ
+const COIL_KEYS = [
+	// 棒が通る側の手 x,y,z ／ 反対側の手 x,y,z ／ ひねり ／ 腰の移動
+	[40, 108, -18, -40, 108, -18, 0, 0],
+	[6, 120, -20, -6, 200, -16, 22, 6],
+	[32, 128, 10, 12, 205, 14, 50, 10],
+	[40, 150, 30, -20, 205, 30, 30, 6],
+	[40, 222, 0, -40, 222, 0, 0, 0],
+];
+const coil = (side: 1 | -1) => (t: number): Pose => {
+	const [ax, ay, az, bx, by, bz, twist, shift] = through(COIL_KEYS, t);
+	const near: V = [ax * side, ay, az];
+	const far: V = [bx * side, by, bz];
+	return {
+		handR: side === 1 ? near : far,
+		handL: side === 1 ? far : near,
+		hintR: [1, 0.2, -0.4],
+		hintL: [-1, 0.2, -0.4],
+		twist: twist * side,
+		shift: shift * side,
+	};
+};
+
+const MOVES: Record<MoveName, Move> = {
+	// 棒を肩に担いで、上半身を左右にひねる
+	twist: {
+		title: '棒を肩に担いで腰を左右にひねる動き',
+		desc: '後ろから見た図。棒を首の後ろで肩に担ぎ、両腕を棒に沿わせて広げる。足の位置は変えずに、上半身を左右にひねる。',
+		caption: '担いで左右にひねる（後ろから見た図）',
+		yaw: 180,
+		pitch: 16,
+		dur: 2.6,
+		key: 6,
+		...stance(30),
+		pose: (t) => ({ ...onShoulders(), twist: 62 * wave(t) }),
+	},
+	// 足を大きく開き、棒を担いだまま上半身を前に倒す
+	bow: {
+		title: '棒を肩に担いで上半身を前に倒す動き',
+		desc: 'ななめ前から見た図。足を大きく開いて立ち、棒を肩に担いで両腕を広げる。背中を伸ばしたまま上半身を前に倒し、少し起こしてはまた深く倒す。',
+		caption: '担いで前に倒す（ななめ前から見た図）',
+		yaw: -38,
+		pitch: 16,
+		dur: 2.4,
+		key: 12,
+		...stance(46),
+		hipZ: -12,
+		pose: (t) => ({ ...onShoulders(), lean: 52 + 34 * swing(t) }),
+	},
+	// 棒を担いだまま、体を左右に大きく倒す
+	side: {
+		title: '棒を肩に担いで体を左右に倒す動き',
+		desc: '後ろから見た図。足を開いて立ち、棒を肩に担いで両腕を広げる。そのまま体を真横に大きく倒し、棒が縦に近くなるところまでいったら戻して、反対側にも倒す。',
+		caption: '担いで横に倒す（後ろから見た図）',
+		yaw: 180,
+		pitch: 8,
+		dur: 3.6,
+		key: 6,
+		...stance(38),
+		pose: (t) => ({ ...onShoulders(), bend: 50 * holdWave(t), shift: 7 * holdWave(t) }),
+	},
+	coilLeft: {
+		title: '棒を体の左側で大きく回す動き',
+		desc: '後ろから見た図。腰の後ろで横に持った棒を、背中で縦に立て、体をひねりながら頭の上を越えて体の左前へ回す。そのまま頭の上で横にして、背中側から腰の後ろへ下ろす。これをくり返す。',
+		caption: '体の左側で回す（後ろから見た図）',
+		yaw: 172,
+		pitch: 10,
+		dur: 3.2,
+		key: 6,
+		...stance(36),
+		pose: coil(1),
+	},
+	// 前屈したまま上半身をひねり、棒の先を床に近づける
+	bentTwist: {
+		title: '前屈したまま上半身を左右にひねる動き',
+		desc: '正面から見た図。足を大きく開いて立ち、棒を肩に担いで上半身を前に倒す。そのまま上半身をひねって、棒の片方の先を床へ、もう片方を天井へ向ける。少し止めてから、反対側にもひねる。',
+		caption: '前屈して左右にひねる（正面から見た図）',
+		yaw: -14,
+		pitch: 16,
+		dur: 4,
+		key: 6,
+		...stance(50),
+		hipZ: -14,
+		pose: (t) => ({ ...onShoulders(), lean: 80, twist: 66 * holdWave(t) }),
+	},
+	coilRight: {
+		title: '棒を体の右側で大きく回す動き',
+		desc: '後ろから見た図。腰の後ろで横に持った棒を、背中で縦に立て、体をひねりながら頭の上を越えて体の右前へ回す。そのまま頭の上で横にして、背中側から腰の後ろへ下ろす。これをくり返す。',
+		caption: '体の右側で回す（後ろから見た図）',
+		yaw: 188,
+		pitch: 10,
+		dur: 3.2,
+		key: 6,
+		...stance(36),
+		pose: coil(-1),
+	},
+	// 肩回し。腕を伸ばしたまま、棒を体の前から頭の上を通して背中側へ
+	pass: {
+		title: '腕を伸ばしたまま棒を前から後ろへ大きく回す動き',
+		desc: 'ななめ後ろから見た図。棒の両端近くを持ち、腕を伸ばしたまま体の前から頭の上を通して背中側へ下ろす。同じ道を通って前に戻す。',
+		caption: '前から後ろへ肩を回す（ななめ後ろから見た図）',
+		yaw: 145,
+		pitch: 12,
+		dur: 3.4,
+		key: 12,
+		...stance(30),
+		pose: (t) => {
+			const grip = 64;
+			const reach = Math.sqrt((UPPER_ARM + FOREARM) ** 2 - (grip - SHOULDER_W) ** 2) - 0.5;
+			const a = rad(18 + 302 * swing(t)); // 真下から前回りに測った腕の角度
+			const hand = (sign: number): V => [grip * sign, SHOULDER_Y - reach * Math.cos(a), reach * Math.sin(a)];
+			return { handR: hand(1), handL: hand(-1), hintR: [1, 0, 0], hintL: [-1, 0, 0] };
+		},
+	},
+	// 足を前後に開いて、棒を頭の上から背中側へ引き下ろす
+	lunge: {
+		title: '足を前後に開いて棒を頭の上から背中へ下ろす動き',
+		desc: 'ななめ後ろから見た図。足を前後に大きく開いて前のひざを曲げ、棒を頭の上に持ち上げる。ひじを曲げて棒を首の後ろへ引き下ろし、そのまま背中側の腰のあたりまで下ろす。同じ道を通って頭の上に戻す。',
+		caption: '足を前後に開いて背中へ下ろす（ななめ後ろから見た図）',
+		yaw: 118,
+		pitch: 10,
+		dur: 3.2,
+		key: 6,
+		hipY: 80,
+		hipZ: 4,
+		feet: [
+			[-11, 0, 42],
+			[11, 0, -52],
+		],
+		pose: (t) => {
+			const u = swing(t) * 2;
+			const top = (sign: number): V => [50 * sign, 221, -2];
+			const neck = (sign: number): V => [54 * sign, 174, -17];
+			const waist = (sign: number): V => [40 * sign, 112, -22];
+			const hand = (sign: number) => (u < 1 ? lerp(top(sign), neck(sign), u) : lerp(neck(sign), waist(sign), u - 1));
+			return { handR: hand(1), handL: hand(-1), hintR: [1, 0.1, -0.5], hintL: [-1, 0.1, -0.5], lean: 6 };
+		},
+	},
+	// 背中側で、左右の手を交互に上げ下げして棒をななめにする
+	seesaw: {
+		title: '棒を背中側で左右交互にななめにする動き',
+		desc: '後ろから見た図。両手を後ろに回して腰の後ろで棒を横に持つ。片方の手を肩の上へ、もう片方の手を腰に残して棒をななめに立て、腰の後ろで横に戻す。反対側も同じように行う。腰も一緒に左右へひねる。',
+		caption: '背中で左右交互に回す（後ろから見た図）',
+		yaw: 168,
+		pitch: 10,
+		dur: 3,
+		key: 6,
+		...stance(32),
+		pose: (t) => {
+			const s = wave(t);
+			const k = ease(Math.abs(s));
+			const base = (sign: number): V => [40 * sign, 108, -18];
+			const high = (sign: number): V => [14 * sign, 192, -17];
+			const low = (sign: number): V => [24 * sign, 122, -21];
+			return {
+				handR: lerp(base(1), s >= 0 ? high(1) : low(1), k),
+				handL: lerp(base(-1), s >= 0 ? low(-1) : high(-1), k),
+				hintR: [1, 0.3, -0.5],
+				hintL: [-1, 0.3, -0.5],
+				twist: -20 * s,
+				shift: -6 * s,
+			};
+		},
+	},
+};
+
+const m = MOVES[move];
+
+/* ---------- 1コマぶんの絵を作る ---------- */
+const VIEW_W = 300;
+const VIEW_H = 300;
+const CX = VIEW_W / 2;
+const GROUND = 272;
+const FRAMES = 24;
+
+const yaw = rad(m.yaw);
+const pitch = rad(m.pitch);
+
+// 3次元の点を、画面の座標と奥行きに直す
+function project(p: V) {
+	const q = rotY(p, yaw);
+	return {
+		x: CX + q[0],
+		y: GROUND - q[1] * Math.cos(pitch) + q[2] * Math.sin(pitch),
+		depth: q[2],
+	};
+}
+type P2 = ReturnType<typeof project>;
+const f = (n: number) => n.toFixed(1);
+const line = (...pts: P2[]) => pts.map((p, i) => `${i ? 'L' : 'M'}${f(p.x)} ${f(p.y)}`).join('');
+const depthOf = (...pts: P2[]) => pts.reduce((sum, p) => sum + p.depth, 0) / pts.length;
+
+type Part = { depth: number; kind: 'line' | 'stick' | 'body' | 'head'; d?: string; at?: P2 };
+
+function drawFrame(t: number): Part[] {
+	const pose = m.pose(t);
+	const twist = rad(pose.twist ?? 0);
+	const bend = rad(pose.bend ?? 0);
+	const lean = rad(pose.lean ?? 0);
+	const pivot: V = [0, HIP_Y, 0];
+	const hipAt: V = [pose.shift ?? 0, (m.hipY ?? HIP_Y) - HIP_Y, m.hipZ ?? 0];
+
+	// 上半身：ひねる → 横に倒す → 前に倒す → 腰の位置へ動かす
+	const upper = (p: V): V => add(rotX(rotZ(rotY(p, twist), bend, pivot), lean, pivot), hipAt);
+	const upperDir = (v: V): V => sub(upper(add(pivot, v)), upper(pivot));
+	// 腰は上半身ほどは回らない
+	const lower = (p: V): V => add(rotY(p, lean ? 0 : twist * 0.25), hipAt);
+
+	const shoulderL = upper([-SHOULDER_W, SHOULDER_Y, 0]);
+	const shoulderR = upper([SHOULDER_W, SHOULDER_Y, 0]);
+	const neck = upper([0, SHOULDER_Y + 4, 0]);
+	const head = upper([0, SHOULDER_Y + 9 + HEAD_R, 1]);
+	const hipL = lower([-HIP_W, HIP_Y, 0]);
+	const hipR = lower([HIP_W, HIP_Y, 0]);
+
+	const handL = upper(pose.handL);
+	const handR = upper(pose.handR);
+	const elbowL = midJoint(shoulderL, handL, UPPER_ARM, FOREARM, upperDir(pose.hintL ?? [-1, 0, 0]));
+	const elbowR = midJoint(shoulderR, handR, UPPER_ARM, FOREARM, upperDir(pose.hintR ?? [1, 0, 0]));
+
+	// 棒は両手を通る直線。握る位置から左右に同じだけ伸ばす
+	const stickMid = lerp(handL, handR, 0.5);
+	const stickDir = norm(sub(handR, handL));
+	const stickL = add(stickMid, mul(stickDir, -STICK_HALF));
+	const stickR = add(stickMid, mul(stickDir, STICK_HALF));
+
+	// 脚：足は床に置いたまま、ひざの位置を逆算する
+	const [footL, footR] = m.feet ?? stance(25).feet;
+	const kneeL = midJoint(hipL, footL, THIGH, SHIN, [-0.2, 0, 1]);
+	const kneeR = midJoint(hipR, footR, THIGH, SHIN, [0.2, 0, 1]);
+	const toeL = add(footL, [-3, 0, 13]);
+	const toeR = add(footR, [3, 0, 13]);
+
+	const P = project;
+	const torso = [P(shoulderL), P(shoulderR), P(hipR), P(hipL)];
+	const parts: Part[] = [
+		// 脚はいつもいちばん奥に描く
+		{ depth: -999, kind: 'line', d: line(P(hipL), P(kneeL), P(footL), P(toeL)) + line(P(hipR), P(kneeR), P(footR), P(toeR)) },
+		{ depth: depthOf(...torso), kind: 'body', d: `${line(...torso)}Z${line(P(neck), P(head))}` },
+		{ depth: P(head).depth + 0.5, kind: 'head', at: P(head) },
+		{ depth: depthOf(P(elbowL), P(handL)), kind: 'line', d: line(P(shoulderL), P(elbowL), P(handL)) },
+		{ depth: depthOf(P(elbowR), P(handR)), kind: 'line', d: line(P(shoulderR), P(elbowR), P(handR)) },
+		// 棒は左右に分けて、体の手前か奥かをそれぞれ決める
+		{ depth: depthOf(P(stickL), P(stickMid)), kind: 'stick', d: line(P(stickL), P(stickMid)) },
+		{ depth: depthOf(P(stickR), P(stickMid)), kind: 'stick', d: line(P(stickR), P(stickMid)) },
+	];
+	return parts.sort((a, b) => a.depth - b.depth);
+}
+
+const frames = Array.from({ length: FRAMES }, (_, i) => drawFrame(i / FRAMES));
+const id = `stick-ex-${move}`;
+---
+<figure class="stick-ex" style={`--se-dur: ${m.dur}s`}>
+	<svg viewBox={`0 0 ${VIEW_W} ${VIEW_H}`} role="img" aria-labelledby={`${id}-title ${id}-desc`}>
+		<title id={`${id}-title`}>{m.title}</title>
+		<desc id={`${id}-desc`}>{m.desc}</desc>
+		<defs>
+			<filter id={`${id}-sketch`} x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="23"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter={`url(#${id}-sketch)`}>
+			<path class="se-ground" d={`M${CX - 110} ${GROUND + 12}q110 5 220 0`} />
+			{
+				frames.map((parts, i) => (
+					<g class:list={['se-f', { 'se-f--key': i === m.key }]} style={`--i: ${i}`}>
+						{parts.map((p) =>
+							p.kind === 'head' ? (
+								<circle class="se-body" cx={f(p.at!.x)} cy={f(p.at!.y)} r={HEAD_R} />
+							) : (
+								<path class={`se-${p.kind}`} d={p.d} />
+							),
+						)}
+					</g>
+				))
+			}
+		</g>
+	</svg>
+	<figcaption>
+		<span>{m.caption}</span>
+		<button class="se-toggle" type="button" data-stick-toggle aria-pressed="false" hidden>
+			<span class="se-toggle__stop">動きを止める</span>
+			<span class="se-toggle__play">動かす</span>
+		</button>
+	</figcaption>
+</figure>
+
+<script>
+	// 図ごとの「動きを止める／動かす」ボタン
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	for (const button of document.querySelectorAll<HTMLButtonElement>('[data-stick-toggle]')) {
+		const figure = button.closest<HTMLElement>('.stick-ex')!;
+		const set = (playing: boolean) => {
+			figure.dataset.state = playing ? 'playing' : 'paused';
+			button.setAttribute('aria-pressed', String(!playing));
+		};
+		set(!reduce);
+		button.hidden = false;
+		button.addEventListener('click', () => set(figure.dataset.state !== 'playing'));
+	}
+</script>
+
+<style>
+	.stick-ex svg {
+		display: block;
+		width: 100%;
+		max-width: 20rem;
+		height: auto;
+		margin-inline: auto;
+	}
+	.se-ground,
+	.se-line,
+	.se-stick,
+	.se-body {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 3;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.se-ground {
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	/* 胴体と頭は塗って、後ろに回った棒や腕が隠れるようにする */
+	.se-body {
+		fill: var(--c-bg);
+	}
+	.se-stick {
+		stroke: var(--c-accent);
+		stroke-width: 5.5;
+	}
+
+	/* コマ送り：24コマを1つずつ順番に見せる */
+	.se-f {
+		visibility: hidden;
+		animation: se-flip var(--se-dur) steps(1, end) infinite;
+		animation-delay: calc(var(--se-dur) / 24 * (var(--i) - 24));
+	}
+	[data-state='paused'] .se-f {
+		animation-play-state: paused;
+	}
+	@keyframes se-flip {
+		0% {
+			visibility: visible;
+		}
+		/* 1コマ＝100% ÷ 24。切り替わりで一瞬消えないよう、ほんの少し長く見せる */
+		4.2%,
+		100% {
+			visibility: hidden;
+		}
+	}
+
+	.stick-ex figcaption {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: var(--sp-2) var(--sp-4);
+	}
+	.se-toggle {
+		min-height: var(--tap);
+		padding: var(--sp-1) var(--sp-4);
+		border: 1px solid var(--c-line-strong);
+		border-radius: var(--radius-pill);
+		background: var(--c-surface-raised);
+		color: var(--c-accent);
+		font: inherit;
+		font-weight: 700;
+		cursor: pointer;
+	}
+	.se-toggle:hover {
+		background: var(--c-accent-wash);
+		color: var(--c-accent-hover);
+	}
+	.se-toggle[aria-pressed='false'] .se-toggle__play,
+	.se-toggle[aria-pressed='true'] .se-toggle__stop {
+		display: none;
+	}
+
+	/* 動きを減らす設定のときは、代表の1コマだけを見せる。ボタンで「動かす」を選んだら動かす */
+	@media (prefers-reduced-motion: reduce) {
+		.stick-ex:not([data-state='playing']) .se-f {
+			animation: none;
+		}
+		.stick-ex:not([data-state='playing']) .se-f--key {
+			visibility: visible;
+		}
+		.stick-ex[data-state='playing'] .se-f {
+			animation-duration: var(--se-dur) !important;
+			animation-iteration-count: infinite !important;
+			animation-delay: calc(var(--se-dur) / 24 * (var(--i) - 24)) !important;
+		}
+	}
+</style>

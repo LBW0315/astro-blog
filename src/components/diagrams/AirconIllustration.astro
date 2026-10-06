@@ -1,15 +1,18 @@
 ---
 /*
-  記事「我が家のエアコンはダイキンEシリーズに決定！」の冒頭に置く飾りのイラスト。
+  エアコンの記事（Eシリーズに決めた話、どこで買うかの話）の冒頭に置く飾りのイラスト。
   壁掛けエアコンから、涼しい風がゆらゆら流れてくる絵。
 
   線の太さ・丸い端・やわらかい塗りは、既存の Pekingese.astro・CoffeeSteam.astro に
   そろえている。図解ではなく飾りなので、手描き風のゆらぎフィルターはかけていない。
 
-  顔は小さくすると「吹き出し口の点々」に見えてしまうので、
-  本体を縦に厚くして、目・口・ほっぺを離して置いている。
+  ひと目でエアコンと分かることを優先して、顔は付けていない。
+  横長の箱・前面パネルの合わせ目・暗い吹き出し口・開いたフラップ・運転ランプで、
+  壁掛けエアコンの形を出している。
 
-  風は CoffeeSteam の湯気と同じ考え方で、3本を少しずつずらして繰り返す。
+  風は吹き出し口から扇形に広がる4本の弧と、雪の結晶ひとつ。
+  波線にすると「におい」や「湯気」に見えるので、曲がりが一方向だけの弧にしている。
+  内側の2本、外側の2本の順に、少しずらして繰り返す。
   「動きを減らす」設定（prefers-reduced-motion）のときは止める。
 
   中身を説明する図ではないので aria-hidden。記事の情報は本文が持っている。
@@ -18,29 +21,30 @@
 
 <figure class="acill">
 	<svg viewBox="0 0 240 150" width="240" height="150" aria-hidden="true" focusable="false">
-		<!-- 涼しい風。下にいくほど大きく広がる -->
+		<!-- 涼しい風。吹き出し口から扇形に広がる、なめらかな弧（波線にすると「におい」に見えるので使わない） -->
 		<g class="acill__winds">
-			<path class="acill__wind" d="M79 92q13.5 11 27 0t27 0t27 0" />
-			<path class="acill__wind" d="M70 108q16.7 12 33.3 0t33.3 0t33.3 0" />
-			<path class="acill__wind" d="M61 124q19.7 13 39.3 0t39.3 0t39.3 0" />
+			<path class="acill__wind" d="M103 92q-3 20-16 36" />
+			<path class="acill__wind" d="M137 92q3 20 16 36" />
+			<path class="acill__wind" d="M82 90q-8 22-34 36" />
+			<path class="acill__wind" d="M158 90q8 22 34 36" />
 		</g>
+		<!-- 雪の結晶。冷たい風だと分かるように -->
+		<path class="acill__flake" d="M120 105v14M113.9 108.5l12.2 7M113.9 115.5l12.2-7" />
 
 		<!-- 本体 -->
 		<g class="acill__body">
 			<!-- 壁のライン -->
-			<path class="acill__wall" d="M10 18h220" />
+			<path class="acill__wall" d="M10 16h220" />
 			<!-- 箱 -->
-			<rect class="acill__case" x="45" y="24" width="150" height="54" rx="18" />
-			<!-- 吹き出し口 -->
-			<path class="acill__louver" d="M62 70h116" />
-			<!-- 運転ランプ（顔と離して右上に） -->
-			<circle class="acill__lamp" cx="178" cy="36" r="2.8" />
-			<!-- 顔 -->
-			<ellipse class="acill__cheek" cx="92" cy="54" rx="6" ry="3.4" />
-			<ellipse class="acill__cheek" cx="148" cy="54" rx="6" ry="3.4" />
-			<circle class="acill__eye" cx="104" cy="44" r="4" />
-			<circle class="acill__eye" cx="136" cy="44" r="4" />
-			<path class="acill__mouth" d="M113 55q7 7 14 0" />
+			<rect class="acill__case" x="30" y="22" width="180" height="50" rx="10" />
+			<!-- 前面パネルの合わせ目 -->
+			<path class="acill__seam" d="M31 50h178" />
+			<!-- 吹き出し口（暗い開口部） -->
+			<rect class="acill__outlet" x="44" y="57" width="152" height="9" rx="4.5" />
+			<!-- 開いたフラップ -->
+			<path class="acill__flap" d="M50 72h140l-8 10H58z" />
+			<!-- 運転ランプ -->
+			<circle class="acill__lamp" cx="194" cy="41" r="2.8" />
 		</g>
 	</svg>
 </figure>
@@ -71,26 +75,20 @@
 		stroke: var(--c-text-sub);
 		stroke-width: 2;
 	}
-	.acill__louver {
+	.acill__seam {
 		fill: none;
-		stroke: var(--c-line);
-		stroke-width: 2;
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
 		stroke-linecap: round;
 	}
-
-	/* 顔 */
-	.acill__eye {
+	.acill__outlet {
 		fill: var(--c-text-sub);
 	}
-	.acill__mouth {
-		fill: none;
+	.acill__flap {
+		fill: var(--c-surface-raised);
 		stroke: var(--c-text-sub);
 		stroke-width: 2;
-		stroke-linecap: round;
-	}
-	.acill__cheek {
-		fill: var(--c-accent2);
-		opacity: 0.4;
+		stroke-linejoin: round;
 	}
 	.acill__lamp {
 		fill: var(--c-accent);
@@ -105,17 +103,21 @@
 		opacity: 0;
 		animation: acill-wind 4.5s var(--ease-inout) infinite;
 	}
-	.acill__wind:nth-child(2) {
-		animation-delay: 1.2s;
+	.acill__wind:nth-child(n + 3) {
+		animation-delay: 0.9s;
 	}
-	.acill__wind:nth-child(3) {
-		animation-delay: 2.4s;
+	.acill__flake {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 2;
+		stroke-linecap: round;
+		opacity: 0.8;
 	}
 
 	@keyframes acill-wind {
 		0% {
 			opacity: 0;
-			transform: translateY(-7px);
+			transform: translateY(-5px);
 		}
 		25% {
 			opacity: 0.9;
@@ -125,11 +127,11 @@
 		}
 		100% {
 			opacity: 0;
-			transform: translateY(12px);
+			transform: translateY(6px);
 		}
 	}
 
-	/* 動きを減らす設定のときは、流れを止めて3本とも静かに見せる */
+	/* 動きを減らす設定のときは、流れを止めて4本とも静かに見せる */
 	@media (prefers-reduced-motion: reduce) {
 		.acill__wind {
 			animation: none;

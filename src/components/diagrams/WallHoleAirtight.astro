@@ -1,0 +1,158 @@
+---
+/*
+  記事「エアコンは「どこで買うか」で20万円変わる。高気密の新築で選んだ買い方」専用の図解
+  壁にあける配管の穴と、そのまわりの気密処理を横から見た図（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  気密処理の3か所（スリーブ・パテ・コーキング）を青磁でそろえ、
+  壁・配管・エアコンは本文色の線にしています。色だけに頼らず、3か所とも名前を横に書いています。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  viewBox 幅は340。375px画面（本文約335px）でほぼ等倍になる。
+*/
+---
+
+<figure class="wallhole">
+	<svg viewBox="0 0 340 300" role="img" aria-labelledby="wallhole-title wallhole-desc">
+		<title id="wallhole-title">エアコンの配管を通す穴と、気密処理をする3か所</title>
+		<desc id="wallhole-desc">
+			壁を横から見た図。左が室内、右が屋外。室内のエアコンから出た配管が、壁の穴を通って屋外に出ている。穴にはスリーブという筒を通す。配管と筒のすき間はパテで埋める。外壁側の筒のふちはコーキングでふさぐ。
+		</desc>
+		<defs>
+			<filter id="wallhole-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="43"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+			<clipPath id="wallhole-wall-clip">
+				<rect x="140" y="36" width="60" height="232"></rect>
+			</clipPath>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#wallhole-sketch)">
+			<!-- 壁（中の斜線は断熱材） -->
+			<rect class="wallhole__wall" x="140" y="36" width="60" height="232"></rect>
+			<g class="wallhole__insulation" clip-path="url(#wallhole-wall-clip)">
+				<path d="M140 60l60-24 M140 150l60-24 M140 180l60-24 M140 210l60-24 M140 240l60-24 M140 270l60-24"></path>
+			</g>
+
+			<!-- エアコン（室内機） -->
+			<rect class="wallhole__unit" x="26" y="52" width="94" height="38" rx="8"></rect>
+			<path class="wallhole__unit-line" d="M38 80h70"></path>
+
+			<!-- スリーブ（穴に通す筒）。外に向かって少し下げる -->
+			<path class="wallhole__sleeve" d="M136 86L204 94L204 124L136 116Z"></path>
+
+			<!-- パテ（配管と筒のすき間）。配管より先に描いて、配管のまわりを埋めているように見せる -->
+			<ellipse class="wallhole__putty" cx="140" cy="101" rx="5" ry="12"></ellipse>
+			<ellipse class="wallhole__putty" cx="200" cy="109" rx="5" ry="12"></ellipse>
+
+			<!-- 配管 -->
+			<path class="wallhole__pipe" d="M120 84q10 0 16 16L204 109q24 3 24 28V268"></path>
+
+			<!-- コーキング（外壁側の筒のふち） -->
+			<circle class="wallhole__caulk" cx="205" cy="92" r="4.5"></circle>
+			<circle class="wallhole__caulk" cx="205" cy="126" r="4.5"></circle>
+
+			<!-- 引き出し線 -->
+			<path class="wallhole__leader" d="M92 138L134 108"></path>
+			<path class="wallhole__leader" d="M96 204L166 122"></path>
+			<path class="wallhole__leader" d="M246 76L212 89"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="wallhole__side" x="72" y="24" text-anchor="middle">室内</text>
+		<text class="wallhole__side" x="170" y="24" text-anchor="middle">壁</text>
+		<text class="wallhole__side" x="270" y="24" text-anchor="middle">屋外</text>
+
+		<text class="wallhole__name" x="14" y="156">パテ</text>
+		<text class="wallhole__note" x="14" y="176">すき間を埋める</text>
+
+		<text class="wallhole__name" x="14" y="222">スリーブ</text>
+		<text class="wallhole__note" x="14" y="242">穴に通す筒</text>
+
+		<text class="wallhole__name" x="238" y="52">コーキング</text>
+		<text class="wallhole__note" x="238" y="72">ふちをふさぐ</text>
+
+		<text class="wallhole__note" x="228" y="290" text-anchor="middle">室外機へ</text>
+	</svg>
+	<figcaption>配管の穴まわりの気密処理。どこまでが標準工事に入るかは、業者に確認が必要</figcaption>
+</figure>
+
+<style>
+	.wallhole svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+
+	/* 壁・エアコン・配管 */
+	.wallhole__wall {
+		fill: var(--c-surface);
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+	}
+	.wallhole__insulation path {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 1.2;
+	}
+	.wallhole__unit {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+	}
+	.wallhole__unit-line {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+	}
+	.wallhole__pipe {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	/* 気密処理の3か所 */
+	.wallhole__sleeve {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2.2;
+		stroke-linejoin: round;
+	}
+	.wallhole__putty,
+	.wallhole__caulk {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 1.5;
+	}
+	.wallhole__leader {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 1.4;
+		stroke-linecap: round;
+	}
+
+	/* 文字 */
+	.wallhole__side {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.wallhole__name {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.wallhole__note {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+</style>

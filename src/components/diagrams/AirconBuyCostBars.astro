@@ -1,0 +1,201 @@
+---
+/*
+  記事「エアコンは「どこで買うか」で20万円変わる。高気密の新築で選んだ買い方」専用の図解
+  4つの買い方の総額（2台・税込）を、棒の長さで並べた図（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  金額そのものは本文の表（Markdown）にあるので、この図は「長さの差」を見せる役目です。
+
+  色だけで区別しないように、次の組み合わせにしています。
+  - 選ばなかった買い方：グレーの実線
+  - 選んだ買い方：青磁の実線＋「決定」のラベル
+  - まだ金額が出ていない取付費：灰桜の点線＋「これから」のラベル
+  - ヨドバシのポイント還元分：斜線の入った薄い棒
+
+  viewBox 幅は340。375px画面（本文約335px）でほぼ等倍になり、15pxの文字がそのまま読める。
+*/
+type Row = {
+	title: string;
+	amount: string;
+	note: string;
+	yen: number;
+	pointYen?: number; // ポイント還元分（棒の右端を薄くする）
+	planYen?: number; // これからかかる分（点線で足す）
+	chosen?: boolean;
+};
+
+const X0 = 10;
+const BAR_MAX = 310;
+const MAX_YEN = 572000;
+const ROW_H = 88;
+const BAR_H = 20;
+const px = (yen: number) => Math.round((yen / MAX_YEN) * BAR_MAX * 10) / 10;
+
+const rows: Row[] = [
+	{ title: 'ダイキンプロショップ', amount: '572,000円', note: '（10年保証は別に＋26,400円）', yen: 572000 },
+	{ title: 'ヨドバシ', amount: '547,580円', note: '（ポイントを引くと約46.6万円）', yen: 547580, pointYen: 82000 },
+	{ title: 'ネット本体＋提携業者の工事', amount: '330,970円', note: '（標準工事込み）', yen: 330970 },
+	{
+		title: 'ネット本体＋くらしのマーケット',
+		amount: '285,970円',
+		note: '＋取付費（見積もり前）',
+		yen: 285970,
+		planYen: 64030, // 総額35万円前後という目安までの分
+		chosen: true,
+	},
+];
+
+const H = 8 + rows.length * ROW_H - 8;
+---
+
+<figure class="acbars">
+	<svg viewBox={`0 0 340 ${H}`} role="img" aria-labelledby="acbars-title acbars-desc">
+		<title id="acbars-title">エアコン2台の総額を、買い方ごとに棒の長さで比べた図</title>
+		<desc id="acbars-desc">
+			ダイキンプロショップは572,000円でいちばん長い。ヨドバシは547,580円で、ポイントを引くと約46.6万円。ネットで本体を買って提携業者に工事を頼むと330,970円。ネットで本体を買ってくらしのマーケットで取付を頼む場合は、本体が285,970円で、取付費はこれから見積もる。棒の長さはプロショップの半分ほどになる。
+		</desc>
+		<defs>
+			<filter id="acbars-sketch" x="-3%" y="-3%" width="106%" height="106%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="27"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+			<pattern id="acbars-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+				<line class="acbars__hatch" x1="0" y1="0" x2="0" y2="7"></line>
+			</pattern>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#acbars-sketch)">
+			{
+				rows.map((r, i) => {
+					const y = 8 + i * ROW_H + 28;
+					const solid = px(r.yen - (r.pointYen ?? 0));
+					return (
+						<g>
+							<rect
+								class:list={['acbars__bar', { 'acbars__bar--chosen': r.chosen }]}
+								x={X0}
+								y={y}
+								width={solid}
+								height={BAR_H}
+								rx="4"
+							/>
+							{r.pointYen && (
+								<rect class="acbars__point" x={X0 + solid} y={y} width={px(r.pointYen)} height={BAR_H} rx="4" />
+							)}
+							{r.planYen && (
+								<rect class="acbars__plan" x={X0 + solid} y={y} width={px(r.planYen)} height={BAR_H} rx="4" />
+							)}
+						</g>
+					);
+				})
+			}
+			<!-- ラベルの枠 -->
+			<rect class="acbars__tag acbars__tag--chosen" x="282" y={8 + 3 * ROW_H + 1} width="50" height="22" rx="11"></rect>
+			<rect class="acbars__tag acbars__tag--plan" x="208" y={8 + 3 * ROW_H + 27} width="72" height="22" rx="11"></rect>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r, i) => {
+				const y = 8 + i * ROW_H;
+				return (
+					<g>
+						<text class="acbars__title" x={X0} y={y + 18}>
+							{r.title}
+						</text>
+						<text class="acbars__sub" x={X0} y={y + 68}>
+							<tspan class="acbars__amount">{r.amount}</tspan>
+							<tspan>{r.note}</tspan>
+						</text>
+					</g>
+				);
+			})
+		}
+		<text class="acbars__tag-text acbars__tag-text--chosen" x="307" y={8 + 3 * ROW_H + 12} text-anchor="middle" dominant-baseline="central"
+			>決定</text
+		>
+		<text class="acbars__tag-text acbars__tag-text--plan" x="244" y={8 + 3 * ROW_H + 38} text-anchor="middle" dominant-baseline="central"
+			>これから</text
+		>
+	</svg>
+	<figcaption>
+		エアコン2台の総額（税込）。ヨドバシの斜線はポイント還元分、いちばん下の点線はこれから見積もる取付費
+	</figcaption>
+</figure>
+
+<style>
+	.acbars svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+
+	/* 棒 */
+	.acbars__bar {
+		fill: var(--c-line);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.8;
+	}
+	.acbars__bar--chosen {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.acbars__point {
+		fill: url(#acbars-hatch);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.8;
+	}
+	.acbars__hatch {
+		stroke: var(--c-line-strong);
+		stroke-width: 1.5;
+	}
+	.acbars__plan {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 7 5;
+	}
+
+	/* 文字 */
+	.acbars__title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.acbars__sub {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+	}
+	.acbars__amount {
+		fill: var(--c-text);
+		font-weight: 700;
+	}
+
+	/* ラベル */
+	.acbars__tag {
+		fill: var(--c-surface-raised);
+		stroke-width: 1.2;
+	}
+	.acbars__tag--chosen {
+		stroke: var(--c-accent);
+	}
+	.acbars__tag--plan {
+		stroke: var(--c-accent2);
+	}
+	.acbars__tag-text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.acbars__tag-text--chosen {
+		fill: var(--c-accent);
+	}
+	.acbars__tag-text--plan {
+		fill: var(--c-accent2);
+	}
+</style>

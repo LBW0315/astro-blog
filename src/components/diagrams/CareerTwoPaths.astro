@@ -1,0 +1,140 @@
+---
+/*
+  記事「頑張ったことがキャリアになる」専用の図解
+  キャリアの2つの進み方の対比（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 積み上がる進み方：青磁の実線
+  - 積み上がらない進み方：灰桜の点線
+
+  スマホでも読めるように、2つのパネルを横に並べず、縦に積んでいます。
+*/
+const W = 360;
+const H = 420;
+---
+
+<figure class="ctp">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="ctp-title ctp-desc">
+		<title id="ctp-title">キャリアの2つの進み方</title>
+		<desc id="ctp-desc">
+			上は、焦って会社を移り続ける進み方。3ヶ月、半年、1年と短い在籍が並ぶだけで、どれも通過点にならず積み上がらない。下は、1つの場所で目の前の仕事をやりきる進み方。任される仕事が少しずつ大きくなり、頑張った分が階段のように積み上がっていく。
+		</desc>
+		<defs>
+			<filter id="career-paths-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#career-paths-sketch)">
+			<!-- 上：焦って移る -->
+			<g class="ctp-flat">
+				<rect x="16" y="46" width="96" height="52" rx="10"></rect>
+				<rect x="132" y="46" width="96" height="52" rx="10"></rect>
+				<rect x="248" y="46" width="96" height="52" rx="10"></rect>
+				<path class="ctp-arrow-flat" d="M116 72h12M226 72h18"></path>
+				<path class="ctp-base" d="M16 126h328"></path>
+			</g>
+
+			<!-- 下：やりきる -->
+			<g class="ctp-step">
+				<rect x="16" y="330" width="96" height="48" rx="10"></rect>
+				<rect x="132" y="286" width="96" height="92" rx="10"></rect>
+				<rect x="248" y="238" width="96" height="140" rx="10"></rect>
+				<path class="ctp-arrow-up" d="M24 318q140-96 300-104 M308 202l16 12-10 16"></path>
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="ctp-head ctp-head--flat" x="16" y="26">作ろうとして動く</text>
+		<text class="ctp-box" x="64" y="68" text-anchor="middle">会社A</text>
+		<text class="ctp-sub" x="64" y="88" text-anchor="middle">3ヶ月</text>
+		<text class="ctp-box" x="180" y="68" text-anchor="middle">会社B</text>
+		<text class="ctp-sub" x="180" y="88" text-anchor="middle">半年</text>
+		<text class="ctp-box" x="296" y="68" text-anchor="middle">会社C</text>
+		<text class="ctp-sub" x="296" y="88" text-anchor="middle">1年</text>
+		<text class="ctp-note ctp-note--flat" x="180" y="146" text-anchor="middle">どれも通過点にならない</text>
+
+		<text class="ctp-head ctp-head--step" x="16" y="196">目の前をやりきる</text>
+		<text class="ctp-box" x="64" y="358" text-anchor="middle">今の仕事</text>
+		<text class="ctp-box" x="180" y="330" text-anchor="middle">任される</text>
+		<text class="ctp-box" x="296" y="300" text-anchor="middle">大きな仕事</text>
+		<text class="ctp-note ctp-note--step" x="180" y="404" text-anchor="middle">頑張った分が積み上がる</text>
+	</svg>
+	<figcaption>キャリアの2つの進み方（点線は積み上がらないほう、実線は積み上がるほう）</figcaption>
+</figure>
+
+<style>
+	.ctp svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.ctp-flat rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.ctp-step rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.ctp-arrow-flat,
+	.ctp-base,
+	.ctp-arrow-up {
+		fill: none;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ctp-arrow-flat {
+		stroke: var(--c-accent2);
+		stroke-width: 2.2;
+	}
+	.ctp-base {
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 6 6;
+	}
+	.ctp-arrow-up {
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.ctp-head {
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.ctp-head--flat {
+		fill: var(--c-accent2);
+	}
+	.ctp-head--step {
+		fill: var(--c-accent);
+	}
+	.ctp-box {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.ctp-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.ctp-note {
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.ctp-note--flat {
+		fill: var(--c-accent2);
+	}
+	.ctp-note--step {
+		fill: var(--c-accent);
+	}
+</style>

@@ -1,0 +1,99 @@
+---
+/*
+  記事「頑張ったことがキャリアになる」専用の図解
+  続けた時間と手応えの関係（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 手応えが出ない期間：灰桜の点線
+  - 手応えが出てからの期間：青磁の実線
+*/
+const W = 360;
+const H = 280;
+---
+
+<figure class="ec">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="ec-title ec-desc">
+		<title id="ec-title">続けた時間と手応えの関係</title>
+		<desc id="ec-desc">
+			続けはじめてしばらくは、手応えがほとんど増えない平らな期間が続く。多くの人はこの平らな期間でやめたくなる。そこを越えると、手応えは急に伸びていく。
+		</desc>
+		<defs>
+			<filter id="effort-curve-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="13"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#effort-curve-sketch)">
+			<!-- 軸 -->
+			<path class="ec-axis" d="M44 34v198h286 M44 34l-6 8M44 34l6 8 M330 232l-8-6M330 232l-8 6"></path>
+			<!-- 手応えが出ない期間（灰桜の点線） -->
+			<path class="ec-flat" d="M56 214C96 212 142 210 186 204"></path>
+			<!-- 手応えが出てから（青磁の実線） -->
+			<path class="ec-rise" d="M186 204C242 198 284 154 322 66"></path>
+			<!-- やめたくなるところを指す縦線 -->
+			<path class="ec-marker" d="M186 196v-32"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="ec-axis-label" x="44" y="24">手応え</text>
+		<text class="ec-axis-label" x="330" y="256" text-anchor="end">続けた時間</text>
+		<text class="ec-note ec-note--flat" x="186" y="152" text-anchor="middle">ここでやめたくなる</text>
+		<text class="ec-note ec-note--rise" x="322" y="52" text-anchor="end">越えると伸びる</text>
+	</svg>
+	<figcaption>続けた時間と手応えの関係（点線は手応えが出ない期間、実線は出てからの期間）</figcaption>
+</figure>
+
+<style>
+	.ec svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.ec-axis,
+	.ec-flat,
+	.ec-rise,
+	.ec-marker {
+		fill: none;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ec-axis {
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.ec-flat {
+		stroke: var(--c-accent2);
+		stroke-width: 3;
+		stroke-dasharray: 8 6;
+	}
+	.ec-rise {
+		stroke: var(--c-accent);
+		stroke-width: 3;
+	}
+	.ec-marker {
+		stroke: var(--c-accent2);
+		stroke-width: 1.6;
+		stroke-dasharray: 4 4;
+	}
+	.ec-axis-label {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.ec-note {
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.ec-note--flat {
+		fill: var(--c-accent2);
+	}
+	.ec-note--rise {
+		fill: var(--c-accent);
+	}
+</style>

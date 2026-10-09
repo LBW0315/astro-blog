@@ -6,10 +6,15 @@ import { getPosts, type Post } from '../../lib/posts';
 
 export async function getStaticPaths() {
 	const posts = await getPosts(); // 新しい順
-	return posts.map((post, i) => ({
-		params: { slug: post.id },
-		props: { post, next: posts[i - 1], prev: posts[i + 1] },
-	}));
+	return posts.map((post) => {
+		// 前後の記事は、同じジャンルの中から選ぶ
+		const sameCategory = posts.filter((p) => p.data.category === post.data.category);
+		const i = sameCategory.indexOf(post);
+		return {
+			params: { slug: post.id },
+			props: { post, next: sameCategory[i - 1], prev: sameCategory[i + 1] },
+		};
+	});
 }
 
 interface Props {

@@ -19,8 +19,8 @@ import BaseLayout from './BaseLayout.astro';
 interface Props {
 	post: Post;
 	headings: MarkdownHeading[];
-	prev?: Post; // ひとつ古い記事
-	next?: Post; // ひとつ新しい記事
+	prev?: Post; // 同じジャンルの、ひとつ古い記事
+	next?: Post; // 同じジャンルの、ひとつ新しい記事
 }
 
 const { post, headings, prev, next } = Astro.props;
@@ -106,12 +106,12 @@ const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
 			<footer class="post__footer">
 				{
 					(prev || next) && (
-						<nav class="pager" aria-label="前後の記事">
+						<nav class="pager" aria-label={`「${cat.label}」の前後の記事`}>
 							{next ? (
 								<a href={`/blog/${next.id}/`} class="pager__link pager__link--next">
 									<span class="pager__label">
 										<Icon name="arrow-left" size={16} />
-										新しい記事
+										「{cat.label}」の新しい記事
 									</span>
 									<span class="pager__title">{next.data.title}</span>
 								</a>
@@ -121,7 +121,7 @@ const hasToc = headings.some((h) => h.depth === 2 || h.depth === 3);
 							{prev && (
 								<a href={`/blog/${prev.id}/`} class="pager__link pager__link--prev">
 									<span class="pager__label">
-										古い記事
+										「{cat.label}」の古い記事
 										<Icon name="arrow-right" size={16} />
 									</span>
 									<span class="pager__title">{prev.data.title}</span>

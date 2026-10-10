@@ -9,7 +9,7 @@ import { renderOgImage } from '../../lib/og';
 
 export const GET: APIRoute = async () => {
 	const png = await renderOgImage({
-		title: '技術・道具・考え方・子育てのことを、こつこつ書いています。',
+		title: '技術・道具・家づくり・考え方・子育てのことを、こつこつ書いています。',
 		categoryLabel: SITE_SUBTITLE_JA,
 		illustration,
 	});

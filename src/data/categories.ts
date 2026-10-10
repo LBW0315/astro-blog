@@ -31,6 +31,12 @@ export const categories = [
 		description: '万年筆やノート、キーボード、コーヒー、メガネなど、好きな道具のこと。',
 	},
 	{
+		slug: 'home',
+		label: '家づくり',
+		icon: 'home',
+		description: '新築の平屋づくりで、迷ったこと、調べたこと、決めた理由の記録。',
+	},
+	{
 		slug: 'thinking',
 		label: '考え方',
 		icon: 'lightbulb',

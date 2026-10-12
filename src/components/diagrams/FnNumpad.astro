@@ -1,0 +1,113 @@
+---
+/*
+  記事「私の最高のキーボード ― Keychron Q11 Ultra 8K」専用の図解
+  Fn を押している間だけ、右手のホームポジションまわりがテンキーになる配置。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  キーの左上の小さい文字が「ふだんのキー」、中央の大きい数字が「Fn を押している間」。
+  段ごとのずれは、実物のキーボードと同じ向きにしている（上段は少し左、下段は少し右）。
+
+  viewBox 幅は320なので、375px画面（本文約335px）でほぼ等倍になる。
+*/
+const KEY_W = 58;
+const KEY_H = 54;
+const STEP = 66; // キー1つぶんの送り（キー幅＋すき間）
+
+type Row = { x: number; y: number; keys: [string, string][] };
+
+const rows: Row[] = [
+	{ x: 34, y: 38, keys: [['U', '7'], ['I', '8'], ['O', '9']] },
+	{ x: 50, y: 100, keys: [['J', '4'], ['K', '5'], ['L', '6']] },
+	{ x: 83, y: 162, keys: [['M', '1'], [',', '2'], ['.', '3']] },
+];
+
+const SPACE = { x: 50, y: 224, w: 180, h: 50 };
+---
+
+<figure class="fnp">
+	<svg viewBox="0 0 320 288" role="img" aria-labelledby="fnp-title fnp-desc">
+		<title id="fnp-title">Fnを押している間のテンキー配置</title>
+		<desc id="fnp-desc">
+			右手側のキーが3段のテンキーになる。上段の U・I・O が 7・8・9、中段の J・K・L が 4・5・6、下段の M・カンマ・ピリオドが
+			1・2・3。右手親指のスペースキーが 0。
+		</desc>
+		<defs>
+			<filter id="fnp-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="73"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#fnp-sketch)">
+			{
+				rows.map((r) =>
+					r.keys.map((_, i) => <rect class="fnp__key" x={r.x + STEP * i} y={r.y} width={KEY_W} height={KEY_H} rx="9" />),
+				)
+			}
+			<rect class="fnp__key" x={SPACE.x} y={SPACE.y} width={SPACE.w} height={SPACE.h} rx="9" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="fnp__heading" x="160" y="22" text-anchor="middle">Fn を押している間（右手側）</text>
+		{
+			rows.map((r) =>
+				r.keys.map(([legend, digit], i) => (
+					<g>
+						<text class="fnp__legend" x={r.x + STEP * i + 9} y={r.y + 19}>
+							{legend}
+						</text>
+						<text
+							class="fnp__digit"
+							x={r.x + STEP * i + KEY_W / 2 + 4}
+							y={r.y + KEY_H / 2 + 6}
+							text-anchor="middle"
+							dominant-baseline="central"
+						>
+							{digit}
+						</text>
+					</g>
+				)),
+			)
+		}
+		<text class="fnp__legend" x={SPACE.x + 10} y={SPACE.y + 19}>スペース</text>
+		<text class="fnp__digit" x={SPACE.x + SPACE.w / 2} y={SPACE.y + SPACE.h / 2 + 4} text-anchor="middle" dominant-baseline="central"
+			>0</text
+		>
+	</svg>
+	<figcaption>左上の小さい文字がふだんのキー、大きい数字が Fn を押している間の入力</figcaption>
+</figure>
+
+<style>
+	.fnp svg {
+		display: block;
+		width: 100%;
+		max-width: 24rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.fnp__key {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.fnp__heading {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.fnp__legend {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.fnp__digit {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 24px;
+		font-weight: 700;
+	}
+</style>

@@ -1,0 +1,179 @@
+---
+/*
+  記事「私の最高のキーボード ― Keychron Q11 Ultra 8K」専用の図解
+  旧Q11（有線）と Q11 Ultra 8K（無線）で、ケーブルがどこにあるかの違い。
+
+  手描き風のゆらぎは SVG フィルター（feTurbulence + feDisplacementMap）で、
+  線と図形だけにかけている。文字にはかけない。
+
+  左右でPCとキーボードの位置をまったく同じにして、違うのは
+  「つなぐ線がケーブルか、電波か」と、その結果の文言だけにしている。
+  色だけに頼らないよう、見出しと文言でも読み分けられるようにした。
+  ※点線は使わない。点線＝「これから作る部分」の意味と混ざらないようにするため。
+
+  スマホ幅（35rem以下）では2枚が縦に積まれる。
+*/
+
+// 28×28 のマス目で描く、線だけのPCアイコン
+const PC = 'M3 5h22v14H3z M11 19v4 M17 19v4 M8 23h12';
+// キーボードの片側（84×44）。中の短い線はキーの列
+const HALF = 'M0 0h84v44H0z M12 13h60 M12 22h60 M12 31h60';
+---
+
+<figure class="q11w">
+	<svg viewBox="0 0 260 222" role="img" aria-labelledby="q11w-wired-title q11w-wired-desc">
+		<title id="q11w-wired-title">旧Q11は有線</title>
+		<desc id="q11w-wired-desc">
+			左右に分かれたキーボードの間がケーブルでつながり、片側からPCへもケーブルが伸びている。ケーブルは合わせて2本。
+		</desc>
+		<defs>
+			<filter id="q11w-wired-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="21"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#q11w-wired-sketch)">
+			<rect class="q11w__panel q11w__panel--wired" x="8" y="34" width="244" height="180" rx="15" />
+			<path class="q11w__icon" transform="translate(116 46)" d={PC} />
+			<path class="q11w__half" transform="translate(30 108)" d={HALF} />
+			<path class="q11w__half" transform="translate(146 108)" d={HALF} />
+			<!-- PCへのケーブルと、左右をつなぐケーブル -->
+			<path class="q11w__cable" d="M86 108 C86 88 104 84 120 74" />
+			<path class="q11w__cable" d="M114 130 q16 16 32 0" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="q11w__heading q11w__heading--wired" x="130" y="24" text-anchor="middle">旧 Q11（有線）</text>
+		<text class="q11w__label" x="154" y="65">PCと有線</text>
+		<text class="q11w__label" x="130" y="178" text-anchor="middle">左右の間もケーブル</text>
+		<text class="q11w__note q11w__note--wired" x="130" y="200" text-anchor="middle">ケーブルが2本</text>
+	</svg>
+
+	<svg viewBox="0 0 260 222" role="img" aria-labelledby="q11w-less-title q11w-less-desc">
+		<title id="q11w-less-title">Q11 Ultra 8K は無線</title>
+		<desc id="q11w-less-desc">
+			左右に分かれたキーボードの間は電波でつながり、PCとも電波でつながっている。ふだんはケーブルが要らない。
+		</desc>
+		<defs>
+			<filter id="q11w-less-sketch" x="-6%" y="-6%" width="112%" height="112%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="64"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#q11w-less-sketch)">
+			<rect class="q11w__panel q11w__panel--less" x="8" y="34" width="244" height="180" rx="15" />
+			<path class="q11w__icon" transform="translate(116 46)" d={PC} />
+			<path class="q11w__half" transform="translate(30 108)" d={HALF} />
+			<path class="q11w__half" transform="translate(146 108)" d={HALF} />
+			<!-- PCへ届く電波と、左右の間の電波 -->
+			<path class="q11w__wave" d="M123 98 q7 -6 14 0 M117 90 q13 -10 26 0" />
+			<path class="q11w__wave" d="M126 124 q-4 6 0 12 M121 120 q-7 10 0 20 M134 124 q4 6 0 12 M139 120 q7 10 0 20" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="q11w__heading q11w__heading--less" x="130" y="24" text-anchor="middle">Q11 Ultra 8K（無線）</text>
+		<text class="q11w__label" x="154" y="65">PCと無線</text>
+		<text class="q11w__label" x="130" y="178" text-anchor="middle">左右の間も無線（2.4GHz）</text>
+		<text class="q11w__note q11w__note--less" x="130" y="200" text-anchor="middle">ふだんはケーブルなし</text>
+	</svg>
+
+	<figcaption>分割キーボードとしての形は同じ。変わったのは、つなぐ線がなくなったこと</figcaption>
+</figure>
+
+<style>
+	.q11w {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+	.q11w svg {
+		display: block;
+		flex: 1 1 0;
+		min-width: 0;
+		height: auto;
+		font-family: var(--font-body);
+	}
+	.q11w figcaption {
+		flex: 0 0 100%;
+	}
+
+	/* 枠 */
+	.q11w__panel {
+		fill: var(--c-surface);
+		stroke-width: 1.5;
+	}
+	.q11w__panel--wired {
+		stroke: var(--c-accent2);
+	}
+	.q11w__panel--less {
+		stroke: var(--c-accent);
+	}
+
+	/* PCとキーボード */
+	.q11w__icon,
+	.q11w__half {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.q11w__half {
+		fill: var(--c-surface-raised);
+	}
+
+	/* ケーブルと電波 */
+	.q11w__cable {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.6;
+		stroke-linecap: round;
+	}
+	.q11w__wave {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+	}
+
+	/* パネルの見出し */
+	.q11w__heading {
+		font-family: var(--font-heading);
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.q11w__heading--wired {
+		fill: var(--c-accent2);
+	}
+	.q11w__heading--less {
+		fill: var(--c-accent);
+	}
+
+	.q11w__label {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+	.q11w__note {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.q11w__note--wired {
+		fill: var(--c-accent2);
+	}
+	.q11w__note--less {
+		fill: var(--c-accent);
+	}
+
+	/* スマホ幅では縦に積む（横並びのままだと図の中の文字が小さくなりすぎるため） */
+	@media (max-width: 35rem) {
+		.q11w svg {
+			flex-basis: 100%;
+		}
+	}
+</style>

@@ -1,0 +1,154 @@
+---
+/*
+  記事「ブログを始めて1か月。収益0円だけど、とりあえず半年続けてみようと思う。」専用の図解
+  開設から半年後までの道のり（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - ここまで来た部分：青磁の実線と塗りつぶした丸
+  - これからの部分：灰桜の点線と白抜きの丸＋「これから」のラベル
+*/
+type Stop = { y: number; when: string; title: string; done?: boolean };
+
+const LINE_X = 48;
+const TEXT_X = 78;
+
+const stops: Stop[] = [
+	{ y: 38, when: '9月16日', title: 'ブログ開設', done: true },
+	{ y: 108, when: '10月13日（約1か月）', title: '22本目、収益0円', done: true },
+	{ y: 178, when: '12月ごろ（3か月）', title: '途中経過を書く' },
+	{ y: 248, when: '3月16日（半年）', title: '答え合わせ' },
+	{ y: 318, when: 'その先', title: '100記事' },
+];
+
+const NOW_Y = stops[1].y;
+const END_Y = stops[stops.length - 1].y;
+const H = 356;
+---
+
+<figure class="hyr">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="hyr-title hyr-desc">
+		<title id="hyr-title">ブログ開設から半年後までの道のり</title>
+		<desc id="hyr-desc">
+			9月16日にブログを開設し、10月13日の約1か月時点で22本目、収益は0円。ここまでが来た道。これから先は、12月ごろの3か月時点で途中経過を書き、3月16日の半年時点で答え合わせをする。100記事はその先の目標。
+		</desc>
+		<defs>
+			<filter id="half-year-road-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="21"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#half-year-road-sketch)">
+			<!-- ここまで来た道（青磁の実線） -->
+			<path class="hyr-done" d={`M${LINE_X} ${stops[0].y}q3 ${(NOW_Y - stops[0].y) / 2} 0 ${NOW_Y - stops[0].y}`}></path>
+			<!-- これからの道（灰桜の点線） -->
+			<path class="hyr-todo" d={`M${LINE_X} ${NOW_Y}q-3 ${(END_Y - NOW_Y) / 2} 0 ${END_Y - NOW_Y}`}></path>
+			{
+				stops.map((s, i) =>
+					s.done ? (
+						<circle class="hyr-dot hyr-dot--done" cx={LINE_X} cy={s.y} r={i === 1 ? 11 : 8} />
+					) : (
+						<circle class="hyr-dot hyr-dot--todo" cx={LINE_X} cy={s.y} r="8" />
+					),
+				)
+			}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			stops.map((s) => (
+				<g>
+					<text class="hyr-when" x={TEXT_X} y={s.y - 8}>
+						{s.when}
+					</text>
+					<text class:list={['hyr-title', { 'hyr-title--todo': !s.done }]} x={TEXT_X} y={s.y + 14}>
+						{s.title}
+					</text>
+				</g>
+			))
+		}
+
+		<!-- 「いまここ」ラベル -->
+		<g class="hyr-tag hyr-tag--now">
+			<rect x="252" y={NOW_Y - 6} width="80" height="24" rx="12"></rect>
+			<text x="292" y={NOW_Y + 6} text-anchor="middle" dominant-baseline="central">いまここ</text>
+		</g>
+		<!-- 「これから」ラベル -->
+		<g class="hyr-tag hyr-tag--todo">
+			<rect x="252" y={stops[2].y - 6} width="80" height="24" rx="12"></rect>
+			<text x="292" y={stops[2].y + 6} text-anchor="middle" dominant-baseline="central">これから</text>
+		</g>
+	</svg>
+	<figcaption>開設から半年後までの道のり（実線はここまで来た部分、点線はこれからの部分）</figcaption>
+</figure>
+
+<style>
+	.hyr svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.hyr-done,
+	.hyr-todo {
+		fill: none;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 3;
+	}
+	.hyr-done {
+		stroke: var(--c-accent);
+	}
+	.hyr-todo {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 8 6;
+	}
+	.hyr-dot--done {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.hyr-dot--todo {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 4 3;
+	}
+	.hyr-when {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.hyr-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.hyr-title--todo {
+		fill: var(--c-text);
+	}
+	.hyr-tag rect {
+		fill: var(--c-surface-raised);
+		stroke-width: 1.2;
+	}
+	.hyr-tag text {
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.hyr-tag--now rect {
+		stroke: var(--c-accent);
+	}
+	.hyr-tag--now text {
+		fill: var(--c-accent);
+	}
+	.hyr-tag--todo rect {
+		stroke: var(--c-accent2);
+	}
+	.hyr-tag--todo text {
+		fill: var(--c-accent2);
+	}
+</style>

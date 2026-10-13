@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「1日数人でも、読まれていた」のカード用の絵（自作）
+    検索結果を見る虫めがねと、来た人の数を見る棒グラフ。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 検索結果を見る虫めがね -->
+    <path d="M236 228l62 66" stroke-width="13"/>
+    <circle cx="180" cy="164" r="82" fill="#fffdfb"/>
+    <path d="M134 136h92" stroke="#2a6058" stroke-width="5"/>
+    <path d="M134 164h70M134 192h82" stroke="#93877a" stroke-width="4"/>
+    <!-- 来た人の数を見る棒グラフ -->
+    <path d="M366 70v214h222" stroke="#93877a" stroke-width="3.5"/>
+    <rect x="388" y="222" width="36" height="60" rx="5" fill="#e6f0ee" stroke="#2a6058" stroke-width="3.5"/>
+    <rect x="438" y="176" width="36" height="106" rx="5" fill="#e6f0ee" stroke="#2a6058" stroke-width="3.5"/>
+    <rect x="488" y="202" width="36" height="80" rx="5" fill="#e6f0ee" stroke="#2a6058" stroke-width="3.5"/>
+    <rect x="538" y="124" width="36" height="158" rx="5" fill="#2a6058" stroke="#2a6058" stroke-width="3.5"/>
+  </g>
+</svg>

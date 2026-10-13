@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「頑張ったことがキャリアになる」のカード用の絵（自作）
+    一段ずつ上がる階段と、上で待っている旗。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="45"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 一段ずつ上がる階段 -->
+    <path d="M80 300V262h96v-42h96v-42h96v-42h96v-42h96V300Z" fill="#fffdfb"/>
+    <path d="M176 262V300M272 220V300M368 178V300M464 136V300" stroke="#e3dcd4" stroke-width="3"/>
+    <!-- ここまで上がってきた足あと -->
+    <path d="M128 244h.1M224 202h.1M320 160h.1" stroke="#7e4548" stroke-width="14"/>
+    <path d="M416 118h.1M512 76h.1" stroke="#7e4548" stroke-width="14" opacity="0.35"/>
+    <!-- 上で待っている旗 -->
+    <path d="M530 94V30"/>
+    <path d="M530 32l50 16 -50 16z" fill="#2a6058" stroke="#2a6058"/>
+  </g>
+</svg>

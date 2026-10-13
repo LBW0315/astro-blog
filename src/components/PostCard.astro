@@ -17,7 +17,7 @@ interface Props {
 }
 
 const { post, index = 0 } = Astro.props;
-const { title, description, pubDate, heroImage, category } = post.data;
+const { title, description, pubDate, heroImage, thumbImage, category } = post.data;
 const minutes = getReadingMinutes(post.body);
 ---
 
@@ -32,6 +32,9 @@ const minutes = getReadingMinutes(post.body);
 					alt=""
 					transition:name={`hero-${post.id}`}
 				/>
+			) : thumbImage ? (
+				// カード専用の絵。記事ページには出ないので、ページをまたぐアニメーションは付けない
+				<Image src={thumbImage} width={720} height={405} alt="" />
 			) : (
 				// 画像がない記事は、淡いグレージュの SVG（ジャンルのアイコン入り）を表示
 				<PostThumbPlaceholder category={category} />

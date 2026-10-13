@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「マークダウン、読みにくくないですか」のカード用の絵（自作）
+    記号だらけのマークダウンが、読みやすく組まれたページに変わる。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="27"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 記号だらけのマークダウン -->
+    <rect x="64" y="56" width="200" height="248" rx="12" fill="#fffdfb"/>
+    <path d="M92 84v24M106 84v24M86 91h26M86 101h26M124 96h100" stroke="#93877a" stroke-width="3.5"/>
+    <path d="M88 142h10M112 142h124M88 172h10M112 172h96M88 202h10M112 202h112" stroke="#93877a" stroke-width="3.5"/>
+    <path d="M88 240l8 8M96 240l-8 8M108 240l8 8M116 240l-8 8M130 244h70M212 240l8 8M220 240l-8 8M232 240l8 8M240 240l-8 8" stroke="#93877a" stroke-width="3"/>
+    <path d="M88 276h120" stroke="#93877a" stroke-width="3.5"/>
+    <path d="M286 180H348M348 180l-11 -10M348 180l-11 10" stroke="#7e4548"/>
+    <!-- 読みやすく組まれたページ -->
+    <rect x="372" y="56" width="204" height="248" rx="12" fill="#fffdfb"/>
+    <rect x="394" y="78" width="132" height="24" rx="8" fill="#2a6058" stroke="none"/>
+    <rect x="394" y="118" width="160" height="76" rx="10" fill="#e6f0ee" stroke="#2a6058" stroke-width="3"/>
+    <path d="M408 180l30 -34 22 22 16 -14 30 26" stroke="#2a6058" stroke-width="3"/>
+    <path d="M394 216h160M394 240h160" stroke="#93877a" stroke-width="3.5"/>
+    <rect x="394" y="258" width="78" height="26" rx="13" fill="#f6eaea" stroke="#7e4548" stroke-width="3"/>
+  </g>
+</svg>

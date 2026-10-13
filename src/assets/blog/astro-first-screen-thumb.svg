@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「AIに聞きながら、Astroでブログを作り始めた日」のカード用の絵（自作）
+    ターミナルでコマンドを打つと、ブラウザに最初の画面が出る。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="2"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- ターミナル -->
+    <rect x="56" y="84" width="236" height="176" rx="14" fill="#5e564f"/>
+    <path d="M84 138l16 12-16 12" stroke="#fffdfb"/>
+    <path d="M116 162h64" stroke="#fffdfb" stroke-width="4"/>
+    <path d="M84 196h124M84 224h76" stroke="#e6f0ee" stroke-width="4"/>
+    <path d="M308 172H350M350 172l-11 -10M350 172l-11 10" stroke="#7e4548"/>
+    <!-- ブラウザに最初の画面が出る -->
+    <rect x="366" y="70" width="222" height="204" rx="14" fill="#fffdfb"/>
+    <path d="M366 108H588" stroke-width="3"/>
+    <path d="M386 89h.1M404 89h.1M422 89h.1" stroke="#93877a" stroke-width="9"/>
+    <rect x="390" y="130" width="124" height="20" rx="8" fill="#2a6058" stroke="none"/>
+    <path d="M390 176h174M390 200h174M390 224h104" stroke="#93877a" stroke-width="3.5"/>
+    <path d="M560 36L564.48 47.519999999999996L576 52L564.48 56.480000000000004L560 68L555.52 56.480000000000004L544 52L555.52 47.519999999999996Z" fill="#7e4548" stroke="#7e4548" stroke-width="2"/>
+  </g>
+</svg>

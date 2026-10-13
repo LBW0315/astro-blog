@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「ホーム画面のアイコンが「ブ」だったので、マグのアイコンを作った話」のカード用の絵（自作）
+    スマホのホーム画面に並んだアイコンの1つが、マグのアイコンになっている。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- スマホのホーム画面 -->
+    <rect x="164" y="34" width="186" height="296" rx="30" fill="#fffdfb"/>
+    <path d="M234 54h46" stroke-width="5"/>
+    <rect x="186" y="92" width="38" height="38" rx="10" fill="#f2eee9" stroke-width="3"/>
+    <rect x="238" y="92" width="38" height="38" rx="10" fill="#e6f0ee" stroke-width="3"/>
+    <rect x="290" y="92" width="38" height="38" rx="10" fill="#f6eaea" stroke-width="3"/>
+    <rect x="186" y="144" width="38" height="38" rx="10" fill="#f2eee9" stroke-width="3"/>
+    <rect x="238" y="144" width="38" height="38" rx="10" fill="#2a6058" stroke="#2a6058" stroke-width="3"/><path d="M249 157h13v11a4 4 0 0 1 -4 4h-5a4 4 0 0 1 -4 -4zM262 160c6 0 6 8 0 8" stroke="#fffdfb" stroke-width="2.6"/>
+    <rect x="290" y="144" width="38" height="38" rx="10" fill="#e6f0ee" stroke-width="3"/>
+    <rect x="186" y="196" width="38" height="38" rx="10" fill="#f6eaea" stroke-width="3"/>
+    <rect x="238" y="196" width="38" height="38" rx="10" fill="#f2eee9" stroke-width="3"/>
+    <rect x="290" y="196" width="38" height="38" rx="10" fill="#e6f0ee" stroke-width="3"/>
+    <rect x="184" y="262" width="146" height="48" rx="18" fill="#f2eee9" stroke-width="3"/>
+    <path d="M430 162H366M366 162l11 -10M366 162l11 10" stroke="#7e4548"/>
+    <!-- もとになったマグ -->
+    <path d="M452 150h76v70a16 16 0 0 1 -16 16h-44a16 16 0 0 1 -16 -16z" fill="#e6f0ee"/>
+    <path d="M528 170c30 0 30 44 0 44"/>
+    <path d="M474 130c-9 -13 9 -20 0 -34M506 130c-9 -13 9 -20 0 -34" stroke="#93877a" stroke-width="4"/>
+  </g>
+</svg>

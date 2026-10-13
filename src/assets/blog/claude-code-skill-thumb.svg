@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「skillとやらを作成してみた」のカード用の絵（自作）
+    フォルダに入れた1枚のマークダウン。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="24"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- フォルダの奥 -->
+    <path d="M132 118a12 12 0 0 1 12 -12h96l26 30h230a12 12 0 0 1 12 12v150a12 12 0 0 1 -12 12H144a12 12 0 0 1 -12 -12z" fill="#f6eaea"/>
+    <!-- マークダウンを1枚 -->
+    <g transform="rotate(-4 320 150)"><rect x="216" y="52" width="208" height="190" rx="10" fill="#fffdfb"/>
+      <rect x="240" y="78" width="96" height="18" rx="7" fill="#2a6058" stroke="none"/>
+      <path d="M240 122h160M240 146h160M240 170h104" stroke="#93877a" stroke-width="3.5"/></g>
+    <!-- フォルダの手前 -->
+    <rect x="132" y="196" width="376" height="114" rx="12" fill="#e6f0ee"/>
+    <path d="M548 54L554.72 71.28L572 78L554.72 84.72L548 102L541.28 84.72L524 78L541.28 71.28Z" fill="#2a6058" stroke="#2a6058" stroke-width="2"/>
+    <path d="M588 120L591.36 128.64L600 132L591.36 135.36L588 144L584.64 135.36L576 132L584.64 128.64Z" fill="#7e4548" stroke="#7e4548" stroke-width="2"/>
+  </g>
+</svg>

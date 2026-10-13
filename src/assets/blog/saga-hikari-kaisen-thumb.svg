@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「佐賀の新築戸建てで光回線を選んだ話」のカード用の絵（自作）
+    電柱から家に光ファイバーを引き込み、家の中にWi-Fiが飛んでいる。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="39"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 290H600" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 新築の家 -->
+    <path d="M96 288v-116l96 -72 96 72v116z" fill="#fffdfb"/>
+    <path d="M72 184l120 -92 120 92" stroke-width="5.5"/>
+    <rect x="120" y="232" width="40" height="56" rx="4" fill="#f6eaea" stroke="#7e4548"/>
+    <!-- 家の中の Wi-Fi -->
+    <path d="M224 236h.1" stroke="#2a6058" stroke-width="11"/>
+    <path d="M206 216a26 26 0 0 1 36 0M192 200a46 46 0 0 1 64 0" stroke="#2a6058"/>
+    <!-- 電柱から引き込む光ファイバー -->
+    <path d="M540 78v210M508 104h64M516 132h48" stroke-width="5.5"/>
+    <path d="M540 106C470 120 380 196 290 196" stroke="#2a6058" stroke-width="5.5" stroke-dasharray="20 14"/>
+    <path d="M416 119L419.64 128.36L429 132L419.64 135.64L416 145L412.36 135.64L403 132L412.36 128.36Z" fill="#7e4548" stroke="#7e4548" stroke-width="2"/>
+  </g>
+</svg>

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「積み重ねを「形」に残したくて、ブログを始めました」のカード用の絵（自作）
+    積み重なったノートに、もう1冊のせるところ。横に万年筆。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 286H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 積み重なったノート -->
+    <rect x="150" y="244" width="270" height="40" rx="9" fill="#fffdfb"/><path d="M186 244v40" stroke-width="3"/>
+    <rect x="168" y="204" width="250" height="40" rx="9" fill="#e6f0ee"/><path d="M204 204v40" stroke-width="3"/>
+    <rect x="156" y="164" width="262" height="40" rx="9" fill="#f6eaea"/><path d="M192 164v40" stroke-width="3"/>
+    <rect x="172" y="124" width="240" height="40" rx="9" fill="#fffdfb"/><path d="M208 124v40" stroke-width="3"/>
+    <!-- いちばん上に、もう1冊のせる -->
+    <g transform="translate(292 70) rotate(-7)"><rect x="-116" y="-20" width="232" height="40" rx="9" fill="#2a6058" stroke="#2a6058"/><path d="M-80 -20v40" stroke="#fffdfb" stroke-width="3"/></g>
+    <path d="M450 70v52M450 122l-12 -12M450 122l12 -12" stroke="#7e4548"/>
+    <!-- 万年筆 -->
+    <g transform="translate(508 258) rotate(-32)"><rect x="-44" y="-10" width="92" height="20" rx="10" fill="#fffdfb"/><path d="M-44 -10L-74 0L-44 10Z" fill="#93877a"/><path d="M18 -10v20" stroke-width="3"/></g>
+  </g>
+</svg>

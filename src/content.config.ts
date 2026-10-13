@@ -14,6 +14,7 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(), // 公開日（文字列を日付に変換）
 			updatedDate: z.coerce.date().optional(), // 更新日（任意）
 			heroImage: z.optional(image()), // アイキャッチ画像（任意）
+			thumbImage: z.optional(image()), // 一覧のカードだけに出す絵（任意。記事ページには出さない）
 			// ジャンル。src/data/categories.ts にある slug のどれか
 			category: z.enum(categorySlugs),
 		}),

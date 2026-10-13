@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「はたらく！キッズDAYに行ってみようと思う！」のカード用の絵（自作）
+    パティシエの帽子と、会場のモデルハウス。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 286H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- パティシエの帽子 -->
+    <path d="M150 226C104 226 94 156 146 150C156 98 244 94 258 144C312 130 340 204 290 226Z" fill="#fffdfb"/>
+    <rect x="154" y="226" width="132" height="58" rx="8" fill="#e6f0ee" stroke="#2a6058"/>
+    <path d="M196 170v40M244 170v40" stroke-width="3"/>
+    <!-- 会場のモデルハウス -->
+    <path d="M404 284v-104l70 -58 70 58v104z" fill="#fffdfb"/>
+    <path d="M384 190l90 -76 90 76" stroke-width="5.5"/>
+    <rect x="456" y="224" width="36" height="60" rx="4" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="506" y="204" width="26" height="26" rx="4" fill="#e6f0ee" stroke-width="3"/>
+    <path d="M352 74L358.16 89.84L374 96L358.16 102.16L352 118L345.84 102.16L330 96L345.84 89.84Z" fill="#7e4548" stroke="#7e4548" stroke-width="2"/>
+    <path d="M90 90L93.92 100.08L104 104L93.92 107.92L90 118L86.08 107.92L76 104L86.08 100.08Z" fill="#2a6058" stroke="#2a6058" stroke-width="2"/>
+    <path d="M580 58L583.36 66.64L592 70L583.36 73.36L580 82L576.64 73.36L568 70L576.64 66.64Z" fill="#2a6058" stroke="#2a6058" stroke-width="2"/>
+  </g>
+</svg>

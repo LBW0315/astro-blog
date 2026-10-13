@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「手動アップロードに挫折した私が、GitHub Actions に仕事を任せるまで」のカード用の絵（自作）
+    パソコンから歯車を通って、クラウドに公開される流れ。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="17"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 手元のパソコン -->
+    <rect x="62" y="124" width="140" height="98" rx="12" fill="#fffdfb"/>
+    <rect x="44" y="222" width="176" height="20" rx="10" fill="#fffdfb"/>
+    <path d="M84 152h52M84 174h86M84 196h40" stroke="#2a6058" stroke-width="4"/>
+    <path d="M234 185H270M270 185l-11 -10M270 185l-11 10" stroke="#7e4548"/>
+    <!-- 代わりに働く歯車 -->
+    <path d="M384.0 185.0L398.0 185.0M371.1 216.1L381.0 226.0M340.0 229.0L340.0 243.0M308.9 216.1L299.0 226.0M296.0 185.0L282.0 185.0M308.9 153.9L299.0 144.0M340.0 141.0L340.0 127.0M371.1 153.9L381.0 144.0" stroke="#2a6058" stroke-width="15"/>
+    <circle cx="340" cy="185" r="42" fill="#e6f0ee" stroke="#2a6058"/>
+    <circle cx="340" cy="185" r="15" fill="#fffdfb" stroke="#2a6058"/>
+    <path d="M410 185H446M446 185l-11 -10M446 185l-11 10" stroke="#7e4548"/>
+    <!-- 公開先のクラウド -->
+    <path transform="translate(528 190) scale(1.0)" d="M-52 28C-84 28 -88 -16 -56 -22C-50 -60 6 -66 22 -34C58 -42 78 4 50 28Z" fill="#fffdfb"/>
+    <path d="M510 186l13 14 24 -28" stroke="#2a6058" stroke-width="5"/>
+  </g>
+</svg>

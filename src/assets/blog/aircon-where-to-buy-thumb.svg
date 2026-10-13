@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「エアコンは「どこで買うか」で20万円変わる。」のカード用の絵（自作）
+    同じエアコンでも、買う場所で硬貨の山の高さが違う。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 同じエアコン -->
+    <g transform="translate(144 2) scale(0.55)">
+      <path d="M60 60H580" stroke="#c9bfb4" stroke-width="4"/>
+      <rect x="140" y="76" width="360" height="104" rx="20" fill="#fffdfb"/>
+      <path d="M144 134H496" stroke-width="3"/>
+      <rect x="170" y="148" width="300" height="16" rx="8" fill="#5e564f" stroke="none"/>
+      <path d="M182 180H458L442 202H198Z" fill="#fffdfb"/>
+      <circle cx="468" cy="112" r="6" fill="#2a6058" stroke="none"/>
+    </g>
+    <!-- 買う場所で変わる総額 -->
+    <path d="M132 284v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="176" cy="284" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M132 262v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="176" cy="262" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M132 240v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="176" cy="240" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M132 218v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="176" cy="218" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M132 196v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="176" cy="196" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M132 174v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="176" cy="174" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M276 284v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="320" cy="284" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M276 262v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="320" cy="262" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M276 240v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="320" cy="240" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M276 218v12a44 12 0 0 0 88 0v-12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/><ellipse cx="320" cy="218" rx="44" ry="12" fill="#fffdfb" stroke="#5e564f" stroke-width="3.5"/>
+    <path d="M420 284v12a44 12 0 0 0 88 0v-12" fill="#e6f0ee" stroke="#2a6058" stroke-width="3.5"/><ellipse cx="464" cy="284" rx="44" ry="12" fill="#e6f0ee" stroke="#2a6058" stroke-width="3.5"/>
+    <path d="M420 262v12a44 12 0 0 0 88 0v-12" fill="#e6f0ee" stroke="#2a6058" stroke-width="3.5"/><ellipse cx="464" cy="262" rx="44" ry="12" fill="#e6f0ee" stroke="#2a6058" stroke-width="3.5"/>
+    <circle cx="534" cy="226" r="18" fill="#2a6058" stroke="#2a6058" stroke-width="3"/><path d="M525.9 226.4l5.8 6.1 10.4-11.9" stroke="#fffdfb" stroke-width="4"/>
+  </g>
+</svg>

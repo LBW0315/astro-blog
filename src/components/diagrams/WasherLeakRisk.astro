@@ -1,0 +1,128 @@
+---
+/*
+  記事「パナソニックのドラム式洗濯機リコール、うちのNA-LX125Cも対象でした」専用の図解
+  自動投入ユニットから洗剤が漏れて、発煙・発火に至るまでの流れ（手描き風）
+
+  内容はパナソニックのリコール社告（2026年10月15日）の説明に沿っています。
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、最後の「発煙・発火」は灰桜の枠に加えて、炎のアイコンで示しています。
+*/
+type Row = { y: number; title: string; sub: string; icon: string; danger?: boolean };
+
+const BOX_X = 44;
+const BOX_W = 272;
+const BOX_H = 56;
+const CX = 180;
+
+const rows: Row[] = [
+	{ y: 14, title: '洗剤が漏れる', sub: 'タンクの接続部から', icon: 'drop' },
+	{ y: 100, title: '配線に付く', sub: '本体の中を伝って', icon: 'wire' },
+	{ y: 186, title: 'ショートする', sub: '被覆の絶縁が弱まる', icon: 'bolt' },
+	{ y: 272, title: '発煙・発火', sub: '下の樹脂部品に燃え移る', icon: 'flame', danger: true },
+];
+
+const ICONS: Record<string, string> = {
+	drop: 'M14 2C9 10 6 15 6 19a8 8 0 0 0 16 0c0-4-3-9-8-17z M10 20a4 4 0 0 0 4 4',
+	wire: 'M1 14h6l3-7 6 14 3-7h8',
+	bolt: 'M17 1L6 16h8l-3 11 11-15h-8z',
+	flame: 'M14 1c1 5 8 8 8 16a8 8 0 0 1-16 0c0-4 2-6 4-9 0 3 2 5 4 5-2-4-1-8 0-12z',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 342;
+---
+
+<figure class="washer-leak">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="washer-leak-title washer-leak-desc">
+		<title id="washer-leak-title">洗剤の漏れから発煙・発火に至るまでの流れ</title>
+		<desc id="washer-leak-desc">
+			自動投入タンクの接続部から洗剤や柔軟剤が漏れる。漏れた液が本体の中を伝って、背面や側面の下にある配線（リード線）に付く。被覆の絶縁性能が弱まってショートする。その下にある樹脂部品に燃え移り、発煙・発火に至るおそれがある。
+		</desc>
+		<defs>
+			<filter id="washer-leak-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#washer-leak-sketch)">
+			{
+				rows.map((r) => (
+					<g class:list={['wl-box', { 'wl-box--danger': r.danger }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="wl-icon" transform={`translate(${BOX_X + 16} ${r.y + 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="wl-arrow" d={arrow(74, 96)}></path>
+			<path class="wl-arrow" d={arrow(160, 182)}></path>
+			<path class="wl-arrow" d={arrow(246, 268)}></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class:list={['wl-title', { 'wl-title--danger': r.danger }]} x={BOX_X + 60} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class="wl-sub" x={BOX_X + 60} y={r.y + 44}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+	</svg>
+	<figcaption>洗剤の漏れから発煙・発火に至るまで（いちばん上の「漏れる」元が自動投入タンクなので、タンクを外して使うようにお願いが出ています）</figcaption>
+</figure>
+
+<style>
+	.washer-leak svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.wl-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.wl-box--danger rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2.4;
+	}
+	.wl-icon,
+	.wl-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.wl-box--danger .wl-icon {
+		stroke: var(--c-accent2);
+	}
+	.wl-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.wl-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.wl-title--danger {
+		fill: var(--c-accent2);
+	}
+	.wl-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「パナソニックのドラム式洗濯機リコール、うちのNA-LX125Cも対象でした」のカード用の絵（自作）
+    ドラム式洗濯機から、自動投入タンクを取り外すところ。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 302H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- ドラム式洗濯機 -->
+    <rect x="128" y="62" width="228" height="238" rx="16" fill="#fffdfb"/>
+    <path d="M128 112H356" stroke-width="3.5"/>
+    <!-- タンクが入っていた差し込み口（いまは空） -->
+    <rect x="146" y="76" width="62" height="24" rx="5" fill="#f2eee9" stroke-width="3" stroke-dasharray="7 6"/>
+    <!-- 操作ボタン -->
+    <circle cx="318" cy="88" r="10" stroke-width="3"/>
+    <path d="M262 88h24" stroke-width="3"/>
+    <!-- 丸いドア -->
+    <circle cx="242" cy="206" r="72" fill="#fffdfb"/>
+    <circle cx="242" cy="206" r="52" fill="#e6f0ee"/>
+    <path d="M214 186q12 -14 30 -14" stroke="#93877a" stroke-width="3"/>
+    <!-- 取り外す矢印 -->
+    <path d="M220 72q90 -52 196 10" stroke="#7e4548"/>
+    <path d="M416 82l-16 -2M416 82l-6 -15" stroke="#7e4548"/>
+    <!-- 取り外した自動投入タンク -->
+    <path d="M440 132h88v148q0 14 -14 14h-60q-14 0 -14 -14z" fill="#2a6058" stroke="#2a6058"/>
+    <rect x="466" y="108" width="36" height="24" rx="6" fill="#fffdfb"/>
+    <path d="M440 132h88" stroke="#2a6058"/>
+    <path d="M458 196h52" stroke="#fffdfb" stroke-width="3.5"/>
+  </g>
+</svg>

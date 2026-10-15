@@ -1,0 +1,151 @@
+---
+/*
+  記事「パナソニックのドラム式洗濯機リコール、うちのNA-LX125Cも対象でした」専用の図解
+  無償対応の流れ（手描き風）
+
+  内容はパナソニックのリコール社告（2026年10月15日）の「新しいタンクへの交換について」
+  「無償点検・修理内容」に沿っています。
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 全員が受ける対応：青磁の実線
+  - 必要なときだけの対応（リード線交換）：灰色の点線の枠＋「必要なときだけ」のラベル
+*/
+type Row = { y: number; title: string; sub: string; icon: string; optional?: boolean };
+
+const BOX_X = 44;
+const BOX_W = 272;
+const BOX_H = 56;
+const CX = 180;
+
+const rows: Row[] = [
+	{ y: 14, title: '申し込む', sub: '二次元コード・Web・電話', icon: 'qr' },
+	{ y: 104, title: 'タンク3個が届く', sub: '対策済みのもの', icon: 'box' },
+	{ y: 194, title: '自分で交換する', sub: '古いタンクは着払いで返送', icon: 'swap' },
+	{ y: 284, title: '点検担当者が訪問', sub: 'パッキン交換・不燃シート', icon: 'house' },
+	{ y: 374, title: 'リード線を交換', sub: '付着が見つかったときだけ', icon: 'wire', optional: true },
+];
+
+const ICONS: Record<string, string> = {
+	qr: 'M2 2h9v9H2z M17 2h9v9h-9z M2 17h9v9H2z M17 17h3v3h-3z M23 23h3v3h-3z M17 26v-3 M26 17v3',
+	box: 'M3 8l11-6 11 6v13l-11 6-11-6z M3 8l11 6 11-6 M14 14v13',
+	swap: 'M3 9h19 M17 4l5 5-5 5 M25 19H6 M11 14l-5 5 5 5',
+	house: 'M2 12L14 3l12 9 M5 10v16h18V10 M11 26v-8h6v8',
+	wire: 'M1 14h6l3-7 6 14 3-7h8',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 444;
+---
+
+<figure class="recall-flow">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="recall-flow-title recall-flow-desc">
+		<title id="recall-flow-title">無償対応の流れ</title>
+		<desc id="recall-flow-desc">
+			二次元コード、Web、電話のどれかで申し込む。対策済みの自動投入タンクが3個届く。自分でタンクを交換し、古いタンクは同梱の着払い伝票で送り返す。交換したあとは自動投入を再開できる。後日、点検担当者が訪問して、パッキン交換と不燃シートの取り付け、配線の点検をする。配線に洗剤などの付着が見つかったときだけ、別の担当者が再訪問してリード線を交換する。
+		</desc>
+		<defs>
+			<filter id="recall-flow-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#recall-flow-sketch)">
+			{
+				rows.map((r) => (
+					<g class:list={['rf-box', { 'rf-box--optional': r.optional }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="rf-icon" transform={`translate(${BOX_X + 16} ${r.y + 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="rf-arrow" d={arrow(74, 100)}></path>
+			<path class="rf-arrow" d={arrow(164, 190)}></path>
+			<path class="rf-arrow" d={arrow(254, 280)}></path>
+			<path class="rf-arrow" d={arrow(344, 370)}></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="rf-title" x={BOX_X + 60} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class="rf-sub" x={BOX_X + 60} y={r.y + 44}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+
+		<!-- 交換したら自動投入を再開できる -->
+		<text class="rf-note" x={CX + 14} y="268">ここから自動投入OK</text>
+
+		<!-- 「必要なときだけ」ラベル -->
+		<g class="rf-tag">
+			<rect x="208" y="363" width="104" height="22" rx="11"></rect>
+			<text x="260" y="374" text-anchor="middle" dominant-baseline="central">必要なときだけ</text>
+		</g>
+	</svg>
+	<figcaption>無償対応の流れ（点線の枠は、点検で配線に洗剤などの付着が見つかったときだけ）</figcaption>
+</figure>
+
+<style>
+	.recall-flow svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.rf-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.rf-box--optional rect {
+		stroke: var(--c-line-strong);
+		stroke-dasharray: 6 5;
+	}
+	.rf-icon,
+	.rf-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.rf-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.rf-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.rf-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.rf-note {
+		fill: var(--c-accent);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.rf-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.2;
+	}
+	.rf-tag text {
+		fill: var(--c-text-sub);
+		font-size: 13px;
+		font-weight: 700;
+	}
+</style>

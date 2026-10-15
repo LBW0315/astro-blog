@@ -41,11 +41,7 @@ export const FOOTER_LINKS = [
 	{ href: '/contact/', label: 'お問い合わせ' },
 ] as const;
 
-// ===== SNS（お問い合わせページで使用）=====
-// 3つとも同じアカウント名なので、名前だけを1か所に置いてURLを組み立てる
-export const SNS_ACCOUNT = 'lbw_0797';
-export const SNS_LINKS = [
-	{ label: 'X', href: `https://x.com/${SNS_ACCOUNT}` },
-	{ label: 'Instagram', href: `https://www.instagram.com/${SNS_ACCOUNT}/` },
-	{ label: 'Threads', href: `https://www.threads.com/@${SNS_ACCOUNT}` },
-] as const;
+// ===== お問い合わせ（お問い合わせページで使用）=====
+// Googleフォームの「送信」→リンクで出る公開用URL（forms.gle/... か .../viewform）。
+// 編集画面のURL（.../edit）は入れないこと
+export const CONTACT_FORM_URL = 'https://forms.gle/Y2A5zo9de6eGpT1R7';

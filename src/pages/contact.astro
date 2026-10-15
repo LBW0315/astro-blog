@@ -1,48 +1,38 @@
 ---
-// お問い合わせページ（フォームは置かず、SNSのDMで受け付ける）
+// お問い合わせページ（Googleフォームで受け付ける。フォームはサイトの外に置き、ここからリンクする）
 import Icon from '../components/Icon.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { AUTHOR_NAME, SITE_TITLE, SNS_ACCOUNT, SNS_LINKS } from '../consts';
+import { CONTACT_FORM_URL, SITE_TITLE } from '../consts';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
 	title="お問い合わせ"
-	description={`${SITE_TITLE}へのご連絡は、X・Instagram・Threadsのダイレクトメッセージで受け付けています。`}
+	description={`${SITE_TITLE}へのご連絡は、お問い合わせフォームで受け付けています。`}
 >
 	<PageHeader
 		icon="chat"
 		title="お問い合わせ"
-		lead="記事のご感想や、間違いのご指摘などがありましたら、SNSのDMからお気軽にどうぞ。"
+		lead="記事のご感想や、間違いのご指摘などがありましたら、お問い合わせフォームからお気軽にどうぞ。"
 	/>
 
 	<div class="container container--narrow contact">
 		<div class="prose" data-reveal>
 			<p>
-				当サイトではお問い合わせフォームを設けていません。ご連絡は、下記いずれかのSNSのダイレクトメッセージ（DM）でお願いします。どのアカウントも{
-					AUTHOR_NAME
-				}本人が見ています。
+				ご連絡は、下のお問い合わせフォーム（Googleフォーム）からお願いします。お名前とメールアドレスは任意です。返信が必要な場合だけ、メールアドレスをご記入ください。
 			</p>
 		</div>
 
-		<ul class="sns">
-			{
-				SNS_LINKS.map((sns, i) => (
-					<li data-reveal style={`--i: ${i}`}>
-						<a href={sns.href} target="_blank" rel="me noopener noreferrer" class="sns__link">
-							<span class="sns__icon">
-								<Icon name="chat" size={24} />
-							</span>
-							<span class="sns__body">
-								<span class="sns__label">{sns.label}</span>
-								<span class="sns__handle">@{SNS_ACCOUNT}</span>
-							</span>
-							<Icon name="arrow-right" size={18} class="sns__arrow" />
-						</a>
-					</li>
-				))
-			}
-		</ul>
+		<a href={CONTACT_FORM_URL} target="_blank" rel="noopener noreferrer" class="form-link" data-reveal>
+			<span class="form-link__icon">
+				<Icon name="chat" size={24} />
+			</span>
+			<span class="form-link__body">
+				<span class="form-link__label">お問い合わせフォームを開く</span>
+				<span class="form-link__note">Googleフォームが新しいタブで開きます</span>
+			</span>
+			<Icon name="arrow-right" size={18} class="form-link__arrow" />
+		</a>
 
 		<div class="prose" data-reveal>
 			<h2>ご連絡の前に</h2>
@@ -69,14 +59,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		gap: var(--sp-7);
 	}
 
-	.sns {
-		display: grid;
-		gap: var(--sp-3);
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-	.sns__link {
+	.form-link {
 		display: flex;
 		align-items: center;
 		gap: var(--sp-4);
@@ -91,11 +74,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			border-color var(--dur-fast) var(--ease-soft),
 			transform var(--dur-press) var(--ease-soft);
 	}
-	.sns__link:hover {
+	.form-link:hover {
 		border-color: var(--c-accent);
 		transform: translateY(-2px);
 	}
-	.sns__icon {
+	.form-link__icon {
 		display: grid;
 		place-items: center;
 		flex-shrink: 0;
@@ -105,23 +88,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		background: var(--c-accent-wash);
 		color: var(--c-accent);
 	}
-	.sns__body {
+	.form-link__body {
 		flex: 1;
 	}
-	.sns__label {
+	.form-link__label {
 		display: block;
 		color: var(--c-heading);
 		font-family: var(--font-heading);
 		font-weight: 700;
 		line-height: 1.5;
 	}
-	.sns__handle {
+	.form-link__note {
 		display: block;
 		color: var(--c-text-sub);
 		font-size: var(--fs-sm);
 		line-height: 1.5;
 	}
-	.sns__arrow {
+	.form-link__arrow {
 		flex-shrink: 0;
 		color: var(--c-text-faint);
 	}

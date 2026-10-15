@@ -1,0 +1,105 @@
+---
+/*
+  記事「資格を取ること自体に意味はない。でも、努力できることには意味がある」専用の図解
+  合格証（紙1枚）の下に積み重なっているもの（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 合格証：灰桜の点線（これだけではスキルにならないほう）
+  - 積み重ねた努力：青磁の実線（見られているほう）
+*/
+const W = 360;
+const H = 316;
+---
+
+<figure class="euc">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="euc-title euc-desc">
+		<title id="euc-title">合格証の下に積み重なっているもの</title>
+		<desc id="euc-desc">
+			いちばん上に合格証が1枚のっている。合格証だけではスキルにならない。その下には、下から順に「試験日から逆算して計画した」「毎日つづけた」「最後までやりきった」という3つの段が積み重なっている。見られているのは、この積み重ねのほう。
+		</desc>
+		<defs>
+			<filter id="effort-under-cert-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="21"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#effort-under-cert-sketch)">
+			<!-- 合格証（紙1枚） -->
+			<g class="euc-paper" transform="rotate(-3 104 58)">
+				<rect x="40" y="26" width="128" height="64" rx="5"></rect>
+				<circle class="euc-seal" cx="146" cy="72" r="8"></circle>
+			</g>
+			<!-- 積み重ねた努力 -->
+			<g class="euc-stack">
+				<rect x="30" y="100" width="300" height="46" rx="10"></rect>
+				<rect x="30" y="152" width="300" height="46" rx="10"></rect>
+				<rect x="30" y="204" width="300" height="46" rx="10"></rect>
+			</g>
+			<!-- 積み重ねを指す矢印 -->
+			<path class="euc-arrow" d="M180 278v-20 M172 266l8-8 8 8"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="euc-box" x="96" y="64" text-anchor="middle">合格証</text>
+		<text class="euc-note euc-note--paper" x="188" y="52">これだけでは</text>
+		<text class="euc-note euc-note--paper" x="188" y="74">スキルにならない</text>
+		<text class="euc-box" x="180" y="129" text-anchor="middle">最後までやりきった</text>
+		<text class="euc-box" x="180" y="181" text-anchor="middle">毎日つづけた</text>
+		<text class="euc-box" x="180" y="233" text-anchor="middle">試験日から逆算して計画した</text>
+		<text class="euc-note euc-note--stack" x="180" y="302" text-anchor="middle">見られているのは、こっち</text>
+	</svg>
+	<figcaption>合格証の下に積み重なっているもの（点線は合格証、実線はそこまでの努力）</figcaption>
+</figure>
+
+<style>
+	.euc svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.euc-paper rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.euc-seal {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+	}
+	.euc-stack rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.euc-arrow {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.euc-box {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.euc-note {
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.euc-note--paper {
+		fill: var(--c-accent2);
+	}
+	.euc-note--stack {
+		fill: var(--c-accent);
+	}
+</style>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「資格を取ること自体に意味はない。でも、努力できることには意味がある」のカード用の絵（自作）
+    横に並んだ人たちの中で、積み重ねた本の上に立つ1人だけが頭ひとつ高い。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="58"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 302H600" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 横に並んだ人たち（顔のない丸い頭と肩） -->
+    <circle cx="84" cy="196" r="22" fill="#fffdfb"/><path d="M48 300V262q0-32 36-32q36 0 36 32V300Z" fill="#fffdfb"/>
+    <circle cx="184" cy="196" r="22" fill="#fffdfb"/><path d="M148 300V262q0-32 36-32q36 0 36 32V300Z" fill="#fffdfb"/>
+    <circle cx="468" cy="196" r="22" fill="#fffdfb"/><path d="M432 300V262q0-32 36-32q36 0 36 32V300Z" fill="#fffdfb"/>
+    <circle cx="568" cy="196" r="22" fill="#fffdfb"/><path d="M532 300V262q0-32 36-32q36 0 36 32V300Z" fill="#fffdfb"/>
+    <!-- 積み重ねた本 -->
+    <rect x="258" y="272" width="128" height="28" rx="7" fill="#fffdfb"/><path d="M282 272v28" stroke-width="3"/>
+    <rect x="266" y="244" width="116" height="28" rx="7" fill="#f6eaea"/><path d="M290 244v28" stroke-width="3"/>
+    <rect x="260" y="216" width="124" height="28" rx="7" fill="#e6f0ee"/><path d="M284 216v28" stroke-width="3"/>
+    <!-- 本の上に立つ1人 -->
+    <circle cx="322" cy="112" r="24" fill="#2a6058" stroke="#2a6058"/>
+    <path d="M284 214V178q0-34 38-34q38 0 38 34V214Z" fill="#2a6058" stroke="#2a6058"/>
+    <!-- 上がっていく動き -->
+    <path d="M410 200V136M410 136l-13 13M410 136l13 13" stroke="#7e4548"/>
+  </g>
+</svg>

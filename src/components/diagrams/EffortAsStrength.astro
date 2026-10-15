@@ -1,0 +1,143 @@
+---
+/*
+  記事「資格を取ること自体に意味はない。でも、努力できることには意味がある」専用の図解
+  努力する人が減ると、続けられることが武器になる（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 努力している人：青磁の実線（塗りつぶし）
+  - 努力していない人：灰桜の点線（塗りなし）
+
+  スマホでも読めるように、2つの場面を横に並べず、縦に積んでいます。
+  人は、顔のない丸い頭と肩だけで描いています。
+*/
+const W = 360;
+const H = 300;
+
+// 人を横に8人並べる（x は頭の中心）
+const xs = [33, 75, 117, 159, 201, 243, 285, 327];
+// 上の段：努力している人が多い（true が努力している人）
+const many = [true, true, false, true, true, true, false, true];
+// 下の段：努力している人は1人だけ（上の段と同じ位置の人）
+const few = xs.map((_, i) => i === 5);
+
+// 頭の中心の高さから、頭と肩の線を作る
+const person = (x: number, y: number) => ({
+	head: { cx: x, cy: y },
+	body: `M${x - 14} ${y + 32}q0-18 14-18q14 0 14 18z`,
+});
+const TOP = 58;
+const BOTTOM = 198;
+---
+
+<figure class="eso">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="eso-title eso-desc">
+		<title id="eso-title">努力する人が減ると、続けられることが武器になる</title>
+		<desc id="eso-desc">
+			上の段は、8人のうち6人が努力している場面。続けていても、周りと同じなので当たり前に見える。下の段は、努力しているのが8人のうち1人だけになった場面。やっていることは上の段と同じでも、続けられること自体がその人の個性や武器になる。
+		</desc>
+		<defs>
+			<filter id="effort-as-strength-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="34"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#effort-as-strength-sketch)">
+			{
+				xs.map((x, i) => {
+					const p = person(x, TOP);
+					return (
+						<g class={many[i] ? 'eso-on' : 'eso-off'}>
+							<circle cx={p.head.cx} cy={p.head.cy} r="9" />
+							<path d={p.body} />
+						</g>
+					);
+				})
+			}
+			<!-- 上の段から下の段へ -->
+			<path class="eso-down" d="M180 124v22 M172 138l8 8 8-8"></path>
+			{
+				xs.map((x, i) => {
+					const p = person(x, BOTTOM);
+					return (
+						<g class={few[i] ? 'eso-on' : 'eso-off'}>
+							<circle cx={p.head.cx} cy={p.head.cy} r="9" />
+							<path d={p.body} />
+						</g>
+					);
+				})
+			}
+			<!-- 続けている1人を指す矢印 -->
+			<path class="eso-up" d="M243 262v-20 M235 250l8-8 8 8"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="eso-head eso-head--many" x="16" y="26">努力する人が多いとき</text>
+		<text class="eso-note eso-note--many" x="180" y="114" text-anchor="middle">続けていても当たり前</text>
+		<text class="eso-head eso-head--few" x="16" y="170">努力する人が減ると</text>
+		<text class="eso-note eso-note--few" x="243" y="284" text-anchor="middle">続けられることが武器になる</text>
+	</svg>
+	<figcaption>努力する人が減ると、続けられることが武器になる（塗りつぶしは努力している人、点線はしていない人）</figcaption>
+</figure>
+
+<style>
+	.eso svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.eso-on circle,
+	.eso-on path {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+		stroke-linejoin: round;
+	}
+	.eso-off circle,
+	.eso-off path {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 5 4;
+		stroke-linejoin: round;
+	}
+	.eso-down,
+	.eso-up {
+		fill: none;
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.eso-down {
+		stroke: var(--c-line-strong);
+	}
+	.eso-up {
+		stroke: var(--c-accent);
+	}
+	.eso-head {
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.eso-head--many {
+		fill: var(--c-text-sub);
+	}
+	.eso-head--few {
+		fill: var(--c-accent);
+	}
+	.eso-note {
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.eso-note--many {
+		fill: var(--c-text-sub);
+	}
+	.eso-note--few {
+		fill: var(--c-accent);
+	}
+</style>

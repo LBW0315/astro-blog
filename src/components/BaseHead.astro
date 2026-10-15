@@ -2,7 +2,7 @@
 // <head> の中身（すべてのページで共通）
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
-import { AUTHOR_NAME, SITE_TITLE } from '../consts';
+import { AUTHOR_NAME, SITE_SUBTITLE_JA, SITE_TITLE } from '../consts';
 import { fontCssVersion } from '../lib/font-css';
 
 interface Props {
@@ -16,6 +16,17 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description, image, ogImagePath } = Astro.props;
 // 記事ページはその記事用に作った画像、それ以外のページはサイト共通の画像を使う
 const ogImageURL = new URL(ogImagePath ?? image?.src ?? '/og/site.png', Astro.url);
+
+// 検索結果に出すサイト名を Google に伝える構造化データ（トップページにだけ置く決まり）。
+// name が採用されないとき（同じ名前のサイトがあるときなど）に備えて、別名も添える
+const isHome = Astro.url.pathname === '/';
+const websiteJsonLd = JSON.stringify({
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: SITE_TITLE,
+	alternateName: [SITE_SUBTITLE_JA, Astro.site?.hostname],
+	url: Astro.site?.href,
+});
 
 // アクセス解析（Google Analytics 4）の測定 ID。ページのソースに出る公開情報なので、そのまま書いています
 const GA_ID = 'G-7N06JTSXTQ';
@@ -82,7 +93,11 @@ if (!window.__gaPageView) {
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImageURL} />
 <meta property="og:locale" content="ja_JP" />
+<meta property="og:site_name" content={SITE_TITLE} />
 <meta name="twitter:card" content="summary_large_image" />
+
+<!-- 検索結果のサイト名（トップページだけ） -->
+{isHome && <script type="application/ld+json" set:html={websiteJsonLd} />}
 
 <!--
   アクセス解析（Google Analytics 4）

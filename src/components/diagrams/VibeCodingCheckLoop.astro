@@ -1,0 +1,161 @@
+---
+/*
+  記事「QAエンジニアを3年間やって感じたこと」専用の図解
+  Vibe Coding で個人開発するときの流れ。最後の「自分で確かめる」がQAの経験そのもの（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色の意味は、ほかの記事とそろえています。
+  - 自分で確かめるところ（この図の主役）：青磁の実線の枠＋「QAの経験」のラベル
+  - やり直しの矢印：灰桜
+*/
+type Step = { y: number; title: string; sub: string; check?: boolean };
+
+const BOX_X = 14;
+const BOX_W = 240;
+const BOX_H = 62;
+const CX = BOX_X + BOX_W / 2;
+const LOOP_X = 300;
+
+const steps: Step[] = [
+	{ y: 14, title: '言葉で伝える', sub: '作りたいものを、AIに' },
+	{ y: 112, title: 'AIがコードを書く', sub: '自分で書く量は、ぐっと減った' },
+	{ y: 210, title: '自分で確かめる', sub: '要件・動き・画面サイズ', check: true },
+];
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const TOP_MID = steps[0].y + BOX_H / 2;
+const BOTTOM_MID = steps[2].y + BOX_H / 2;
+const H = 290;
+---
+
+<figure class="vcl">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="vcl-title vcl-desc">
+		<title id="vcl-title">Vibe Codingで個人開発するときの流れ</title>
+		<desc id="vcl-desc">
+			作りたいものをAIに言葉で伝える。AIがコードを書く。できたものが要件に合っているか、期待どおり動くか、画面サイズが変わっても表示されるかを自分で確かめる。違っていたら、もう1度伝え直す。最後の、自分で確かめるところが、QAの経験そのもの。
+		</desc>
+		<defs>
+			<filter id="vibe-coding-check-loop-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="16"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#vibe-coding-check-loop-sketch)">
+			{
+				steps.map((s) => (
+					<rect
+						class:list={['vcl-box', { 'vcl-box--check': s.check }]}
+						x={BOX_X}
+						y={s.y}
+						width={BOX_W}
+						height={BOX_H}
+						rx="12"
+					/>
+				))
+			}
+			{steps.slice(0, -1).map((s, i) => <path class="vcl-arrow" d={arrow(s.y + BOX_H + 4, steps[i + 1].y - 4)} />)}
+			<!-- 違っていたら、最初に戻る -->
+			<path
+				class="vcl-loop"
+				d={`M${BOX_X + BOX_W + 6} ${BOTTOM_MID}H${LOOP_X}V${TOP_MID}H${BOX_X + BOX_W + 8} M${BOX_X + BOX_W + 16} ${TOP_MID - 7}l-8 7 8 7`}
+			></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			steps.map((s) => (
+				<g>
+					<text class:list={['vcl-title', { 'vcl-title--check': s.check }]} x={BOX_X + 18} y={s.y + 25}>
+						{s.title}
+					</text>
+					<text class="vcl-sub" x={BOX_X + 18} y={s.y + 47}>
+						{s.sub}
+					</text>
+				</g>
+			))
+		}
+		<!-- やり直しのラベル -->
+		<g class="vcl-tag">
+			<rect x={LOOP_X - 36} y={(TOP_MID + BOTTOM_MID) / 2 - 13} width="72" height="26" rx="13"></rect>
+			<text x={LOOP_X} y={(TOP_MID + BOTTOM_MID) / 2} text-anchor="middle" dominant-baseline="central">やり直し</text>
+		</g>
+		<!-- 「QAの経験」ラベル -->
+		<g class="vcl-qa">
+			<rect x={BOX_X + BOX_W - 104} y={steps[2].y - 12} width="96" height="24" rx="12"></rect>
+			<text x={BOX_X + BOX_W - 56} y={steps[2].y} text-anchor="middle" dominant-baseline="central">QAの経験</text>
+		</g>
+	</svg>
+	<figcaption>Vibe Codingで個人開発するときの流れ（青磁の枠が、QAの経験が生きているところ）</figcaption>
+</figure>
+
+<style>
+	.vcl svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.vcl-box {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-text);
+		stroke-width: 2;
+	}
+	.vcl-box--check {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.6;
+	}
+	.vcl-arrow {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.vcl-loop {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.vcl-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.vcl-title--check {
+		fill: var(--c-accent);
+	}
+	.vcl-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.vcl-tag rect,
+	.vcl-qa rect {
+		fill: var(--c-surface-raised);
+		stroke-width: 1.2;
+	}
+	.vcl-tag rect {
+		stroke: var(--c-accent2);
+	}
+	.vcl-tag text {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.vcl-qa rect {
+		stroke: var(--c-accent);
+	}
+	.vcl-qa text {
+		fill: var(--c-accent);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

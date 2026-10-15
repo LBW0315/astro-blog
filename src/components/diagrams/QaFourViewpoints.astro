@@ -1,0 +1,128 @@
+---
+/*
+  記事「QAエンジニアを3年間やって感じたこと」専用の図解
+  QAで触った4つの立場の画面が、真ん中の1つのアプリにつながっている（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色の意味は、ほかの記事とそろえています。
+  - 4つの立場の画面：実線の枠（QAでひと通り触った部分）
+  - 真ん中のアプリ全体：淡い青磁の塗り（この図の主役）
+*/
+type Role = { x: number; y: number; label: string; icon: string };
+
+const BOX_W = 152;
+const BOX_H = 62;
+const CX = 180;
+const CY = 158;
+
+const roles: Role[] = [
+	{ x: 8, y: 14, label: '会社側', icon: 'building' },
+	{ x: 200, y: 14, label: '店舗側', icon: 'shop' },
+	{ x: 8, y: 240, label: 'お客さん側', icon: 'person' },
+	{ x: 200, y: 240, label: '管理者側', icon: 'gear' },
+];
+
+// 24×24 の線画アイコン（文字の左に置く）
+const ICONS: Record<string, string> = {
+	building: 'M4 23V3h12v20 M16 9h5v14 M8 7h4 M8 11h4 M8 15h4 M9 23v-4h2v4 M2 23h21',
+	shop: 'M3 9l2-6h14l2 6z M3 9c0 3 4 3 4 0 0 3 5 3 5 0 0 3 5 3 5 0 0 3 4 3 4 0 M5 11v12h14V11 M10 23v-6h4v6',
+	person: 'M12 3a4.5 4.5 0 1 1 0 9a4.5 4.5 0 1 1 0-9z M4 23c0-6 3.5-8.5 8-8.5s8 2.5 8 8.5',
+	gear: 'M12 8.5a3.5 3.5 0 1 1 0 7a3.5 3.5 0 1 1 0-7z M12 2v3.5 M12 18.5V22 M2 12h3.5 M18.5 12H22 M4.9 4.9l2.5 2.5 M16.6 16.6l2.5 2.5 M4.9 19.1l2.5-2.5 M16.6 7.4l2.5-2.5',
+};
+
+// 各ボックスの、真ん中に近い角から線を引く
+const link = (r: Role) => {
+	const bx = r.x < CX ? r.x + BOX_W - 24 : r.x + 24;
+	const by = r.y < CY ? r.y + BOX_H : r.y;
+	const ty = r.y < CY ? CY - 32 : CY + 32;
+	return `M${bx} ${by}Q${(bx + CX) / 2} ${(by + ty) / 2 + 4} ${CX + (bx < CX ? -30 : 30)} ${ty}`;
+};
+
+const H = 316;
+---
+
+<figure class="qa4">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="qa4-title qa4-desc">
+		<title id="qa4-title">QAで触った4つの立場の画面</title>
+		<desc id="qa4-desc">
+			会社側、店舗側、お客さん側、管理者側という4つの立場の画面が、真ん中にある1つのアプリにつながっている。QAでは、この4つの画面をひと通り触った。
+		</desc>
+		<defs>
+			<filter id="qa-four-viewpoints-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="12"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#qa-four-viewpoints-sketch)">
+			{roles.map((r) => <path class="qa4-link" d={link(r)} />)}
+			<rect class="qa4-center" x={CX - 78} y={CY - 32} width="156" height="64" rx="32"></rect>
+			{
+				roles.map((r) => (
+					<g>
+						<rect class="qa4-box" x={r.x} y={r.y} width={BOX_W} height={BOX_H} rx="12" />
+						<path class="qa4-icon" transform={`translate(${r.x + 16} ${r.y + 19})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			roles.map((r) => (
+				<text class="qa4-label" x={r.x + 52} y={r.y + BOX_H / 2} dominant-baseline="central">
+					{r.label}
+				</text>
+			))
+		}
+		<text class="qa4-center-label" x={CX} y={CY} text-anchor="middle" dominant-baseline="central">1つのアプリ</text>
+	</svg>
+	<figcaption>QAで触った4つの立場の画面（どれも、真ん中の1つのアプリにつながっている）</figcaption>
+</figure>
+
+<style>
+	.qa4 svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.qa4-link {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+	.qa4-box {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-text);
+		stroke-width: 2;
+	}
+	.qa4-center {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.qa4-icon {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.qa4-label {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.qa4-center-label {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+</style>

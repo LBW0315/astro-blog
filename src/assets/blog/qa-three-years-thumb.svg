@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「QAエンジニアを3年間やって感じたこと」のカード用の絵（自作）
+    開発途中のアプリが入ったスマホを、虫めがねで確かめているところ。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 302H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 開発途中のアプリが入ったスマホ -->
+    <rect x="188" y="36" width="164" height="266" rx="26" fill="#fffdfb"/>
+    <path d="M246 56h48" stroke-width="5"/>
+    <rect x="212" y="84" width="100" height="20" rx="8" fill="#2a6058" stroke="none"/>
+    <rect x="212" y="128" width="24" height="24" rx="6" fill="#e6f0ee" stroke="#2a6058" stroke-width="3"/><path d="M217 140l5 5 9-10" stroke="#2a6058" stroke-width="3"/><path d="M248 140h74" stroke="#93877a" stroke-width="3.5"/>
+    <rect x="212" y="174" width="24" height="24" rx="6" fill="#e6f0ee" stroke="#2a6058" stroke-width="3"/><path d="M217 186l5 5 9-10" stroke="#2a6058" stroke-width="3"/><path d="M248 186h74" stroke="#93877a" stroke-width="3.5"/>
+    <rect x="212" y="220" width="24" height="24" rx="6" fill="#e6f0ee" stroke="#2a6058" stroke-width="3"/><path d="M217 232l5 5 9-10" stroke="#2a6058" stroke-width="3"/><path d="M248 232h74" stroke="#93877a" stroke-width="3.5"/>
+    <rect x="212" y="262" width="116" height="26" rx="13" fill="#f6eaea" stroke="#7e4548" stroke-width="3"/>
+    <!-- 確かめる虫めがね -->
+    <path d="M466 224l58 58" stroke-width="13"/>
+    <circle cx="418" cy="172" r="70" fill="#fffdfb" fill-opacity="0.9"/>
+    <path d="M386 174l22 22 42 -46" stroke="#2a6058" stroke-width="9"/>
+  </g>
+</svg>

@@ -11,6 +11,12 @@ export default defineConfig({
 	site: 'https://bun-bou.com',
 	integrations: [mdx(), sitemap()],
 
+	// 公開後にURLを変えたページの転送。
+	// 静的サイトなので、転送用のHTML（即時の meta refresh と canonical）が出力される
+	redirects: {
+		'/blog/start-blog': '/blog/2026-09-16-start-blog/',
+	},
+
 	// ページ遷移時に、次のページへ移動しそうなリンクを先読みして表示を速くする
 	prefetch: true,
 

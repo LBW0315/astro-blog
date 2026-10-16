@@ -1,0 +1,124 @@
+---
+/*
+  記事「無料枠でジャーヴィスっぽくAIを使ってみた！」専用の図解
+  ChatGPTの音声モードで会話を始めるまでの3ステップ（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  3つとも実際にやったことなので、すべて青磁の実線にしています。
+*/
+type Row = { y: number; no: string; title: string; sub: string; icon: string };
+
+const BOX_X = 44;
+const BOX_W = 272;
+const BOX_H = 56;
+const CX = 180;
+
+const rows: Row[] = [
+	{ y: 14, no: '1', title: 'ChatGPTを開く', sub: 'iPhoneでもPCのブラウザでも', icon: 'phone' },
+	{ y: 104, no: '2', title: '音声モードのボタンを押す', sub: '声は既定のままでOK', icon: 'button' },
+	{ y: 194, no: '3', title: 'そのまま話しかける', sub: '返事も声で返ってくる', icon: 'bubble' },
+];
+
+const ICONS: Record<string, string> = {
+	phone: 'M8 2h12a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z M12 22h4',
+	button: 'M14 2a12 12 0 1 1 0 24a12 12 0 1 1 0-24z M9 11v6 M14 8v12 M19 11v6',
+	bubble: 'M3 5h22v14H12l-6 5v-5H3z M8 11h12 M8 15h7',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 264;
+---
+
+<figure class="voice-steps">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="voice-steps-title voice-steps-desc">
+		<title id="voice-steps-title">ChatGPTの音声モードで会話を始めるまで</title>
+		<desc id="voice-steps-desc">
+			1. ChatGPTを開く。iPhoneでもPCのブラウザでもよい。2. 音声モードのボタンを押す。声は既定のままでよい。3. そのまま話しかける。返事も声で返ってくる。
+		</desc>
+		<defs>
+			<filter id="voice-steps-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#voice-steps-sketch)">
+			{
+				rows.map((r) => (
+					<g class="vs-box">
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="vs-icon" transform={`translate(${BOX_X + 16} ${r.y + 14})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="vs-arrow" d={arrow(74, 100)}></path>
+			<path class="vs-arrow" d={arrow(164, 190)}></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="vs-no" x={BOX_X - 18} y={r.y + BOX_H / 2} text-anchor="middle" dominant-baseline="central">
+						{r.no}
+					</text>
+					<text class="vs-title" x={BOX_X + 58} y={r.y + 24}>
+						{r.title}
+					</text>
+					<text class="vs-sub" x={BOX_X + 58} y={r.y + 44}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+	</svg>
+	<figcaption>やることは3つだけ。設定画面は開かなくても始められる</figcaption>
+</figure>
+
+<style>
+	.voice-steps svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.vs-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.vs-icon {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.vs-arrow {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.vs-no {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 18px;
+		font-weight: 700;
+	}
+	.vs-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.vs-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「無料枠でジャーヴィスっぽくAIを使ってみた！」のカード用の絵（自作）
+    左の人（顔のない丸い頭と線の体）が話しかけ、声の波が右のスマホへ届くところ。
+    スマホの画面には、音声モードの丸いボタン（青磁）と声の線。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 300H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 話しかける人（顔は描かない） -->
+    <circle cx="150" cy="128" r="36" fill="#fffdfb"/>
+    <path d="M150 164V236M150 186L112 222M150 186L190 214M150 236L122 296M150 236L178 296"/>
+    <!-- 声の波（灰桜） -->
+    <g stroke="#7e4548">
+      <path d="M228 108q16 22 0 44"/>
+      <path d="M256 92q28 38 0 76"/>
+      <path d="M284 76q40 54 0 108"/>
+    </g>
+    <!-- スマホ -->
+    <rect x="370" y="44" width="160" height="252" rx="22" fill="#fffdfb"/>
+    <path d="M430 270h40" stroke-width="3.5"/>
+    <!-- 画面の中の声の線 -->
+    <path d="M404 112h92M404 134h64" stroke="#93877a" stroke-width="3"/>
+    <!-- 音声モードの丸いボタン（青磁） -->
+    <circle cx="450" cy="206" r="38" fill="#2a6058" stroke="#2a6058"/>
+    <path d="M432 198v16M444 188v36M456 192v28M468 200v12" stroke="#fffdfb" stroke-width="4"/>
+  </g>
+</svg>

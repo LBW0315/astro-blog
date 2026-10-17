@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「ChatGPTの音声モードを日常で使ってみた。犬の散歩が『考える時間』になった」のカード用の絵（自作）
+    犬（ペキニーズ）を散歩させながら話している人。頭の横から声の波（灰桜）が出て、
+    上に青磁の吹き出し（声の線入り）。人にも犬にも顔は描かない。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 304H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 歩いている人（顔は描かない） -->
+    <circle cx="200" cy="120" r="32" fill="#fffdfb"/>
+    <path d="M200 152V228M200 174L170 214M200 174L238 204M200 228L172 300M200 228L232 300"/>
+    <!-- リード -->
+    <path d="M238 204Q380 160 522 222" stroke-width="3"/>
+    <!-- ペキニーズ（ふさふさの体と頭、短い脚） -->
+    <path d="M390 238q-6 -30 26 -34q40 -6 78 4q30 8 26 36q-2 26 -36 30h-62q-30 -2 -32 -36z" fill="#fffdfb"/>
+    <path d="M412 274v26M432 276v24M488 276v24M506 272v28"/>
+    <path d="M520 214q-4 -36 26 -40q32 -2 36 26q2 24 -22 32q-28 8 -40 -18z" fill="#fffdfb"/>
+    <path d="M524 186q-14 10 -8 32M574 184q14 10 8 34" stroke-width="3.5"/>
+    <path d="M394 222q-26 -22 -10 -46" stroke-width="3.5"/>
+    <!-- 声の波（灰桜） -->
+    <g stroke="#7e4548">
+      <path d="M246 104q12 16 0 32"/>
+      <path d="M268 92q22 28 0 56"/>
+    </g>
+    <!-- 吹き出し（青磁）と声の線 -->
+    <path d="M300 40h132a18 18 0 0 1 18 18v40a18 18 0 0 1 -18 18h-92l-26 22v-22h-14a18 18 0 0 1 -18 -18v-40a18 18 0 0 1 18 -18z" fill="#2a6058" stroke="#2a6058"/>
+    <path d="M334 66v24M352 58v40M370 64v28M388 58v40M406 68v20" stroke="#fffdfb" stroke-width="4"/>
+  </g>
+</svg>

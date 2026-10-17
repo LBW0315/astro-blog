@@ -1,0 +1,143 @@
+---
+/*
+  記事「ChatGPTの音声モードを日常で使ってみた。犬の散歩が『考える時間』になった」専用の図解
+  机に向かって文字で打つときと、ポケットのスマホで話すときの対比（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+
+  色だけで区別しないように、次の組み合わせにしています。
+  - 机に向かうとき：グレーの実線＋番号付きの4つの手順
+  - 散歩しながら：青磁の実線
+*/
+type Step = { y: number; no: string; text: string };
+
+const BOX_X = 40;
+const BOX_W = 280;
+const STEP_H = 40;
+
+const steps: Step[] = [
+	{ y: 40, no: '1', text: 'モニターを見て' },
+	{ y: 88, no: '2', text: 'キーボードを使って' },
+	{ y: 136, no: '3', text: 'プロンプトを考えて' },
+	{ y: 184, no: '4', text: '文章として入力する' },
+];
+
+const H = 380;
+---
+
+<figure class="desk-pocket">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="desk-pocket-title desk-pocket-desc">
+		<title id="desk-pocket-title">机に向かって打つときと、散歩しながら話すときの違い</title>
+		<desc id="desk-pocket-desc">
+			机に向かってAIを使うときは、1. モニターを見て、2. キーボードを使って、3. プロンプトを考えて、4. 文章として入力する、の4つが要る。散歩しながらなら、ポケットのスマホ1台で、頭に浮かんだことをそのまま話すだけ。
+		</desc>
+		<defs>
+			<filter id="desk-pocket-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#desk-pocket-sketch)">
+			<rect class="dp-group" x="20" y="26" width="320" height="206" rx="14"></rect>
+			{
+				steps.map((s) => (
+					<g class="dp-step">
+						<rect x={BOX_X} y={s.y} width={BOX_W} height={STEP_H} rx="8" />
+						<circle cx={BOX_X + 22} cy={s.y + STEP_H / 2} r="12" />
+					</g>
+				))
+			}
+			<rect class="dp-now" x="20" y="280" width="320" height="86" rx="14"></rect>
+			<!-- スマホ -->
+			<path class="dp-icon" transform="translate(44 296)" d="M10 2h20a4 4 0 0 1 4 4v42a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4z M16 45h8 M14 20v8 M20 15v18 M26 20v8"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="dp-label" x="20" y="18">机に向かうと</text>
+		{
+			steps.map((s) => (
+				<g>
+					<text class="dp-no" x={BOX_X + 22} y={s.y + STEP_H / 2} text-anchor="middle" dominant-baseline="central">
+						{s.no}
+					</text>
+					<text class="dp-step-text" x={BOX_X + 44} y={s.y + 25}>
+						{s.text}
+					</text>
+				</g>
+			))
+		}
+		<text class="dp-label dp-label--now" x="20" y="272">散歩しながらなら</text>
+		<text class="dp-now-title" x="96" y="316">ポケットのスマホ1台</text>
+		<text class="dp-now-sub" x="96" y="342">浮かんだことを、そのまま話す</text>
+	</svg>
+	<figcaption>机に向かうと4つの手順が要る。散歩中は、スマホに話しかけるだけ</figcaption>
+</figure>
+
+<style>
+	.desk-pocket svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.dp-group {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.dp-step rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
+	}
+	.dp-step circle {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
+	}
+	.dp-now {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.dp-icon {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.dp-label {
+		fill: var(--c-text-sub);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.dp-label--now {
+		fill: var(--c-accent);
+	}
+	.dp-no {
+		fill: var(--c-text-sub);
+		font-family: var(--font-heading);
+		font-size: 13px;
+		font-weight: 700;
+	}
+	.dp-step-text {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+	.dp-now-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.dp-now-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

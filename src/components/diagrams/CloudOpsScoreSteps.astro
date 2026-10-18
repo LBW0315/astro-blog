@@ -1,0 +1,135 @@
+---
+/*
+  記事「AWS CloudOpsに4回目で合格するまでにやったこと」専用の図解
+  受験ごとの点数と合格ライン（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 不合格の回：白抜きの丸＋点数
+  - 合格した回：青磁で塗った丸＋「合格」の文字
+  - 合格ライン：細い点線＋「合格ライン 720」の文字
+  縦軸は 600 から始まっています（差を見やすくするため。軸に 600 と書いています）。
+*/
+const W = 360;
+const H = 270;
+// 点数 → y 座標（600 が y=220、750 が y=40）
+const y = (s: number) => 220 - (s - 600) * 1.2;
+const tries = [
+	{ x: 88, label: '1回目', score: 627 },
+	{ x: 160, label: '2回目', score: 697 },
+	{ x: 232, label: '3回目', score: 706 },
+];
+const passX = 304;
+const passY = 50;
+---
+
+<figure class="cos">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="cos-title cos-desc">
+		<title id="cos-title">CloudOpsの受験ごとの点数</title>
+		<desc id="cos-desc">
+			合格ラインは1000点中720点。1回目は627点、2回目は697点、3回目は706点で不合格。3回目は合格ラインまであと14点だった。4回目で合格した。
+		</desc>
+		<defs>
+			<filter id="cloudops-score-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="21"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#cloudops-score-sketch)">
+			<!-- 軸 -->
+			<path class="cos-axis" d="M48 30v190h292"></path>
+			<!-- 合格ライン -->
+			<path class="cos-pass-line" d={`M48 ${y(720)}h292`}></path>
+			<!-- 回ごとのつながり -->
+			<path
+				class="cos-link"
+				d={`M${tries[0].x} ${y(tries[0].score)} L${tries[1].x} ${y(tries[1].score)} L${tries[2].x} ${y(tries[2].score)} L${passX} ${passY}`}
+			></path>
+			<!-- 不合格の回 -->
+			{tries.map((t) => <circle class="cos-dot" cx={t.x} cy={y(t.score)} r="7"></circle>)}
+			<!-- 合格した回 -->
+			<circle class="cos-dot cos-dot--pass" cx={passX} cy={passY} r="9"></circle>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="cos-axis-label" x="40" y="225" text-anchor="end">600</text>
+		<text class="cos-pass-label" x="54" y={y(720) - 8}>合格ライン 720</text>
+		{
+			tries.map((t) => (
+				<text class="cos-score" x={t.x} y={y(t.score) + 26} text-anchor="middle">
+					{t.score}
+				</text>
+			))
+		}
+		<text class="cos-score cos-score--pass" x={passX} y={passY - 16} text-anchor="middle">
+			合格
+		</text>
+		{
+			[...tries.map((t) => ({ x: t.x, label: t.label })), { x: passX, label: '4回目' }].map((t) => (
+				<text class="cos-axis-label" x={t.x} y="244" text-anchor="middle">
+					{t.label}
+				</text>
+			))
+		}
+	</svg>
+	<figcaption>受験ごとの点数（1000点満点。縦軸は600点から。4回目の点数は書いていません）</figcaption>
+</figure>
+
+<style>
+	.cos svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.cos-axis,
+	.cos-pass-line,
+	.cos-link {
+		fill: none;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.cos-axis {
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.cos-pass-line {
+		stroke: var(--c-text-sub);
+		stroke-width: 1.6;
+		stroke-dasharray: 6 5;
+	}
+	.cos-link {
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.cos-dot {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 2.5;
+	}
+	.cos-dot--pass {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+	}
+	.cos-axis-label {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.cos-pass-label {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.cos-score {
+		fill: var(--c-text);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.cos-score--pass {
+		fill: var(--c-accent);
+	}
+</style>

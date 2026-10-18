@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「AWS CloudOpsに4回目で合格するまでにやったこと」のカード用の絵（自作）
+    4段の階段。いちばん上の段だけ青磁で、旗が立っている。下から上へ、灰桜の矢印でのぼっていく。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="9"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 300H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 4段の階段（下から1段目〜3段目は白、4段目は青磁） -->
+    <rect x="140" y="248" width="90" height="52" rx="6" fill="#fffdfb"/>
+    <rect x="230" y="196" width="90" height="104" rx="6" fill="#fffdfb"/>
+    <rect x="320" y="144" width="90" height="156" rx="6" fill="#fffdfb"/>
+    <rect x="410" y="92" width="90" height="208" rx="6" fill="#e6f0ee" stroke="#2a6058"/>
+    <!-- 旗 -->
+    <path d="M455 92V34" stroke="#2a6058"/>
+    <path d="M455 36L497 48L455 60Z" fill="#2a6058" stroke="#2a6058"/>
+    <!-- のぼっていく矢印 -->
+    <path d="M118 226C170 170 260 120 372 70" stroke="#7e4548"/>
+    <path d="M372 70l-16 0M372 70l-8 14" stroke="#7e4548"/>
+  </g>
+</svg>

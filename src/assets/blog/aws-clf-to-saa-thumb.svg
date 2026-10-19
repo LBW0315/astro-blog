@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「Cloud PractitionerからAWS SAAへ。2回目で合格するまでにやったこと」のカード用の絵（自作）
+    左に小さな雲、灰桜の矢印、右に大きな雲。大きな雲（SAA）を青磁で塗っている。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="4"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 300H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 小さな雲（入門） -->
+    <path d="M96 236C78 236 70 220 80 208C82 192 100 186 112 194C120 178 146 178 154 196C170 194 182 206 178 222C178 232 170 236 162 236Z" fill="#fffdfb"/>
+    <!-- 矢印 -->
+    <path d="M206 212C250 196 286 186 330 180" stroke="#7e4548"/>
+    <path d="M330 180l-14 -10M330 180l-12 12" stroke="#7e4548"/>
+    <!-- 大きな雲（SAA） -->
+    <path d="M404 250C368 250 352 220 370 196C372 160 410 146 436 164C450 128 506 126 520 166C552 162 576 186 568 218C568 238 554 250 536 250Z" fill="#e6f0ee" stroke="#2a6058"/>
+    <path d="M410 218H530" stroke="#2a6058" stroke-width="3"/>
+    <path d="M430 196H510" stroke="#2a6058" stroke-width="3"/>
+  </g>
+</svg>

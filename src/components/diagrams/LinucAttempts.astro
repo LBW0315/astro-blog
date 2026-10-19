@@ -1,0 +1,142 @@
+---
+/*
+  記事「LinuC Level 1に合格するまでにやったこと」専用の図解
+  101 と 102 の受験の流れ（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 合格：青磁で塗った丸＋「合格」の文字
+  - 不合格：白抜きの丸＋「不合格」の文字
+  - LPIC への寄り道：点線の丸＋「LPIC」の文字
+*/
+const W = 360;
+const H = 304;
+const xs = [88, 184, 280];
+const rows = [
+	{
+		title: '101',
+		y: 78,
+		tries: [
+			{ label: '1回目', result: '不合格', kind: 'fail' },
+			{ label: 'LPIC 101', result: '不合格', kind: 'detour' },
+			{ label: '2回目', result: '合格', kind: 'pass' },
+		],
+	},
+	{
+		title: '102',
+		y: 240,
+		tries: [
+			{ label: '1回目', result: '不合格', kind: 'fail' },
+			{ label: '2回目', result: '不合格', kind: 'fail' },
+			{ label: '3回目', result: '合格', kind: 'pass' },
+		],
+	},
+] as const;
+const R = 18;
+---
+
+<figure class="lca">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="lca-title lca-desc">
+		<title id="lca-title">LinuC Level 1の受験の流れ</title>
+		<desc id="lca-desc">
+			101は、1回目が不合格。LinuCを受け直せるまでの間にLPICの101を受けて不合格。LinuCの101の2回目で合格した。102は、1回目と2回目が不合格で、3回目で合格した。
+		</desc>
+		<defs>
+			<filter id="linuc-attempts-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="29"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#linuc-attempts-sketch)">
+			{
+				rows.map((row) => (
+					<>
+						<path class="lca-link" d={`M${xs[0] + R + 4} ${row.y}H${xs[1] - R - 4}M${xs[1] + R + 4} ${row.y}H${xs[2] - R - 4}`}></path>
+						{row.tries.map((t, i) => (
+							<circle class={`lca-dot lca-dot--${t.kind}`} cx={xs[i]} cy={row.y} r={R}></circle>
+						))}
+					</>
+				))
+			}
+			<!-- 101 から 102 へ -->
+			<path class="lca-link" d="M280 140C280 168 88 160 88 190M82 182L88 190L95 183"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((row) => (
+				<>
+					<text class="lca-row-title" x="16" y={row.y - 38}>
+						{row.title}
+					</text>
+					{row.tries.map((t, i) => (
+						<>
+							<text class={`lca-result lca-result--${t.kind}`} x={xs[i]} y={row.y + 42} text-anchor="middle">
+								{t.result}
+							</text>
+							<text class="lca-label" x={xs[i]} y={row.y - 26} text-anchor="middle">
+								{t.label}
+							</text>
+						</>
+					))}
+				</>
+			))
+		}
+	</svg>
+	<figcaption>LinuC Level 1の受験の流れ（点線の丸はLPICへの寄り道）</figcaption>
+</figure>
+
+<style>
+	.lca svg {
+		display: block;
+		width: 100%;
+		max-width: 26rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.lca-link {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.lca-dot {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 2.5;
+	}
+	.lca-dot--detour {
+		stroke: var(--c-text-sub);
+		stroke-dasharray: 5 4;
+	}
+	.lca-dot--pass {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+	}
+	.lca-row-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.lca-label {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.lca-result {
+		fill: var(--c-text);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.lca-result--detour {
+		fill: var(--c-text-sub);
+	}
+	.lca-result--pass {
+		fill: var(--c-accent);
+	}
+</style>

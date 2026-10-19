@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「LinuC Level 1に合格するまでにやったこと」のカード用の絵（自作）
+    ターミナルの画面（プロンプトの「>」とカーソル）を大きく。横に、重ねた参考書。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 300H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- ターミナルの画面 -->
+    <rect x="110" y="64" width="300" height="200" rx="14" fill="#fffdfb"/>
+    <path d="M110 100H410" stroke-width="3"/>
+    <circle cx="134" cy="82" r="5" stroke-width="3"/>
+    <circle cx="154" cy="82" r="5" stroke-width="3"/>
+    <circle cx="174" cy="82" r="5" stroke-width="3"/>
+    <!-- プロンプトとカーソル -->
+    <path d="M150 150L176 168L150 186" stroke="#2a6058"/>
+    <path d="M196 186H236" stroke="#2a6058"/>
+    <path d="M150 226H290" stroke="#93877a" stroke-width="3"/>
+    <!-- 重ねた参考書 -->
+    <rect x="440" y="252" width="128" height="34" rx="7" fill="#f6eaea"/><path d="M464 252v34" stroke-width="3"/>
+    <rect x="450" y="218" width="112" height="34" rx="7" fill="#e6f0ee"/><path d="M474 218v34" stroke-width="3"/>
+    <rect x="444" y="184" width="120" height="34" rx="7" fill="#fffdfb"/><path d="M468 184v34" stroke-width="3"/>
+  </g>
+</svg>

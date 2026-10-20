@@ -1,0 +1,140 @@
+---
+/*
+  記事「【家づくり記録①】「子育てするなら一軒家じゃないと無理！」妻の突然の一言から始まった家づくり」専用の図解
+  妻の一言から、家づくりが始まるまでの流れ（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - この記事で書いたところ：青磁の実線と塗りつぶした丸
+  - 次回の記事で書くところ：灰桜の点線と白抜きの丸＋「次回」のラベル
+*/
+type Stop = { y: number; sub: string; title: string; done?: boolean };
+
+const LINE_X = 40;
+const TEXT_X = 66;
+
+const stops: Stop[] = [
+	{ y: 38, sub: 'ある日、妻の一言', title: '「一軒家じゃないと無理！」', done: true },
+	{ y: 108, sub: '理由を聞いてみる', title: '音・庭・キッチンのストレス', done: true },
+	{ y: 178, sub: 'ふと気づく', title: '自分は音を気にしていなかった', done: true },
+	{ y: 248, sub: '決める', title: '「妻がそこまで言うなら」', done: true },
+	{ y: 318, sub: 'そして', title: '家づくりがスタート', done: true },
+	{ y: 388, sub: 'まずは', title: 'ネットでハウスメーカー探し' },
+];
+
+const LAST_DONE_Y = stops.filter((s) => s.done).at(-1)!.y;
+const END_Y = stops[stops.length - 1].y;
+const H = 422;
+---
+
+<figure class="hbs">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="hbs-title hbs-desc">
+		<title id="hbs-title">妻の一言から、家づくりが始まるまでの流れ</title>
+		<desc id="hbs-desc">
+			ある日、妻が「子育てするなら一軒家じゃないと無理！」と言う。理由を聞いてみると、生活音・庭・キッチンにストレスを感じていた。そこで、自分は音を気にしていなかったと気づく。「妻がそこまで言うなら」と家を建てることを決め、家づくりがスタートした。まず始めたのは、ネットでハウスメーカーを調べること。ここは次回の記事で書く。
+		</desc>
+		<defs>
+			<filter id="home-building-start-flow-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="29"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#home-building-start-flow-sketch)">
+			<!-- この記事で書いたところ（青磁の実線） -->
+			<path class="hbs-done" d={`M${LINE_X} ${stops[0].y}q3 ${(LAST_DONE_Y - stops[0].y) / 2} 0 ${LAST_DONE_Y - stops[0].y}`}></path>
+			<!-- 次回の記事で書くところ（灰桜の点線） -->
+			<path class="hbs-todo" d={`M${LINE_X} ${LAST_DONE_Y}q-3 ${(END_Y - LAST_DONE_Y) / 2} 0 ${END_Y - LAST_DONE_Y}`}></path>
+			{
+				stops.map((s) =>
+					s.done ? (
+						<circle class="hbs-dot hbs-dot--done" cx={LINE_X} cy={s.y} r="8" />
+					) : (
+						<circle class="hbs-dot hbs-dot--todo" cx={LINE_X} cy={s.y} r="8" />
+					),
+				)
+			}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			stops.map((s) => (
+				<g>
+					<text class="hbs-sub" x={TEXT_X} y={s.y - 8}>
+						{s.sub}
+					</text>
+					<text class:list={['hbs-title', { 'hbs-title--todo': !s.done }]} x={TEXT_X} y={s.y + 14}>
+						{s.title}
+					</text>
+				</g>
+			))
+		}
+
+		<!-- 「次回」ラベル -->
+		<g class="hbs-tag">
+			<rect x="272" y={END_Y - 26} width="64" height="24" rx="12"></rect>
+			<text x="304" y={END_Y - 14} text-anchor="middle" dominant-baseline="central">次回</text>
+		</g>
+	</svg>
+	<figcaption>妻の一言から、家づくりが始まるまで（実線はこの記事で書いたところ、点線は次回の記事で書くところ）</figcaption>
+</figure>
+
+<style>
+	.hbs svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.hbs-done,
+	.hbs-todo {
+		fill: none;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 3;
+	}
+	.hbs-done {
+		stroke: var(--c-accent);
+	}
+	.hbs-todo {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 8 6;
+	}
+	.hbs-dot--done {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.hbs-dot--todo {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 4 3;
+	}
+	.hbs-sub {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+	}
+	.hbs-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.hbs-title--todo {
+		fill: var(--c-text);
+	}
+	.hbs-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.hbs-tag text {
+		fill: var(--c-accent2);
+		font-size: 15px;
+		font-weight: 700;
+	}
+</style>

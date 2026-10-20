@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「【家づくり記録①】「子育てするなら一軒家じゃないと無理！」妻の突然の一言から始まった家づくり」のカード用の絵（自作）
+    左のアパート（窓が並んだ2階建て）から、矢印で、右の庭付きの一軒家（平屋と木）へ。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 290H600" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- アパート（2階建て、窓が並ぶ） -->
+    <rect x="60" y="112" width="176" height="178" rx="4" fill="#fffdfb"/>
+    <path d="M52 112H244"/>
+    <path d="M60 200H236" stroke-width="3"/>
+    <rect x="80" y="134" width="36" height="40" rx="3" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="130" y="134" width="36" height="40" rx="3" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="180" y="134" width="36" height="40" rx="3" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="80" y="222" width="36" height="40" rx="3" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="130" y="222" width="36" height="68" rx="3" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="180" y="222" width="36" height="40" rx="3" fill="#f2eee9" stroke-width="3.5"/>
+    <!-- 矢印 -->
+    <path d="M262 200H332M332 200l-16 -14M332 200l-16 14" stroke="#7e4548"/>
+    <!-- 一軒家（平屋） -->
+    <path d="M356 178L450 120L544 178Z" fill="#2a6058" stroke="#2a6058"/>
+    <rect x="372" y="178" width="156" height="112" rx="4" fill="#e6f0ee"/>
+    <path d="M356 178H544"/>
+    <rect x="392" y="204" width="44" height="38" rx="3" fill="#fffdfb" stroke-width="3.5"/>
+    <path d="M414 204v38M392 223h44" stroke-width="3"/>
+    <rect x="462" y="216" width="38" height="74" rx="3" fill="#fffdfb" stroke-width="3.5"/>
+    <path d="M490 254h0" stroke-width="5"/>
+    <!-- 庭の木 -->
+    <path d="M578 290V236" stroke-width="4"/>
+    <ellipse cx="578" cy="218" rx="26" ry="32" fill="#e6f0ee" stroke="#2a6058"/>
+  </g>
+</svg>

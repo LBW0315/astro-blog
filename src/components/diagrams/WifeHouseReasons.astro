@@ -1,0 +1,146 @@
+---
+/*
+  記事「【家づくり記録①】「子育てするなら一軒家じゃないと無理！」妻の突然の一言から始まった家づくり」専用の図解
+  妻が一軒家にこだわった3つの理由（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - アパートでの今の暮らし：灰色の実線の箱（左）
+  - 一軒家なら手に入るもの（まだ建っていない）：灰桜の点線の箱（右）
+
+  スマホでも読めるように、3つの理由は横に並べず、縦に積んでいます。
+*/
+type Reason = { no: string; title: string; now: [string, string]; then: [string, string] };
+
+const reasons: Reason[] = [
+	{ no: '①', title: '生活音', now: ['隣の音が気になる', '音を出しにくい'], then: ['音の気遣いが', '少なくてすむ'] },
+	{ no: '②', title: '庭', now: ['自由に使える', '庭がない'], then: ['子どもの遊び場', '家族で外の時間'] },
+	{ no: '③', title: 'キッチン', now: ['狭くて', '変えられない'], then: ['使いやすさを', '自分たちで考える'] },
+];
+
+const TOP = 44; // 1つ目の理由の始まり
+const STEP = 106; // 理由どうしの間隔
+const BOX_Y = 28; // 理由の見出しから箱の上までの距離
+const BOX_H = 60;
+const LEFT_X = 16;
+const RIGHT_X = 204;
+const BOX_W = 140;
+const H = TOP + STEP * reasons.length - 10;
+---
+
+<figure class="whr">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="whr-title whr-desc">
+		<title id="whr-title">妻が一軒家にこだわった3つの理由</title>
+		<desc id="whr-desc">
+			アパートでの暮らしと、一軒家ならできることを3つ並べた図。1つ目は生活音。アパートでは隣の音が気になり、自分たちも音を出しにくいが、一軒家なら音への気遣いが少なくてすむ。2つ目は庭。アパートには自由に使える庭がないが、一軒家なら子どもの遊び場や、家族で外の時間を楽しむ場所になる。3つ目はキッチン。アパートのキッチンは狭くて変えられないが、一軒家なら使いやすさを自分たちで考えられる。
+		</desc>
+		<defs>
+			<filter id="wife-house-reasons-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="17"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#wife-house-reasons-sketch)">
+			{
+				reasons.map((_, i) => {
+					const y = TOP + STEP * i + BOX_Y;
+					const mid = y + BOX_H / 2;
+					return (
+						<g>
+							<rect class="whr-now" x={LEFT_X} y={y} width={BOX_W} height={BOX_H} rx="10" />
+							<rect class="whr-then" x={RIGHT_X} y={y} width={BOX_W} height={BOX_H} rx="10" />
+							<path class="whr-arrow" d={`M${LEFT_X + BOX_W + 8} ${mid}h30 m-8 -7l8 7-8 7`} />
+						</g>
+					);
+				})
+			}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="whr-col whr-col--now" x={LEFT_X + BOX_W / 2} y="22" text-anchor="middle">アパートでは</text>
+		<text class="whr-col whr-col--then" x={RIGHT_X + BOX_W / 2} y="22" text-anchor="middle">一軒家なら</text>
+		{
+			reasons.map((r, i) => {
+				const y = TOP + STEP * i;
+				const boxTop = y + BOX_Y;
+				return (
+					<g>
+						<text class="whr-head" x={LEFT_X} y={y + 18}>
+							{r.no} {r.title}
+						</text>
+						<text class="whr-text whr-text--now" x={LEFT_X + BOX_W / 2} y={boxTop + 25} text-anchor="middle">
+							{r.now[0]}
+						</text>
+						<text class="whr-text whr-text--now" x={LEFT_X + BOX_W / 2} y={boxTop + 46} text-anchor="middle">
+							{r.now[1]}
+						</text>
+						<text class="whr-text whr-text--then" x={RIGHT_X + BOX_W / 2} y={boxTop + 25} text-anchor="middle">
+							{r.then[0]}
+						</text>
+						<text class="whr-text whr-text--then" x={RIGHT_X + BOX_W / 2} y={boxTop + 46} text-anchor="middle">
+							{r.then[1]}
+						</text>
+					</g>
+				);
+			})
+		}
+	</svg>
+	<figcaption>妻が一軒家にこだわった3つの理由（実線はアパートでの今の暮らし、点線は一軒家なら手に入るもの）</figcaption>
+</figure>
+
+<style>
+	.whr svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.whr-now {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.whr-then {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 6 4;
+	}
+	.whr-arrow {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.whr-col {
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.whr-col--now {
+		fill: var(--c-text-sub);
+	}
+	.whr-col--then {
+		fill: var(--c-accent2);
+	}
+	.whr-head {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.whr-text {
+		font-size: 15px;
+	}
+	.whr-text--now {
+		fill: var(--c-text);
+	}
+	.whr-text--then {
+		fill: var(--c-text);
+		font-weight: 700;
+	}
+</style>

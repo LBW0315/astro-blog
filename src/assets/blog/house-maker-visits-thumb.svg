@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「ネットで調べるだけでは分からなかった。夫婦でハウスメーカーを巡って感じたこと ― 家づくり記録③」のカード用の絵（自作）
+    旗が並んだ住宅展示場のモデルハウスを、左から夫婦2人が見に来ているところ。
+    人は顔のない丸い頭と線の体。方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 290H600" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 展示場の旗（ガーランド） -->
+    <path d="M300 66Q440 100 588 66" stroke="#93877a" stroke-width="3"/>
+    <path d="M330 73l10 24 12-20Z" fill="#f6eaea" stroke-width="3"/>
+    <path d="M380 82l10 24 12-21Z" fill="#e6f0ee" stroke-width="3"/>
+    <path d="M432 86l10 24 12-24Z" fill="#f6eaea" stroke-width="3"/>
+    <path d="M484 84l10 24 12-21Z" fill="#e6f0ee" stroke-width="3"/>
+    <path d="M534 78l10 24 12-20Z" fill="#f6eaea" stroke-width="3"/>
+    <path d="M300 66V290M588 66V290" stroke="#93877a" stroke-width="3.5"/>
+    <!-- モデルハウス（平屋） -->
+    <path d="M336 186L444 132L552 186Z" fill="#2a6058" stroke="#2a6058"/>
+    <rect x="352" y="186" width="184" height="104" rx="4" fill="#e6f0ee"/>
+    <path d="M336 186H552"/>
+    <rect x="372" y="208" width="54" height="40" rx="3" fill="#fffdfb" stroke-width="3.5"/>
+    <path d="M399 208v40M372 228h54" stroke-width="3"/>
+    <rect x="456" y="214" width="40" height="76" rx="3" fill="#fffdfb" stroke-width="3.5"/>
+    <!-- 夫婦2人（顔のない丸い頭と線の体） -->
+    <circle cx="128" cy="162" r="20" fill="#fffdfb"/>
+    <path d="M128 182V238M128 238L108 290M128 238L148 290M128 200L100 226M128 200L162 216"/>
+    <circle cx="200" cy="172" r="18" fill="#fffdfb"/>
+    <path d="M200 190V242M200 242L182 290M200 242L218 290M200 208L170 220M200 208L228 228"/>
+    <!-- 見に行く向きの矢印 -->
+    <path d="M244 220H290M290 220l-14 -12M290 220l-14 12" stroke="#7e4548"/>
+  </g>
+</svg>

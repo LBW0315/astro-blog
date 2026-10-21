@@ -1,0 +1,80 @@
+---
+/*
+  記事「ネットで調べるだけでは分からなかった。夫婦でハウスメーカーを巡って感じたこと ― 家づくり記録③」専用の図解
+  ネットで調べる → 実際に見学する → もう1度調べる、の繰り返し（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、各段に①②③の番号を付け、読む順番は矢印で一本道にしています。
+  - 実際にやったこと：青磁の実線の箱
+  - 次に進む向き：灰桜の矢印
+*/
+---
+
+<figure class="rvl">
+	<svg viewBox="0 0 360 260" role="img" aria-labelledby="rvl-title rvl-desc">
+		<title id="rvl-title">ネットで調べる、見学する、もう1度調べるの繰り返し</title>
+		<desc id="rvl-desc">
+			3つの段階が輪になっている図。1つ目はネットで調べる。2つ目は実際に見学する。3つ目は、見学して気になったことをもう1度調べる。そこからまた1つ目に戻り、この3つを繰り返す。
+		</desc>
+		<defs>
+			<filter id="research-visit-loop-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="58"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#research-visit-loop-sketch)">
+			<rect class="rvl-box" x="100" y="14" width="160" height="56" rx="12"></rect>
+			<rect class="rvl-box" x="200" y="176" width="148" height="64" rx="12"></rect>
+			<rect class="rvl-box" x="12" y="176" width="148" height="64" rx="12"></rect>
+			<!-- ① → ② -->
+			<path class="rvl-arrow" d="M244 74Q296 104 282 168m-12 -10l12 10 6 -15"></path>
+			<!-- ② → ③ -->
+			<path class="rvl-arrow" d="M196 208H164m10 -8l-10 8 10 8"></path>
+			<!-- ③ → ①（繰り返す） -->
+			<path class="rvl-arrow" d="M78 172Q62 104 96 52m-14 4l14 -4 2 14"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="rvl-text" x="180" y="48" text-anchor="middle">① ネットで調べる</text>
+		<text class="rvl-text" x="274" y="214" text-anchor="middle">② 実際に見学する</text>
+		<text class="rvl-text" x="86" y="203" text-anchor="middle">③ 気になったことを</text>
+		<text class="rvl-text" x="86" y="226" text-anchor="middle">もう1度調べる</text>
+		<text class="rvl-loop" x="180" y="134" text-anchor="middle">繰り返す</text>
+	</svg>
+	<figcaption>ネットで調べる → 実際に見学する → 気になったことをもう1度調べる、の繰り返し</figcaption>
+</figure>
+
+<style>
+	.rvl svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.rvl-box {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.2;
+	}
+	.rvl-arrow {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.rvl-text {
+		fill: var(--c-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.rvl-loop {
+		fill: var(--c-accent2);
+		font-size: 15px;
+		font-weight: 700;
+	}
+</style>

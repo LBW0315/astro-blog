@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「ハウスメーカーを調べ尽くした結果、余計に決められなくなった話 ― 家づくり記録②」のカード用の絵（自作）
+    形の違う3軒の家を、虫眼鏡でのぞいて見比べているところ。家と家のあいだを、迷うように行き来する矢印。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 290H600" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 左の家（三角屋根） -->
+    <path d="M70 200L135 152L200 200Z" fill="#f6eaea"/>
+    <rect x="84" y="200" width="102" height="90" rx="3" fill="#fffdfb"/>
+    <rect x="102" y="220" width="30" height="28" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="146" y="234" width="26" height="56" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <!-- まんなかの家（四角い2階建て） -->
+    <rect x="252" y="160" width="136" height="130" rx="3" fill="#fffdfb"/>
+    <path d="M244 160H396"/>
+    <rect x="270" y="178" width="30" height="28" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="340" y="178" width="30" height="28" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="270" y="230" width="30" height="28" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="340" y="234" width="28" height="56" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <!-- 右の家（片流れ屋根） -->
+    <path d="M446 214L572 176V214Z" fill="#e6f0ee"/>
+    <rect x="456" y="214" width="106" height="76" rx="3" fill="#fffdfb"/>
+    <rect x="474" y="232" width="34" height="26" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="524" y="238" width="24" height="52" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <!-- 迷って行き来する矢印 -->
+    <path d="M150 128Q230 70 300 116M300 116l-18 -2M300 116l-4 -17" stroke="#7e4548"/>
+    <path d="M492 138Q420 82 350 120M350 120l17 -6M350 120l2 -18" stroke="#7e4548"/>
+    <!-- 虫眼鏡 -->
+    <circle cx="320" cy="74" r="40" fill="#e6f0ee" fill-opacity="0.7" stroke="#2a6058" stroke-width="6"/>
+    <path d="M348 104L380 138" stroke="#2a6058" stroke-width="9"/>
+  </g>
+</svg>

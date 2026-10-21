@@ -1,0 +1,90 @@
+---
+/*
+  記事「ハウスメーカーを調べ尽くした結果、余計に決められなくなった話 ― 家づくり記録②」専用の図解
+  調べれば調べるほど、知識は増えるのに決められなくなる（手描き風）
+
+  数値のグラフではなく、当時の感覚を2本の線で表したイメージ図です。
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、線の端にそれぞれ名前を書いています。
+  - 知識：青磁の太い線（右上がり）
+  - 決めやすさ：灰桜の線（右下がり）
+*/
+const X0 = 32; // 原点
+const Y0 = 212;
+const X1 = 330; // 横軸の右端
+---
+
+<figure class="mrc">
+	<svg viewBox="0 0 360 260" role="img" aria-labelledby="mrc-title mrc-desc">
+		<title id="mrc-title">調べれば調べるほど、知識は増えるのに決められなくなる</title>
+		<desc id="mrc-desc">
+			横軸は調べた量。調べた量が増えるにつれて、知識の線は右上がりに増えていく。一方で、決めやすさの線は右下がりに下がっていき、最後は決められなくなる。数値ではなく、当時の感覚を表したイメージ図。
+		</desc>
+		<defs>
+			<filter id="more-research-harder-choice-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="63"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#more-research-harder-choice-sketch)">
+			<!-- 軸 -->
+			<path class="mrc-axis" d={`M${X0} 24V${Y0}H${X1}m-9 -7l9 7-9 7`}></path>
+			<!-- 知識（右上がり） -->
+			<path class="mrc-know" d={`M${X0 + 8} ${Y0 - 14}C120 180 200 110 300 58`}></path>
+			<!-- 決めやすさ（右下がり） -->
+			<path class="mrc-decide" d={`M${X0 + 8} 70C120 80 200 134 300 164`}></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="mrc-label mrc-label--know" x="300" y="42" text-anchor="end">知識は増える</text>
+		<text class="mrc-label mrc-label--decide" x="300" y="200" text-anchor="end">決めやすさは下がる</text>
+		<text class="mrc-axis-label" x={X1} y="242" text-anchor="end">調べた量</text>
+	</svg>
+	<figcaption>調べれば調べるほど、知識は増えるのに決められなくなる（当時の感覚のイメージ）</figcaption>
+</figure>
+
+<style>
+	.mrc svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.mrc-axis,
+	.mrc-know,
+	.mrc-decide {
+		fill: none;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.mrc-axis {
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.mrc-know {
+		stroke: var(--c-accent);
+		stroke-width: 4;
+	}
+	.mrc-decide {
+		stroke: var(--c-accent2);
+		stroke-width: 3;
+	}
+	.mrc-label {
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.mrc-label--know {
+		fill: var(--c-accent);
+	}
+	.mrc-label--decide {
+		fill: var(--c-accent2);
+	}
+	.mrc-axis-label {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+	}
+</style>

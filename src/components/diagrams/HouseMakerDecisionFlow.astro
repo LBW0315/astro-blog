@@ -1,0 +1,140 @@
+---
+/*
+  記事「私たちがNATUR-sagaを選んだ理由。最後の決め手は「人」だった！ ― 家づくり記録④」専用の図解
+  ナチュールサガさんに決めるまでの流れと、次の段階（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - この記事で書いたところ：青磁の実線と塗りつぶした丸
+  - 次回の記事で書くところ：灰桜の点線と白抜きの丸＋「次回」のラベル
+*/
+type Stop = { y: number; sub: string; title: string; done?: boolean };
+
+const LINE_X = 40;
+const TEXT_X = 66;
+
+const stops: Stop[] = [
+	{ y: 38, sub: '前回', title: 'ハウスメーカーを巡る', done: true },
+	{ y: 108, sub: 'きっかけ', title: '義理の母からの紹介', done: true },
+	{ y: 178, sub: '妻が一目惚れ', title: '営業担当の方との出会い', done: true },
+	{ y: 248, sub: '4〜5回ほど', title: '完成見学会に参加', done: true },
+	{ y: 318, sub: '夫婦それぞれが納得', title: 'ナチュールサガさんに決める', done: true },
+	{ y: 388, sub: '最初の大きな壁', title: '土地探し' },
+];
+
+const LAST_DONE_Y = stops.filter((s) => s.done).at(-1)!.y;
+const END_Y = stops[stops.length - 1].y;
+const H = 422;
+---
+
+<figure class="hmd">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="hmd-title hmd-desc">
+		<title id="hmd-title">ナチュールサガさんに決めるまでの流れと、次の段階</title>
+		<desc id="hmd-desc">
+			前回の記事で、いろいろなハウスメーカーを巡った。そのあと、義理の母からナチュールサガさんを紹介され、妻が営業担当の方に一目惚れ。完成見学会に4〜5回ほど参加し、夫婦それぞれが納得して、ナチュールサガさんに決めた。次の段階は、最初の大きな壁になった土地探し。ここは次回の記事で書く。
+		</desc>
+		<defs>
+			<filter id="house-maker-decision-flow-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="53"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#house-maker-decision-flow-sketch)">
+			<!-- この記事で書いたところ（青磁の実線） -->
+			<path class="hmd-done" d={`M${LINE_X} ${stops[0].y}q3 ${(LAST_DONE_Y - stops[0].y) / 2} 0 ${LAST_DONE_Y - stops[0].y}`}></path>
+			<!-- 次回の記事で書くところ（灰桜の点線） -->
+			<path class="hmd-todo" d={`M${LINE_X} ${LAST_DONE_Y}q-3 ${(END_Y - LAST_DONE_Y) / 2} 0 ${END_Y - LAST_DONE_Y}`}></path>
+			{
+				stops.map((s) =>
+					s.done ? (
+						<circle class="hmd-dot hmd-dot--done" cx={LINE_X} cy={s.y} r="8" />
+					) : (
+						<circle class="hmd-dot hmd-dot--todo" cx={LINE_X} cy={s.y} r="8" />
+					),
+				)
+			}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			stops.map((s) => (
+				<g>
+					<text class="hmd-sub" x={TEXT_X} y={s.y - 8}>
+						{s.sub}
+					</text>
+					<text class:list={['hmd-title', { 'hmd-title--todo': !s.done }]} x={TEXT_X} y={s.y + 14}>
+						{s.title}
+					</text>
+				</g>
+			))
+		}
+
+		<!-- 「次回」ラベル -->
+		<g class="hmd-tag">
+			<rect x="272" y={END_Y - 26} width="64" height="24" rx="12"></rect>
+			<text x="304" y={END_Y - 14} text-anchor="middle" dominant-baseline="central">次回</text>
+		</g>
+	</svg>
+	<figcaption>ナチュールサガさんに決めるまでと、次の段階（実線はこの記事で書いたところ、点線は次回の記事で書くところ）</figcaption>
+</figure>
+
+<style>
+	.hmd svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.hmd-done,
+	.hmd-todo {
+		fill: none;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 3;
+	}
+	.hmd-done {
+		stroke: var(--c-accent);
+	}
+	.hmd-todo {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 8 6;
+	}
+	.hmd-dot--done {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.hmd-dot--todo {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 4 3;
+	}
+	.hmd-sub {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+	}
+	.hmd-title {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.hmd-title--todo {
+		fill: var(--c-text);
+	}
+	.hmd-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.hmd-tag text {
+		fill: var(--c-accent2);
+		font-size: 15px;
+		font-weight: 700;
+	}
+</style>

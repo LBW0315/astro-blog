@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「私たちがNATUR-sagaを選んだ理由。最後の決め手は「人」だった！ ― 家づくり記録④」のカード用の絵（自作）
+    左の夫婦2人から、矢印で、右の青磁の家と、その前に立つ担当の方へ。決め手は「人」だった、という絵。
+    人は顔のない丸い頭と線の体。方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 290H600" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 夫婦2人 -->
+    <circle cx="104" cy="162" r="20" fill="#fffdfb"/>
+    <path d="M104 182V238M104 238L84 290M104 238L124 290M104 200L78 226M104 200L136 216"/>
+    <circle cx="176" cy="172" r="18" fill="#fffdfb"/>
+    <path d="M176 190V242M176 242L158 290M176 242L194 290M176 208L146 220M176 208L204 226"/>
+    <!-- 矢印 -->
+    <path d="M222 222H282M282 222l-14 -12M282 222l-14 12" stroke="#7e4548"/>
+    <!-- 家（平屋） -->
+    <path d="M378 170L478 116L578 170Z" fill="#2a6058" stroke="#2a6058"/>
+    <rect x="394" y="170" width="168" height="120" rx="4" fill="#e6f0ee"/>
+    <path d="M378 170H578"/>
+    <rect x="488" y="192" width="50" height="38" rx="3" fill="#fffdfb" stroke-width="3.5"/>
+    <path d="M513 192v38M488 211h50" stroke-width="3"/>
+    <!-- 家の前に立つ担当の方 -->
+    <circle cx="340" cy="168" r="19" fill="#e6f0ee" stroke="#2a6058"/>
+    <path d="M340 187V240M340 240L322 290M340 240L358 290M340 204L312 222M340 204L366 226" stroke="#2a6058"/>
+  </g>
+</svg>

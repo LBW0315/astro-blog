@@ -1,0 +1,105 @@
+---
+/*
+  記事「私たちがNATUR-sagaを選んだ理由。最後の決め手は「人」だった！ ― 家づくり記録④」専用の図解
+  大手ハウスメーカーと地元工務店の「いいとこ取り」（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、それぞれの円の上に名前を書いています。
+  - 大手ハウスメーカー：灰色の円
+  - 地元の工務店：灰桜の円
+  - 2つが重なるところ（ナチュールサガさん）：淡い青磁の塗りと、青磁の線
+*/
+const LX = 136; // 左の円の中心
+const RX = 224; // 右の円の中心
+const CY = 150;
+const R = 100;
+---
+
+<figure class="bal">
+	<svg viewBox="0 0 360 270" role="img" aria-labelledby="bal-title bal-desc">
+		<title id="bal-title">大手ハウスメーカーと地元工務店のいいとこ取り</title>
+		<desc id="bal-desc">
+			2つの円が重なった図。左の円は大手ハウスメーカーで、建築実績と保証制度の安心感。右の円は地元の工務店で、施主に寄り添う温かみ。2つの円が重なるところに、ナチュールサガさんがある。母体の会社の実績がありながら、地域に根ざした温かみもある、というのが私の印象。
+		</desc>
+		<defs>
+			<filter id="big-and-local-hybrid-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="71"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+			<clipPath id="big-and-local-hybrid-left">
+				<circle cx={LX} cy={CY} r={R}></circle>
+			</clipPath>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#big-and-local-hybrid-sketch)">
+			<!-- 重なるところ -->
+			<circle class="bal-both" cx={RX} cy={CY} r={R} clip-path="url(#big-and-local-hybrid-left)"></circle>
+			<circle class="bal-big" cx={LX} cy={CY} r={R}></circle>
+			<circle class="bal-local" cx={RX} cy={CY} r={R}></circle>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="bal-head bal-head--big" x="96" y="32" text-anchor="middle">大手ハウスメーカー</text>
+		<text class="bal-head bal-head--local" x="272" y="32" text-anchor="middle">地元の工務店</text>
+
+		<text class="bal-text" x="76" y="140" text-anchor="middle">建築実績</text>
+		<text class="bal-text" x="76" y="164" text-anchor="middle">保証制度</text>
+
+		<text class="bal-text" x="284" y="140" text-anchor="middle">施主に</text>
+		<text class="bal-text" x="284" y="164" text-anchor="middle">寄り添う</text>
+		<text class="bal-text" x="284" y="188" text-anchor="middle">温かみ</text>
+
+		<text class="bal-mid" x="180" y="144" text-anchor="middle">ナチュール</text>
+		<text class="bal-mid" x="180" y="168" text-anchor="middle">サガさん</text>
+	</svg>
+	<figcaption>大手と地元工務店の「いいとこ取り」に感じた（あくまで私の印象です）</figcaption>
+</figure>
+
+<style>
+	.bal svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.bal-big,
+	.bal-local {
+		fill: none;
+		stroke-width: 2.4;
+	}
+	.bal-big {
+		stroke: var(--c-line-strong);
+	}
+	.bal-local {
+		stroke: var(--c-accent2);
+	}
+	.bal-both {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 3;
+	}
+	.bal-head {
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.bal-head--big {
+		fill: var(--c-text-sub);
+	}
+	.bal-head--local {
+		fill: var(--c-accent2);
+	}
+	.bal-text {
+		fill: var(--c-text);
+		font-size: 15px;
+	}
+	.bal-mid {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+</style>

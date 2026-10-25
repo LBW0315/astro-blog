@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「土地探しなんてこれまで考えもしなかった・・・ ― 家づくり記録⑤」のカード用の絵（自作）
+    左に妻の実家（2階建て）、すぐ隣に、杭とロープで区切った広い土地。土地の中に青磁の小さな平屋。
+    「実家のすぐ近くの、広い土地」という絵。方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 290H610" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 妻の実家（2階建て） -->
+    <path d="M52 150L122 104L192 150Z" fill="#fffdfb"/>
+    <rect x="64" y="150" width="116" height="140" rx="3" fill="#fffdfb"/>
+    <rect x="82" y="170" width="30" height="28" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="132" y="170" width="30" height="28" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="82" y="222" width="30" height="28" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <rect x="134" y="236" width="26" height="54" rx="2" fill="#f2eee9" stroke-width="3.5"/>
+    <!-- すぐ隣、の矢印 -->
+    <path d="M206 236H252M252 236l-13 -11M252 236l-13 11" stroke="#7e4548"/>
+    <!-- 杭とロープで区切った広い土地 -->
+    <path d="M276 290L310 214H590L620 290Z" fill="#e6f0ee" stroke="#93877a" stroke-width="3.5" stroke-dasharray="12 9"/>
+    <path d="M276 290v-26M310 214v-26M590 214v-26M620 290v-26" stroke="#93877a" stroke-width="5"/>
+    <!-- 土地の中の小さな平屋 -->
+    <path d="M340 236L384 210L428 236Z" fill="#2a6058" stroke="#2a6058"/>
+    <rect x="348" y="236" width="72" height="44" rx="3" fill="#fffdfb" stroke="#2a6058"/>
+    <!-- 庭の木 -->
+    <path d="M560 270V244" stroke-width="4"/>
+    <ellipse cx="560" cy="232" rx="16" ry="20" fill="#e6f0ee" stroke="#2a6058"/>
+  </g>
+</svg>

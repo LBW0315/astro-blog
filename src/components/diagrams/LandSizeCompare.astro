@@ -1,0 +1,107 @@
+---
+/*
+  記事「土地探しなんてこれまで考えもしなかった・・・ ― 家づくり記録⑤」専用の図解
+  土地の広さを棒の長さで比べる（手描き風）
+
+  全国の平均は、総務省「令和5年住宅・土地統計調査」の
+  一戸建・長屋建の持ち家の1住宅当たり敷地面積（261.31㎡）。
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、棒の上にそれぞれ名前と面積を書いています。
+  - 目安の広さ：灰色の線の棒
+  - 全国の平均：灰色で塗った棒
+  - 私たちの土地：青磁で塗った棒
+*/
+type Row = { label: string; sqm: number; kind: 'ref' | 'avg' | 'ours' };
+
+const rows: Row[] = [
+	{ label: '30坪（約99㎡）', sqm: 99, kind: 'ref' },
+	{ label: '50坪（約165㎡）', sqm: 165, kind: 'ref' },
+	{ label: '全国の平均　約79坪（約261㎡）', sqm: 261, kind: 'avg' },
+	{ label: '100坪（約331㎡）', sqm: 331, kind: 'ref' },
+	{ label: '私たちの土地　約138坪（約456㎡）', sqm: 456, kind: 'ours' },
+];
+
+const X0 = 16;
+const MAX_W = 326;
+const ROW_H = 56;
+const H = ROW_H * rows.length + 8;
+---
+
+<figure class="lsc">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="lsc-title lsc-desc">
+		<title id="lsc-title">土地の広さの比べ</title>
+		<desc id="lsc-desc">
+			土地の広さを棒の長さで比べた図。30坪は約99平方メートル、50坪は約165平方メートル、全国の一戸建・長屋建の持ち家の平均の敷地は約79坪で約261平方メートル、100坪は約331平方メートル。私たちの土地は約138坪で約456平方メートルあり、全国の平均のおよそ1.7倍。
+		</desc>
+		<defs>
+			<filter id="land-size-compare-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="89"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#land-size-compare-sketch)">
+			{
+				rows.map((r, i) => (
+					<rect
+						class:list={['lsc-bar', `lsc-bar--${r.kind}`]}
+						x={X0}
+						y={i * ROW_H + 30}
+						width={(r.sqm / 456) * MAX_W}
+						height="18"
+						rx="4"
+					/>
+				))
+			}
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r, i) => (
+				<text class:list={['lsc-label', `lsc-label--${r.kind}`]} x={X0} y={i * ROW_H + 22}>
+					{r.label}
+				</text>
+			))
+		}
+	</svg>
+	<figcaption>土地の広さの比べ（全国の平均は、総務省「令和5年住宅・土地統計調査」の一戸建・長屋建の持ち家の1住宅当たり敷地面積）</figcaption>
+</figure>
+
+<style>
+	.lsc svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.lsc-bar {
+		stroke-width: 2;
+	}
+	.lsc-bar--ref {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+	}
+	.lsc-bar--avg {
+		fill: var(--c-line-strong);
+		stroke: var(--c-line-strong);
+	}
+	.lsc-bar--ours {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+	}
+	.lsc-label {
+		fill: var(--c-text);
+		font-size: 15px;
+	}
+	.lsc-label--avg {
+		font-weight: 700;
+	}
+	.lsc-label--ours {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-weight: 700;
+	}
+</style>

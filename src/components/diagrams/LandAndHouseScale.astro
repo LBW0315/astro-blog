@@ -1,0 +1,110 @@
+---
+/*
+  記事「土地探しなんてこれまで考えもしなかった・・・ ― 家づくり記録⑤」専用の図解
+  約138坪の土地と、約36坪の平屋を同じ縮尺で並べたイメージ（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、それぞれに名前を書いています。
+  - 土地：灰色の線
+  - 平屋：青磁の線と淡い青磁の塗り
+  - ドッグラン（考えているだけ）：灰桜の点線＋「これから」のラベル
+
+  縮尺：1m＝12px。土地は 24m×19m（456㎡）、平屋は 13.6m×8.75m（約119㎡）として描いています。
+  土地の形や家の配置は、実際のものではありません。
+*/
+const S = 12; // 1mあたりのpx
+const LAND = { x: 36, y: 44, w: 24 * S, h: 19 * S };
+const HOUSE = { x: LAND.x + 18, y: LAND.y + 18, w: 13.6 * S, h: 8.75 * S };
+const DOG = { x: LAND.x + 150, y: LAND.y + 140, w: 120, h: 72 };
+---
+
+<figure class="lhs">
+	<svg viewBox="0 0 360 284" role="img" aria-labelledby="lhs-title lhs-desc">
+		<title id="lhs-title">約138坪の土地と、約36坪の平屋の大きさ比べ</title>
+		<desc id="lhs-desc">
+			約138坪（約456平方メートル）の土地の中に、約36坪（約119平方メートル）の平屋を、同じ縮尺で置いたイメージ図。平屋を建てても、土地の半分以上が空いている。空いたところにはドッグランも考えている。土地の形や家の配置は実際のものではない。
+		</desc>
+		<defs>
+			<filter id="land-and-house-scale-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="83"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#land-and-house-scale-sketch)">
+			<rect class="lhs-land" x={LAND.x} y={LAND.y} width={LAND.w} height={LAND.h} rx="4"></rect>
+			<rect class="lhs-house" x={HOUSE.x} y={HOUSE.y} width={HOUSE.w} height={HOUSE.h} rx="4"></rect>
+			<rect class="lhs-dog" x={DOG.x} y={DOG.y} width={DOG.w} height={DOG.h} rx="10"></rect>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="lhs-head" x={LAND.x} y="30">土地　約138坪（約456㎡）</text>
+		<text class="lhs-house-text" x={HOUSE.x + HOUSE.w / 2} y={HOUSE.y + 48} text-anchor="middle">平屋　約36坪</text>
+		<text class="lhs-house-sub" x={HOUSE.x + HOUSE.w / 2} y={HOUSE.y + 70} text-anchor="middle">（約119㎡）</text>
+		<text class="lhs-dog-text" x={DOG.x + DOG.w / 2} y={DOG.y + 44} text-anchor="middle">ドッグランも？</text>
+		<g class="lhs-tag">
+			<rect x={DOG.x + DOG.w - 72} y={DOG.y - 13} width="72" height="24" rx="12"></rect>
+			<text x={DOG.x + DOG.w - 36} y={DOG.y - 1} text-anchor="middle" dominant-baseline="central">これから</text>
+		</g>
+	</svg>
+	<figcaption>約138坪の土地と約36坪の平屋を、同じ縮尺で並べたイメージ（土地の形や家の配置は実際とは違います）</figcaption>
+</figure>
+
+<style>
+	.lhs svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.lhs-land {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 2.4;
+	}
+	.lhs-house {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.6;
+	}
+	.lhs-dog {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 6 4;
+	}
+	.lhs-head {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.lhs-house-text {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.lhs-house-sub {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+	}
+	.lhs-dog-text {
+		fill: var(--c-accent2);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.lhs-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.lhs-tag text {
+		fill: var(--c-accent2);
+		font-size: 15px;
+		font-weight: 700;
+	}
+</style>

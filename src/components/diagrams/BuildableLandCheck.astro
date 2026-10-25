@@ -1,0 +1,134 @@
+---
+/*
+  記事「土地探しなんてこれまで考えもしなかった・・・ ― 家づくり記録⑤」専用の図解
+  土地が見つかってから、家を建てられるまでに確かめること（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、各段に番号と文字を付け、読む順番は矢印で一本道にしています。
+  - 確かめること：灰色の線の箱（①〜③）
+  - 許可を待つところ：灰桜の線の箱と、灰桜の補足
+  - 家を建てられる：青磁で塗った箱
+*/
+type Check = { y: number; h: number; lines: string[] };
+
+const X = 24;
+const W = 312;
+const checks: Check[] = [
+	{ y: 92, h: 60, lines: ['① 農地？', '→ 農地転用の許可・届出'] },
+	{ y: 160, h: 82, lines: ['② 建てられる区域？', '→ 建てにくい区域は条件つき', '（50戸連たん など）'] },
+	{ y: 250, h: 60, lines: ['③ 道路は？', '→ 幅4m以上の道路に2m以上接する'] },
+];
+---
+
+<figure class="blc">
+	<svg viewBox="0 0 360 498" role="img" aria-labelledby="blc-title blc-desc">
+		<title id="blc-title">土地が見つかってから、家を建てられるまでに確かめること</title>
+		<desc id="blc-desc">
+			土地が見つかったら、次の3つを確かめる。1つ目は、農地かどうか。農地なら農地転用の許可や届出が必要。2つ目は、建てられる区域かどうか。建てにくい区域では、50戸連たんなどの条件を満たす必要がある。3つ目は道路で、原則として幅4メートル以上の道路に2メートル以上接している必要がある。許可や確認がそろって、家を建てられる。私たちは、許可が下りるまで2〜3か月かかった。
+		</desc>
+		<defs>
+			<filter id="buildable-land-check-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="97"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#buildable-land-check-sketch)">
+			<rect class="blc-start" x="80" y="14" width="200" height="44" rx="12"></rect>
+			<path class="blc-arrow" d="M180 62v22m-7 -8l7 8 7 -8"></path>
+			{checks.map((c) => <rect class="blc-check" x={X} y={c.y} width={W} height={c.h} rx="10" />)}
+			<path class="blc-arrow" d="M180 316v22m-7 -8l7 8 7 -8"></path>
+			<rect class="blc-wait" x="80" y="342" width="200" height="44" rx="12"></rect>
+			<path class="blc-arrow" d="M180 418v22m-7 -8l7 8 7 -8"></path>
+			<rect class="blc-goal" x="80" y="444" width="200" height="44" rx="12"></rect>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="blc-box-text" x="180" y="41" text-anchor="middle">土地が見つかる</text>
+		{
+			checks.map((c) =>
+				c.lines.map((t, i) => (
+					<text class:list={['blc-check-text', { 'blc-check-text--q': i === 0 }]} x={X + 16} y={c.y + 25 + i * 22}>
+						{t}
+					</text>
+				)),
+			)
+		}
+		<text class="blc-wait-text" x="180" y="369" text-anchor="middle">許可・確認がそろう</text>
+		<text class="blc-note" x="180" y="408" text-anchor="middle">私たちは、ここまで2〜3か月かかった</text>
+		<text class="blc-goal-text" x="180" y="471" text-anchor="middle">家を建てられる</text>
+	</svg>
+	<figcaption>土地が見つかってから、家を建てられるまでに確かめること（条件は土地や自治体によって違います）</figcaption>
+</figure>
+
+<style>
+	.blc svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.blc-start {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.blc-check {
+		fill: var(--c-surface);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.blc-wait {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2.2;
+	}
+	.blc-goal {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.blc-arrow {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.blc-box-text {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.blc-check-text {
+		fill: var(--c-text);
+		font-size: 15px;
+	}
+	.blc-check-text--q {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.blc-wait-text {
+		fill: var(--c-accent2);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.blc-note {
+		fill: var(--c-accent2);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.blc-goal-text {
+		fill: var(--c-on-accent);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+</style>

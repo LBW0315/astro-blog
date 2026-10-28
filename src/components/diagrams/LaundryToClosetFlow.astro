@@ -1,0 +1,126 @@
+---
+/*
+  記事「NATUR-sagaとの家づくり【間取り編】32坪の平屋に夫婦の希望を詰め込んだ ― 家づくり記録⑥」専用の図解
+  ランドリールームで「洗う → 干す → たたむ（造作棚）」まで済ませ、すぐ隣のファミリークローゼットへ「しまう」流れ（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  - 部屋：青磁の線と淡い青磁の塗り（間取りとして決まっている部分）
+  - 作業：白い札に番号を付けて、読む順番を矢印で一本道にしています
+  部屋の大きさや形は、実際のものではありません。
+*/
+const LEFT = { x: 12, y: 12, w: 196, h: 266 };
+const RIGHT = { x: 216, y: 120, w: 132, h: 158 };
+const STEP_W = 160;
+const STEP_X = LEFT.x + (LEFT.w - STEP_W) / 2;
+const CX = LEFT.x + LEFT.w / 2;
+const RCX = RIGHT.x + RIGHT.w / 2;
+const steps = [
+	{ y: 58, h: 44, label: '① 洗う' },
+	{ y: 126, h: 44, label: '② 干す' },
+	{ y: 194, h: 66, label: '③ たたむ', sub: '造作棚で立ったまま' },
+];
+const LAST = steps[steps.length - 1];
+const PUT = { x: RIGHT.x + 14, y: LAST.y, w: RIGHT.w - 28, h: LAST.h };
+const ARROW_Y = LAST.y + LAST.h / 2;
+---
+
+<figure class="ltc">
+	<svg viewBox="0 0 360 290" role="img" aria-labelledby="ltc-title ltc-desc">
+		<title id="ltc-title">ランドリールームからファミリークローゼットへの洗濯の流れ</title>
+		<desc id="ltc-desc">
+			ランドリールームの中で、1番目に洗う、2番目に干す、3番目に造作棚で立ったままたたむ。たたんだ洗濯物は、壁1枚へだてたすぐ隣のファミリークローゼットへ運び、4番目にしまう。洗濯から収納まで、ほとんど移動せずに終わる流れ。部屋の大きさや形は実際のものではない。
+		</desc>
+		<defs>
+			<filter id="laundry-to-closet-flow-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="28"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#laundry-to-closet-flow-sketch)">
+			<rect class="ltc-room" x={LEFT.x} y={LEFT.y} width={LEFT.w} height={LEFT.h} rx="6"></rect>
+			<rect class="ltc-room" x={RIGHT.x} y={RIGHT.y} width={RIGHT.w} height={RIGHT.h} rx="6"></rect>
+			{steps.map((s) => <rect class="ltc-step" x={STEP_X} y={s.y} width={STEP_W} height={s.h} rx="10"></rect>)}
+			<rect class="ltc-step ltc-step--put" x={PUT.x} y={PUT.y} width={PUT.w} height={PUT.h} rx="10"></rect>
+			{steps.slice(0, -1).map((s, i) => {
+				const y1 = s.y + s.h + 4;
+				const y2 = steps[i + 1].y - 4;
+				return <path class="ltc-arrow" d={`M${CX} ${y1}V${y2}M${CX} ${y2}l-6 -7M${CX} ${y2}l6 -7`}></path>;
+			})}
+			<path
+				class="ltc-arrow"
+				d={`M${STEP_X + STEP_W + 4} ${ARROW_Y}H${PUT.x - 4}M${PUT.x - 4} ${ARROW_Y}l-7 -6M${PUT.x - 4} ${ARROW_Y}l-7 6`}
+			></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="ltc-room-name" x={CX} y="40" text-anchor="middle">ランドリールーム</text>
+		<text class="ltc-room-name" x={RCX} y={RIGHT.y + 28} text-anchor="middle">ファミリー</text>
+		<text class="ltc-room-name" x={RCX} y={RIGHT.y + 49} text-anchor="middle">クローゼット</text>
+		{
+			steps.map((s) => (
+				<>
+					<text class="ltc-step-text" x={CX} y={s.sub ? s.y + 26 : s.y + s.h / 2} text-anchor="middle" dominant-baseline="central">
+						{s.label}
+					</text>
+					{s.sub && (
+						<text class="ltc-step-sub" x={CX} y={s.y + 48} text-anchor="middle" dominant-baseline="central">
+							{s.sub}
+						</text>
+					)}
+				</>
+			))
+		}
+		<text class="ltc-step-text" x={RCX} y={PUT.y + 26} text-anchor="middle" dominant-baseline="central">④ しまう</text>
+		<text class="ltc-step-sub" x={RCX} y={PUT.y + 48} text-anchor="middle" dominant-baseline="central">すぐ隣へ</text>
+	</svg>
+	<figcaption>洗ってからしまうまでを、ランドリールームとすぐ隣のファミクロで終わらせるイメージ（部屋の形は実際とは違います）</figcaption>
+</figure>
+
+<style>
+	.ltc svg {
+		display: block;
+		width: 100%;
+		max-width: 26rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.ltc-room {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.6;
+	}
+	.ltc-step {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.ltc-step--put {
+		stroke: var(--c-accent);
+	}
+	.ltc-arrow {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ltc-room-name {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.ltc-step-text {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.ltc-step-sub {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+	}
+</style>

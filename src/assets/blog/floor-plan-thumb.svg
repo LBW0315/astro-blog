@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「NATUR-sagaとの家づくり【間取り編】32坪の平屋に夫婦の希望を詰め込んだ ― 家づくり記録⑥」のカード用の絵（自作）
+    真上から見た平屋の間取り図を大きく1枚。広いリビングを青磁で塗り、中にアイランドキッチン。右下から灰桜の鉛筆が描き込んでいる。
+    「間取りを考えている」という絵。方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 床（白）と、広いリビング（青磁の塗り） -->
+    <rect x="132" y="56" width="360" height="248" rx="3" fill="#fffdfb" stroke="none"/>
+    <rect x="262" y="132" width="230" height="138" fill="#e6f0ee" stroke="none"/>
+    <!-- 外壁 -->
+    <rect x="132" y="56" width="360" height="248" rx="3"/>
+    <!-- 左の列：寝室・水まわり・ランドリー -->
+    <path d="M262 56V304"/>
+    <path d="M132 132H230"/>
+    <path d="M132 206H262"/>
+    <!-- 右上：こども部屋とファミクロ -->
+    <path d="M262 132H330M372 132H492"/>
+    <path d="M392 56V132"/>
+    <!-- 右下：書斎2つ -->
+    <path d="M404 270H492M448 270V304"/>
+    <path d="M262 270H366"/>
+    <!-- ドアの弧 -->
+    <path d="M230 132a32 32 0 0 1 32 -32" stroke-width="3" stroke="#93877a"/>
+    <path d="M330 132a42 42 0 0 0 42 -42" stroke-width="3" stroke="#93877a"/>
+    <!-- アイランドキッチン -->
+    <rect x="300" y="168" width="30" height="74" rx="3" fill="#fffdfb" stroke="#2a6058" stroke-width="4"/>
+    <!-- ダイニングテーブル -->
+    <rect x="378" y="176" width="58" height="34" rx="4" fill="#fffdfb" stroke-width="3.5"/>
+    <!-- 鉛筆（灰桜）：右下から描き込む -->
+    <g transform="translate(560 300) rotate(-128)">
+      <rect x="0" y="-15" width="150" height="30" rx="3" fill="#f6eaea" stroke="#7e4548"/>
+      <path d="M150 -15L190 0L150 15Z" fill="#fffdfb" stroke="#7e4548"/>
+      <path d="M178 -4.5L190 0L178 4.5Z" fill="#7e4548" stroke="#7e4548" stroke-width="3"/>
+      <path d="M30 -15V15" stroke="#7e4548" stroke-width="3.5"/>
+    </g>
+  </g>
+</svg>

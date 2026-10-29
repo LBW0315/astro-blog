@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「NATUR-sagaとの家づくり【住宅設備編】キッチンが400万円！？夢のマイホームが本当に夢になりそうになった話 ― 家づくり記録⑦」のカード用の絵（自作）
+    正面から見たキッチン（厚い天板・青磁の扉・グースネックの蛇口）を大きく1つ。右に灰桜の硬貨が高く積み上がり、その横に上向きの矢印。
+    「キッチンが思った以上に高かった」という絵。方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 床 -->
+    <path d="M40 304H600" stroke="#93877a" stroke-width="3"/>
+    <!-- キッチン：扉（青磁）と厚い天板 -->
+    <rect x="86" y="190" width="272" height="114" rx="3" fill="#e6f0ee" stroke="#2a6058"/>
+    <path d="M176 190V304M268 190V304" stroke="#2a6058" stroke-width="3.5"/>
+    <path d="M116 212H146M208 212H238M298 212H328" stroke="#2a6058" stroke-width="3.5"/>
+    <rect x="70" y="164" width="304" height="26" rx="3" fill="#fffdfb"/>
+    <!-- 蛇口 -->
+    <path d="M286 164V112Q286 92 306 92H316Q332 92 332 108V118" stroke-width="4"/>
+    <path d="M276 164H298" stroke-width="4"/>
+    <!-- 積み上がった硬貨（灰桜） -->
+    <rect x="432" y="284" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="428" y="264" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="434" y="244" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="430" y="224" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="436" y="204" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="431" y="184" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="435" y="164" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="429" y="144" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="433" y="124" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <rect x="430" y="104" width="96" height="20" rx="10" fill="#f6eaea" stroke="#7e4548"/>
+    <!-- 上向きの矢印（灰桜） -->
+    <path d="M574 286V70M574 70l-18 22M574 70l18 22" stroke="#7e4548" stroke-width="5"/>
+  </g>
+</svg>

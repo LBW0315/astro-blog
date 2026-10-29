@@ -1,0 +1,129 @@
+---
+/*
+  記事「NATUR-sagaとの家づくり【住宅設備編】キッチンが400万円！？夢のマイホームが本当に夢になりそうになった話 ― 家づくり記録⑦」専用の図解
+  家は建物だけでは終わらない：建物の中の設備（キッチン・お風呂・トイレ）と、家のまわりの外構（カーポート・宅配ボックス・フェンス）（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  - 建物：青磁の実線と淡い青磁の塗り（間取りまで決まった部分）
+  - 設備と外構：灰桜の点線の札（これから選ぶ部分）
+*/
+const HOUSE = { x: 40, y: 124, w: 280, h: 116 };
+const GROUND_Y = HOUSE.y + HOUSE.h;
+const CHIP_H = 44;
+const inside = { y: 168, w: 76, gap: 10, items: ['キッチン', 'お風呂', 'トイレ'] };
+const outside = { y: 284, w: 106, gap: 7,items: ['カーポート', '宅配ボックス', 'フェンス'] };
+const rowX = (row: typeof inside, i: number) => {
+	const total = row.items.length * row.w + (row.items.length - 1) * row.gap;
+	return 180 - total / 2 + i * (row.w + row.gap);
+};
+const LEGEND_Y = 362;
+---
+
+<figure class="hbb">
+	<svg viewBox="0 0 360 380" role="img" aria-labelledby="hbb-title hbb-desc">
+		<title id="hbb-title">家は建物だけじゃない：中の設備と、まわりの外構</title>
+		<desc id="hbb-desc">
+			家の絵。建物と間取りは決まった部分として実線で描いている。建物の中には、これから選ぶ設備としてキッチン、お風呂、トイレが点線の札で並ぶ。地面の下、家のまわりには、これから選ぶ外構としてカーポート、宅配ボックス、フェンスが点線の札で並ぶ。ショールームで価格に驚いたのは、どれもこの「これから選ぶ」部分だった。
+		</desc>
+		<defs>
+			<filter id="house-beyond-building-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="29"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#house-beyond-building-sketch)">
+			<path
+				class="hbb-house"
+				d={`M${HOUSE.x - 16} ${HOUSE.y}L180 40L${HOUSE.x + HOUSE.w + 16} ${HOUSE.y}Z`}
+			></path>
+			<rect class="hbb-house" x={HOUSE.x} y={HOUSE.y} width={HOUSE.w} height={HOUSE.h}></rect>
+			<path class="hbb-ground" d={`M12 ${GROUND_Y}H348`}></path>
+			{inside.items.map((_, i) => <rect class="hbb-chip" x={rowX(inside, i)} y={inside.y} width={inside.w} height={CHIP_H} rx="10"></rect>)}
+			{outside.items.map((_, i) => <rect class="hbb-chip" x={rowX(outside, i)} y={outside.y} width={outside.w} height={CHIP_H} rx="10"></rect>)}
+			<rect class="hbb-key hbb-key--done" x="58" y={LEGEND_Y - 9} width="30" height="18" rx="4"></rect>
+			<rect class="hbb-chip" x="178" y={LEGEND_Y - 9} width="30" height="18" rx="4"></rect>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="hbb-name" x="180" y="100" text-anchor="middle">建物・間取り</text>
+		<text class="hbb-sub" x="180" y="152" text-anchor="middle">中の設備</text>
+		{
+			inside.items.map((label, i) => (
+				<text class="hbb-chip-text" x={rowX(inside, i) + inside.w / 2} y={inside.y + CHIP_H / 2} text-anchor="middle" dominant-baseline="central">
+					{label}
+				</text>
+			))
+		}
+		<text class="hbb-sub" x="180" y="270" text-anchor="middle">家のまわり（外構）</text>
+		{
+			outside.items.map((label, i) => (
+				<text class="hbb-chip-text" x={rowX(outside, i) + outside.w / 2} y={outside.y + CHIP_H / 2} text-anchor="middle" dominant-baseline="central">
+					{label}
+				</text>
+			))
+		}
+		<text class="hbb-key-text" x="96" y={LEGEND_Y} dominant-baseline="central">決まった</text>
+		<text class="hbb-key-text hbb-key-text--todo" x="216" y={LEGEND_Y} dominant-baseline="central">これから選ぶ</text>
+	</svg>
+	<figcaption>間取りが決まっても、中の設備と家のまわりの外構はこれから。ショールームで驚いたのは、どれもこの部分でした</figcaption>
+</figure>
+
+<style>
+	.hbb svg {
+		display: block;
+		width: 100%;
+		max-width: 26rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.hbb-house {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.6;
+		stroke-linejoin: round;
+	}
+	.hbb-ground {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+	}
+	.hbb-chip {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.hbb-key--done {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.hbb-name {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.hbb-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.hbb-chip-text {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.hbb-key-text {
+		fill: var(--c-accent);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.hbb-key-text--todo {
+		fill: var(--c-accent2);
+	}
+</style>

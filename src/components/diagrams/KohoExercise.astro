@@ -1,0 +1,207 @@
+---
+/*
+  記事「古法運動（古法健身、古法養生操）〜古くから伝わるには理由がある！」専用の図解
+  中国武術の達人の3Dの人物が動きをくり返す動画を見せる
+
+  使い方（.mdx ファイルの中で）：
+    <KohoExercise move="mabuSway" />
+
+  動画は public/videos/koho/ にある。動きの定義と作り方は scripts/koho-exercise/ を参照
+  速さは、もとにした動画から測った実際の速さ
+
+  動画は画面に入ったときだけ読み込んで再生し、画面の外に出たら止める。
+  「動きを減らす」設定（prefers-reduced-motion）のときは、動かさずに代表の1コマだけを見せる。
+  図の下のボタンで、いつでも止めたり動かしたりできる。
+*/
+const MOVES = {
+	mabuSway: {
+		title: '馬歩で腰を左右にゆらす動き',
+		desc: '正面から見た図。足を大きく開いて腰を落とし、腕を胸の前で組む。腰を左右にゆらして、重心を片足ずつに移す。',
+		caption: '馬歩ゆらし（正面から見た図）',
+	},
+	windmill: {
+		title: '足を前後に開いて両腕を風車のように回す動き',
+		desc: 'ななめ横から見た図。足を前後に大きく開いて前のひざを曲げる。両腕を伸ばしたまま、片方が上のときもう片方が下になるように、大きく回す。',
+		caption: '大きな風車回し（ななめ横から見た図）',
+	},
+	sideStretch: {
+		title: '足を大きく開いて体を左右に倒す動き',
+		desc: '正面から見た図。足を大きく開き、両腕をななめ上に広げる。腰を片側へ移しながら、体を反対側へ倒す。片方の腕がほぼ水平に、もう片方が真上になる。これを左右くり返す。',
+		caption: '左右ストレッチ（正面から見た図）',
+	},
+	rotate: {
+		title: '両腕を広げて上半身を左右にひねる動き',
+		desc: '正面から見た図。足を開いて立ち、両腕を横に広げる。足はそのままで、上半身を左右に大きくひねり、腕も一緒に振る。',
+		caption: '旋転乾坤（正面から見た図）',
+	},
+	upDown: {
+		title: '足をそろえて立ち両腕を交互に上下へ振る動き',
+		desc: '真横から見た図。足を軽くそろえて立つ。伸ばした両腕を、片方は頭の上へ、もう片方は腰の前へ。上下を入れ替えながら、大きく振る。',
+		caption: '上下斉発（真横から見た図）',
+	},
+	mabuTwist: {
+		title: '馬歩で手を腰に当てて左右にひねる動き',
+		desc: '正面から見た図。足を開いて腰を落とし、両手を腰に当てる。腰の高さを変えないまま、上半身を左右にひねる。',
+		caption: '馬歩ツイスト（正面から見た図）',
+	},
+	crossKick: {
+		title: '片脚を高く蹴り上げて反対の手で足先に触れる動き',
+		desc: 'ななめ横から見た図。片脚を伸ばしたまま前に高く蹴り上げ、反対側の手で足先に触れる。下ろしたら、反対の脚でも同じように行う。',
+		caption: 'クロスキック（ななめ横から見た図）',
+	},
+	eagle: {
+		title: '腕を上げて手を合わせ腰を落としながら掌を下ろす動き',
+		desc: '正面から見た図。足を大きく開いて立つ。腕を広げながら上げて、頭の上で手を合わせる。腕を広げて下ろしながら腰を落とし、掌を下へ向ける。',
+		caption: '鷹撃長空（正面から見た図）',
+	},
+	sunJump: {
+		title: '頭の上で手を合わせて軽く跳ねる動き',
+		desc: '後ろから見た図。頭の上で手を合わせ、軽く跳ねながら片足ずつ上げる。体も少し左右に倒す。',
+		caption: '昇陽ジャンプ（後ろから見た図）',
+	},
+	wildArms: {
+		title: '力を抜いて腕を振る動き',
+		desc: '正面から見た図。足を軽く開いて立ち、小さく弾みながら、力を抜いた腕を左右に振る。上半身も一緒に回る。',
+		caption: 'ワイルド腕振り（正面から見た図）',
+	},
+	mabuSide: {
+		title: '馬歩のまま片腕を頭の上へ回して体を横へ倒す動き',
+		desc: '正面から見た図。足を開いて腰を落とす。片方の腕を頭の上を通して、体を真横に倒す。もう片方の手は床のほうへ伸ばす。起き上がって、反対側へ倒す。',
+		caption: '馬歩サイド展開（正面から見た図）',
+	},
+	moonHold: {
+		title: '腰を落として月を抱く形から手を上へ通して立ち上がる動き',
+		desc: '正面から見た図。腰を落として、腕で大きな丸を抱える。手を合わせて胸の前から頭の上へ通しながら、ひざを伸ばして立ち上がる。腕を広げて下ろしながら、また腰を落とす。',
+		caption: '穿掌・月を抱く（正面から見た図）',
+	},
+	kongoSquat: {
+		title: '深く腰を落として重心を左右に移す動き',
+		desc: '正面から見た図。足をとても大きく開いて深く腰を落とし、胸の前で手のひらを向かい合わせる。片方のひざを深く曲げ、もう片方の脚を伸ばす。重心を反対の足へ移して、くり返す。',
+		caption: '金剛・仆歩スクワット（正面から見た図）',
+	},
+	dragonSwim: {
+		title: '低い姿勢で左右に移りながら腕を大きく動かす動き',
+		desc: '正面から見た図。深く腰を落としたまま、片方の足へ重心を移して体をそちらへ向ける。腕を頭の上へ回しながら、反対の足へ移る。',
+		caption: '蛟龍遊走（正面から見た図）',
+	},
+	tortoise: {
+		title: '前屈したまま片手を床へもう片方の手を天井へ向ける動き',
+		desc: '正面から見た図。足を大きく開いて上半身を前に倒し、両腕を横に広げる。上半身をひねって、片手を床へ、もう片方の手を天井へ向ける。反対側にもひねる。',
+		caption: '金亀戯水（正面から見た図）',
+	},
+	waistPelvis: {
+		title: '腰を左右にゆらしながら上半身をひねる動き',
+		desc: '後ろから見た図。足を開いて立ち、片腕をななめ上に、もう片方をななめ下に伸ばす。腰を左右にゆらしながら上半身をひねり、腕の上下を入れ替える。',
+		caption: '腰ひねり＋骨盤ゆらし（後ろから見た図）',
+	},
+	dragonSpine: {
+		title: '腰を落として体を前に倒し起き上がって胸を開く動き',
+		desc: 'ななめ横から見た図。腰を落としながら上半身を前に倒し、両腕を前へ伸ばす。そこから腰を前へ押し出すように起き上がり、胸を開いて少し反る。これをくり返す。',
+		caption: '開龍脊（ななめ横から見た図）',
+	},
+};
+
+interface Props {
+	move: keyof typeof MOVES;
+}
+
+const { move } = Astro.props;
+const m = MOVES[move];
+---
+<figure class="koho-ex">
+	<video
+		src={`/videos/koho/${move}.mp4`}
+		poster={`/videos/koho/${move}.jpg`}
+		width="540"
+		height="540"
+		muted
+		loop
+		playsinline
+		preload="none"
+		aria-label={`${m.title}。${m.desc}`}
+	></video>
+	<figcaption>
+		<span>{m.caption}</span>
+		<button class="ke-toggle" type="button" data-koho-toggle aria-pressed="false" hidden>
+			<span class="ke-toggle__stop">動きを止める</span>
+			<span class="ke-toggle__play">動かす</span>
+		</button>
+	</figcaption>
+</figure>
+
+<script>
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	// 再生してよい状態で、画面に入っている動画だけを動かす
+	const sync = (figure: HTMLElement) => {
+		const video = figure.querySelector('video')!;
+		if (figure.dataset.state === 'playing' && figure.dataset.visible === 'true') {
+			video.play().catch(() => {});
+		} else {
+			video.pause();
+		}
+	};
+
+	const watcher = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) {
+				const figure = entry.target as HTMLElement;
+				figure.dataset.visible = String(entry.isIntersecting);
+				sync(figure);
+			}
+		},
+		{ rootMargin: '100px' },
+	);
+
+	// 図ごとの「動きを止める／動かす」ボタン
+	for (const button of document.querySelectorAll<HTMLButtonElement>('[data-koho-toggle]')) {
+		const figure = button.closest<HTMLElement>('.koho-ex')!;
+		const set = (playing: boolean) => {
+			figure.dataset.state = playing ? 'playing' : 'paused';
+			button.setAttribute('aria-pressed', String(!playing));
+			sync(figure);
+		};
+		set(!reduce);
+		button.hidden = false;
+		button.addEventListener('click', () => set(figure.dataset.state !== 'playing'));
+		watcher.observe(figure);
+	}
+</script>
+
+<style>
+	.koho-ex video {
+		display: block;
+		width: 100%;
+		max-width: 22rem;
+		height: auto;
+		margin-inline: auto;
+		border-radius: var(--radius-md, 14px);
+		background: #f2eee9;
+	}
+	.koho-ex figcaption {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: var(--sp-2) var(--sp-4);
+	}
+	.ke-toggle {
+		min-height: var(--tap);
+		padding: var(--sp-1) var(--sp-4);
+		border: 1px solid var(--c-line-strong);
+		border-radius: var(--radius-pill);
+		background: var(--c-surface-raised);
+		color: var(--c-accent);
+		font: inherit;
+		font-weight: 700;
+		cursor: pointer;
+	}
+	.ke-toggle:hover {
+		background: var(--c-accent-wash);
+		color: var(--c-accent-hover);
+	}
+	.ke-toggle[aria-pressed='false'] .ke-toggle__play,
+	.ke-toggle[aria-pressed='true'] .ke-toggle__stop {
+		display: none;
+	}
+</style>

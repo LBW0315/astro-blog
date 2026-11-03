@@ -1,0 +1,127 @@
+---
+/*
+  記事「感音性難聴ってどんな聞こえ方？生まれつき難聴の私がイラストで例えてみた」専用の図解
+  音が耳から脳へ届くまでの道のりと、感音性難聴で問題が生じる場所（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+
+  色だけで区別しないように、次の組み合わせにしています。
+  - 問題が生じる場所：灰桜の実線の枠でまとめて、上にラベル
+  - それ以外：くすんだグレーの実線の枠
+*/
+type Row = { y: number; title: string; sub: string; focus?: boolean };
+
+const BOX_X = 44;
+const BOX_W = 272;
+const BOX_H = 58;
+const CX = 180;
+
+const rows: Row[] = [
+	{ y: 14, title: '外耳', sub: '耳の穴。音の入口' },
+	{ y: 94, title: '中耳', sub: '鼓膜と小さな骨が振動を伝える' },
+	{ y: 214, title: '内耳（蝸牛）', sub: '振動を電気の信号に変える', focus: true },
+	{ y: 294, title: '聴神経', sub: '信号を脳へ送る', focus: true },
+	{ y: 394, title: '脳', sub: '音や言葉として受け取る' },
+];
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 466;
+---
+
+<figure class="hsp">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="hsp-title hsp-desc">
+		<title id="hsp-title">音が耳から脳へ届くまでと、感音性難聴で問題が生じる場所</title>
+		<desc id="hsp-desc">
+			音は、外耳、中耳、内耳の蝸牛、聴神経の順に伝わり、脳で音や言葉として受け取られる。感音性難聴で問題が生じるのは、主に内耳の蝸牛と聴神経のあたり。
+		</desc>
+		<defs>
+			<filter id="hsp-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="9"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#hsp-sketch)">
+			<rect class="hsp-group" x="24" y="176" width="312" height="190" rx="16"></rect>
+			{
+				rows.map((r) => (
+					<rect
+						class:list={['hsp-box', { 'hsp-box--focus': r.focus }]}
+						x={BOX_X}
+						y={r.y}
+						width={BOX_W}
+						height={BOX_H}
+						rx="10"
+					/>
+				))
+			}
+			<path class="hsp-arrow" d={arrow(74, 90)} />
+			<path class="hsp-arrow" d={arrow(154, 172)} />
+			<path class="hsp-arrow" d={arrow(274, 290)} />
+			<path class="hsp-arrow" d={arrow(354, 390)} />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="hsp-group-label" x="180" y="200" text-anchor="middle">感音性難聴で問題が生じるところ</text>
+		{
+			rows.map((r) => (
+				<g>
+					<text class="hsp-name" x={CX} y={r.y + 24} text-anchor="middle">
+						{r.title}
+					</text>
+					<text class="hsp-sub" x={CX} y={r.y + 45} text-anchor="middle">
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+	</svg>
+	<figcaption>音が脳へ届くまでの道のり</figcaption>
+</figure>
+
+<style>
+	.hsp svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.hsp-group {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+	}
+	.hsp-box {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.hsp-box--focus {
+		stroke: var(--c-accent2);
+	}
+	.hsp-arrow {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.hsp-name,
+	.hsp-group-label {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.hsp-group-label {
+		fill: var(--c-accent2);
+	}
+	.hsp-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

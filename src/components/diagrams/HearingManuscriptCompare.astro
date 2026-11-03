@@ -1,0 +1,165 @@
+---
+/*
+  記事「感音性難聴ってどんな聞こえ方？生まれつき難聴の私がイラストで例えてみた」専用の図解
+  同じ文章を原稿用紙に書いて左右（狭い画面では上下）に並べ、会話の「虫食い」を見せる（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、マス目だけにかけています。
+  右の文字のにじみは「聞き取りにくさ」の例えそのものなので、文字にぼかしをかけています。
+
+  色だけで区別しないように、次の組み合わせにしています。
+  - 一般的な聞こえ方：青磁の実線の枠、すべてのマスに文字
+  - 私の場合：くすんだグレーの点線の枠、穴は灰桜の淡い地に点線、残りの文字はぼかし
+*/
+const SENTENCE = '今日は天気がいいので、公園に散歩に行きましょう';
+const COLS = 8;
+const CELL = 34;
+const GAP = 8;
+const PAD = 8;
+
+// 記事本文の「今日は〇〇がいいので、〇〇に散歩に〇〇ましょう」の〇〇にあたる文字
+const HOLES = new Set([3, 4, 11, 12, 17, 18]);
+// にじみが強い文字。残りは弱いにじみ
+const STRONG = new Set([2, 6, 8, 14, 16, 20, 21]);
+
+const cells = Array.from({ length: COLS * 3 }, (_, i) => ({
+	i,
+	x: PAD + (i % COLS) * CELL,
+	y: PAD + Math.floor(i / COLS) * (CELL + GAP),
+	ch: SENTENCE[i] ?? '',
+}));
+
+const W = PAD * 2 + COLS * CELL;
+const H = PAD * 2 + 3 * CELL + 2 * GAP;
+
+const panels = [
+	{
+		side: 'clear',
+		label: '一般的な聞こえ方のイメージ',
+		caption: '文字がすべて、きれいに並んでいる',
+		desc: '原稿用紙に「今日は天気がいいので、公園に散歩に行きましょう」と全部の文字がくっきり書かれている',
+	},
+	{
+		side: 'gap',
+		label: '私の場合（感音性難聴）',
+		caption: '抜けたところは、前後から予測して補う',
+		desc: '同じ原稿用紙で「天気」「公園」「行き」のマスが空いて穴になり、残った「今日は」「がいいので」などの文字もにじんでいる',
+	},
+];
+---
+
+<figure class="hmc">
+	<div class="hmc__panels">
+		{
+			panels.map((p) => (
+				<div class:list={['hmc-panel', `hmc-panel--${p.side}`]}>
+					<p class="hmc-label">{p.label}</p>
+					<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${p.label}：${p.desc}`}>
+						<defs>
+							<filter id={`hmc-${p.side}-sketch`} x="-3%" y="-3%" width="106%" height="106%">
+								<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="5" />
+								<feDisplacementMap in="SourceGraphic" scale="2.5" />
+							</filter>
+							<filter id="hmc-soft" x="-30%" y="-30%" width="160%" height="160%">
+								<feGaussianBlur stdDeviation="0.7" />
+							</filter>
+							<filter id="hmc-strong" x="-40%" y="-40%" width="180%" height="180%">
+								<feGaussianBlur stdDeviation="1.5" />
+							</filter>
+						</defs>
+						<g filter={`url(#hmc-${p.side}-sketch)`}>
+							{
+								cells.map((c) => (
+									<rect
+										class:list={['hmc-cell', { 'hmc-cell--hole': p.side === 'gap' && HOLES.has(c.i) }]}
+										x={c.x}
+										y={c.y}
+										width={CELL}
+										height={CELL}
+									/>
+								))
+							}
+						</g>
+						{
+							cells
+								.filter((c) => c.ch && !(p.side === 'gap' && HOLES.has(c.i)))
+								.map((c) => (
+									<text
+										class="hmc-char"
+										x={c.x + CELL / 2}
+										y={c.y + CELL / 2}
+										text-anchor="middle"
+										dominant-baseline="central"
+										filter={p.side === 'gap' ? `url(#${STRONG.has(c.i) ? 'hmc-strong' : 'hmc-soft'})` : undefined}
+									>
+										{c.ch}
+									</text>
+								))
+						}
+					</svg>
+					<p class="hmc-caption">{p.caption}</p>
+				</div>
+			))
+		}
+	</div>
+	<figcaption>同じ言葉でも、穴が空いて、にじんで届きます</figcaption>
+</figure>
+
+<style>
+	.hmc__panels {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+		gap: var(--sp-3);
+	}
+	.hmc-panel {
+		display: flex;
+		flex-direction: column;
+		padding: var(--sp-3);
+		background: var(--c-surface-raised);
+		border: 2px solid var(--c-accent);
+		border-radius: 14px;
+	}
+	.hmc-panel--gap {
+		border: 2px dashed var(--c-line-strong);
+	}
+	.hmc-label,
+	.hmc-caption {
+		margin: 0;
+		font-family: var(--font-heading);
+		font-weight: 700;
+		text-align: center;
+		line-height: 1.5;
+		font-size: 0.9375rem;
+	}
+	.hmc-label {
+		color: var(--c-accent);
+	}
+	.hmc-panel--gap .hmc-label {
+		color: var(--c-text-sub);
+	}
+	.hmc-caption {
+		color: var(--c-text);
+	}
+	.hmc-panel svg {
+		display: block;
+		width: 100%;
+		max-width: 22rem;
+		height: auto;
+		margin: var(--sp-2) auto;
+		font-family: var(--font-body);
+	}
+	.hmc-cell {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 1.4;
+	}
+	.hmc-cell--hole {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 1.8;
+		stroke-dasharray: 4 3;
+	}
+	.hmc-char {
+		fill: var(--c-text);
+		font-size: 21px;
+	}
+</style>

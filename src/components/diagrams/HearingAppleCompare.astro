@@ -1,0 +1,180 @@
+---
+/*
+  記事「感音性難聴ってどんな聞こえ方？生まれつき難聴の私がイラストで例えてみた」専用の図解
+  同じりんごを左右に並べ、聞こえ方を見え方に例える（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字は HTML なのでかからない）。
+  右のりんごのぼかしは「聞き取りにくさ」の例えそのものなので、形全体にかけています。
+
+  りんごの赤と葉の緑は、ライトでもダークでも見える中間の色に固定しています。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 一般的な聞こえ方：青磁の実線の枠
+  - 私の場合：くすんだグレーの点線の枠
+*/
+const BODY =
+	'M120 72c-12-12-34-16-52-6c-24 13-32 44-24 76c8 32 28 58 50 58c10 0 16-5 26-5s16 5 26 5c22 0 42-26 50-58c8-32 0-63-24-76c-18-10-40-6-52 6z';
+const HATCH =
+	'M58 110l30 -34M56 138l58 -66M64 158l84 -90M74 176l100 -106M90 190l98 -104M112 190l82 -88M140 194l52 -56';
+const STEM = 'M120 72c0-14 3-26 11-38';
+const LEAF = 'M132 50c10-18 30-24 48-20c-4 18-28 32-48 20z';
+
+const panels = [
+	{
+		side: 'clear',
+		label: ['一般的な聞こえ方の', 'イメージ'],
+		caption: ['「あ、', 'りんごだ！」'],
+		desc: '赤いりんごが、輪郭も軸も葉もくっきり描かれている',
+	},
+	{
+		side: 'blur',
+		label: ['私の場合', '（感音性難聴）'],
+		caption: ['「赤い何かが', 'あるな」'],
+		guesses: ['りんご？', 'トマト？', 'いちご？'],
+		desc: '同じりんごの輪郭がぼやけて赤いかたまりにしか見えず、りんごなのか、トマトなのか、いちごなのか判断できない',
+	},
+];
+---
+
+<figure class="hac">
+	<div class="hac__panels">
+		{
+			panels.map((p) => (
+				<div class:list={['hac-panel', `hac-panel--${p.side}`]}>
+					<p class="hac-label">{p.label.map((t) => <span>{t}</span>)}</p>
+					<svg viewBox="0 0 240 220" role="img" aria-label={`${p.label.join('')}：${p.desc}`}>
+						<defs>
+							<filter id={`hac-${p.side}-sketch`} x="-5%" y="-5%" width="110%" height="110%">
+								<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" />
+								<feDisplacementMap in="SourceGraphic" scale="3" />
+							</filter>
+							<filter id="hac-blur" x="-30%" y="-30%" width="160%" height="160%">
+								<feGaussianBlur stdDeviation="13" />
+							</filter>
+							<clipPath id={`hac-${p.side}-clip`}>
+								<path d={BODY} />
+							</clipPath>
+						</defs>
+						<g filter={p.side === 'blur' ? 'url(#hac-blur)' : `url(#hac-${p.side}-sketch)`}>
+							<path class="hac-body" d={BODY} />
+							<g clip-path={`url(#hac-${p.side}-clip)`}>
+								<path class="hac-hatch" d={HATCH} />
+							</g>
+							<path class="hac-outline" d={BODY} />
+							<path class="hac-stem" d={STEM} />
+							<path class="hac-leaf" d={LEAF} />
+						</g>
+					</svg>
+					<div class="hac-words">
+						<p class="hac-caption">{p.caption.map((t) => <span>{t}</span>)}</p>
+						{p.guesses && <p class="hac-guesses">{p.guesses.map((t) => <span>{t}</span>)}</p>}
+					</div>
+				</div>
+			))
+		}
+	</div>
+	<figcaption>聞こえ方を、りんごの見え方に例えました</figcaption>
+</figure>
+
+<style>
+	.hac__panels {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--sp-3);
+	}
+	.hac-panel {
+		display: flex;
+		flex-direction: column;
+		padding: var(--sp-3) var(--sp-2);
+		background: var(--c-surface-raised);
+		border: 2px solid var(--c-accent);
+		border-radius: 14px;
+	}
+	.hac-panel--blur {
+		border: 2px dashed var(--c-line-strong);
+	}
+	.hac-label,
+	.hac-caption {
+		margin: 0;
+		font-family: var(--font-heading);
+		font-weight: 700;
+		text-align: center;
+		line-height: 1.5;
+	}
+	/* 狭い画面でも、言葉の途中で折り返さない */
+	.hac-label span,
+	.hac-caption span {
+		display: inline-block;
+	}
+	.hac-label {
+		font-size: 0.9375rem;
+		color: var(--c-accent);
+	}
+	.hac-panel--blur .hac-label {
+		color: var(--c-text-sub);
+	}
+	.hac-caption {
+		font-size: 0.9375rem;
+		color: var(--c-text);
+	}
+	/* 右だけ言葉が多いので、左の言葉は余白の中央に置く（左右のりんごの高さはそろう） */
+	.hac-words {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: var(--sp-1);
+	}
+	.hac-guesses {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0 var(--sp-3);
+		margin: 0;
+		font-family: var(--font-heading);
+		font-size: 0.9375rem;
+		font-weight: 700;
+		line-height: 1.6;
+		color: var(--c-accent2);
+	}
+	@media (max-width: 30rem) {
+		.hac-guesses {
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+	.hac-panel svg {
+		display: block;
+		width: 100%;
+		max-width: 15rem;
+		height: auto;
+		margin: var(--sp-2) auto;
+	}
+	.hac-body {
+		fill: #d4493f;
+	}
+	.hac-hatch {
+		fill: none;
+		stroke: #ef8a7c;
+		stroke-width: 2.5;
+		stroke-linecap: round;
+		opacity: 0.55;
+	}
+	.hac-outline {
+		fill: none;
+		stroke: #9c2f28;
+		stroke-width: 4;
+		stroke-linejoin: round;
+	}
+	.hac-stem {
+		fill: none;
+		stroke: #8f6b4d;
+		stroke-width: 6;
+		stroke-linecap: round;
+	}
+	.hac-leaf {
+		fill: #6f9f5f;
+		stroke: #4f7f45;
+		stroke-width: 3;
+		stroke-linejoin: round;
+	}
+</style>

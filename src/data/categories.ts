@@ -48,6 +48,12 @@ export const categories = [
 		icon: 'sprout',
 		description: '父親として、日々学んでいること。',
 	},
+	{
+		slug: 'hearing',
+		label: '耳のこと',
+		icon: 'ear',
+		description: '生まれつき感音性難聴の私が、聞こえ方や暮らしの中で感じていること。',
+	},
 ] as const satisfies readonly Category[];
 
 export type CategorySlug = (typeof categories)[number]['slug'];

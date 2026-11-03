@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「感音性難聴ってどんな聞こえ方？生まれつき難聴の私がイラストで例えてみた」のカード用の絵（自作）
+    耳 → 矢印 → ぼやけた赤いりんご。聞こえ方を、ぼんやりした見え方に例えた記事の主役。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+    <filter id="b" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 耳 -->
+    <path d="M78 150c0-62 44-96 92-96c52 0 88 36 88 86c0 42-24 62-42 80c-16 16-18 30-24 50c-6 22-24 36-46 36c-24 0-40-16-44-38" fill="#e6f0ee" stroke="#2a6058"/>
+    <path d="M122 150c0-32 22-52 50-52c26 0 46 20 46 44c0 22-16 32-28 44c-8 8-10 18-14 26" stroke="#2a6058" stroke-width="3.5"/>
+    <path d="M176 138c-14-4-24 6-22 20c2 12 14 16 18 26" stroke="#2a6058" stroke-width="3.5"/>
+    <!-- 矢印 -->
+    <path d="M294 180h76M370 180l-16 -14M370 180l-16 14" stroke="#7e4548"/>
+  </g>
+  <!-- ぼやけたりんご -->
+  <g filter="url(#b)">
+    <path d="M498 104c-11-11-32-15-48-5c-26 15-34 50-25 86c8 34 28 66 54 66c9 0 12-5 19-5s10 5 19 5c26 0 46-32 54-66c9-36 1-71-25-86c-16-10-37-6-48 5z" fill="#d4493f"/>
+    <path d="M498 104c0-16 4-30 12-42" fill="none" stroke="#8f6b4d" stroke-width="9" stroke-linecap="round"/>
+    <path d="M512 84c10-20 34-26 54-22c-4 22-32 36-54 22z" fill="#6f9f5f"/>
+  </g>
+</svg>

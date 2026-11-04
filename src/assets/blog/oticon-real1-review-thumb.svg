@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「オーティコン Real 1を3年以上使ったレビュー｜約80万円の補聴器を買ってよかったのか？」のカード用の絵（自作）
+    左に大きな耳かけ型の補聴器、右にスマートフォン。スマートフォンから補聴器へ音の波が届く
+    （補聴器が自分専用のワイヤレスイヤホンにもなる、という記事の主役）。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 耳かけ型の補聴器（本体・細い線・耳の穴に入る先端） -->
+    <g transform="translate(150 64) scale(4.2)" stroke="#2a6058" stroke-width="1.1">
+      <path d="M16 2c10 0 16 8 16 19c0 12-4 23-10 29c-4 4-10 2-11-3c-3-14-6-30-4-38c1-5 4-7 9-7z" fill="#e6f0ee"/>
+      <path d="M14 10h8" stroke-width="0.8"/>
+      <path d="M10 6c-9 2-14 11-14 22c0 7 1 12 3 16"/>
+      <path d="M-6 47c0-4 3-6 6-6s6 2 6 6c0 3-3 5-6 5s-6-2-6-5z" fill="#2a6058"/>
+    </g>
+    <!-- 音の波（スマートフォンから補聴器へ） -->
+    <path d="M412 146q-18 34 0 68M384 126q-30 54 0 108M356 106q-42 74 0 148" stroke="#7e4548"/>
+    <!-- スマートフォン -->
+    <rect x="444" y="66" width="128" height="228" rx="24" fill="#fffdfb"/>
+    <path d="M484 272h48" stroke-width="3.5"/>
+    <!-- 画面の音符 -->
+    <path d="M520 132v62M520 132l22 8" stroke="#2a6058"/>
+    <ellipse cx="508" cy="196" rx="13" ry="10" fill="#2a6058" stroke="#2a6058"/>
+  </g>
+</svg>

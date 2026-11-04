@@ -1,0 +1,139 @@
+---
+/*
+  記事「オーティコン Real 1を3年以上使ったレビュー」専用の図解
+  iPhone・iPad・MacBook の音が、Bluetoothで両耳の補聴器に直接届く（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  補聴器は「自分の聴力に合わせた音で届く」主役なので、青磁で塗っています。
+*/
+const devices = [
+	{ cx: 60, label: 'iPhone' },
+	{ cx: 180, label: 'iPad' },
+	{ cx: 300, label: 'MacBook' },
+];
+
+// 耳かけ型の補聴器（本体・細い線・耳の穴に入る先端）。原点は本体の左上あたり
+const AID_BODY = 'M16 2c10 0 16 8 16 19c0 12-4 23-10 29c-4 4-10 2-11-3c-3-14-6-30-4-38c1-5 4-7 9-7z';
+const AID_WIRE = 'M10 6c-9 2-14 11-14 22c0 7 1 12 3 16';
+const AID_TIP = 'M-6 47c0-4 3-6 6-6s6 2 6 6c0 3-3 5-6 5s-6-2-6-5z';
+
+const H = 354;
+---
+
+<figure class="r1c">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="r1c-title r1c-desc">
+		<title id="r1c-title">Real 1とApple製品のつながり</title>
+		<desc id="r1c-desc">
+			iPhone、iPad、MacBookの3つから、Bluetoothで左右の補聴器に音が届く。音楽やYouTube、電話の声が、自分の聴力に合わせた音で聞こえる。
+		</desc>
+		<defs>
+			<filter id="r1c-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#r1c-sketch)">
+			<!-- iPhone -->
+			<g class="r1c-device">
+				<rect x="42" y="24" width="36" height="66" rx="8" />
+				<path d="M54 82h12" />
+			</g>
+			<!-- iPad -->
+			<g class="r1c-device">
+				<rect x="148" y="18" width="64" height="78" rx="8" />
+				<path d="M174 88h12" />
+			</g>
+			<!-- MacBook -->
+			<g class="r1c-device">
+				<rect x="266" y="34" width="68" height="46" rx="5" />
+				<path d="M254 86h92l-6 8h-80z" />
+			</g>
+
+			<!-- 3台から補聴器へ -->
+			<path class="r1c-arrow" d="M66 132q46 26 88 44 M144 177l10 -1-5-9" />
+			<path class="r1c-arrow" d="M180 132q3 20 0 40 M174 164l6 8 6-8" />
+			<path class="r1c-arrow" d="M294 132q-46 26-88 44 M216 177l-10 -1 5-9" />
+
+			<!-- 左右の補聴器 -->
+			<g class="r1c-aid" transform="translate(126 188) scale(1.4)">
+				<path class="r1c-aid-body" d={AID_BODY} />
+				<path d={AID_WIRE} />
+				<path class="r1c-aid-tip" d={AID_TIP} />
+			</g>
+			<g class="r1c-aid" transform="translate(234 188) scale(-1.4 1.4)">
+				<path class="r1c-aid-body" d={AID_BODY} />
+				<path d={AID_WIRE} />
+				<path class="r1c-aid-tip" d={AID_TIP} />
+			</g>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			devices.map((d) => (
+				<text class="r1c-label" x={d.cx} y="118" text-anchor="middle">
+					{d.label}
+				</text>
+			))
+		}
+		<text class="r1c-main" x="180" y="298" text-anchor="middle">Real 1（両耳）</text>
+		<text class="r1c-sub" x="180" y="322" text-anchor="middle">音楽・YouTube・電話の声が、</text>
+		<text class="r1c-sub" x="180" y="342" text-anchor="middle">自分の聴力に合わせた音で届く</text>
+	</svg>
+	<figcaption>補聴器が、自分専用のワイヤレスイヤホンにもなる</figcaption>
+</figure>
+
+<style>
+	.r1c svg {
+		display: block;
+		width: 100%;
+		max-width: 26rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.r1c-device rect,
+	.r1c-device path {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-text);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.r1c-arrow {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.r1c-aid path {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 1.7;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.r1c-aid .r1c-aid-body {
+		fill: var(--c-accent-wash);
+	}
+	.r1c-aid .r1c-aid-tip {
+		fill: var(--c-accent);
+	}
+	.r1c-label {
+		fill: var(--c-text);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.r1c-main {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.r1c-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+</style>

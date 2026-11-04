@@ -1,0 +1,152 @@
+---
+/*
+  記事「オーティコン Real 1を3年以上使ったレビュー」専用の図解
+  購入してから今まで、そしてあと3年使いたいという見通し（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないように、次の組み合わせにしています。
+  - これまで（購入・オーバーホール・今）：青磁の実線
+  - これから（あと3年）：灰桜の点線の枠＋「これから」のラベル
+*/
+type Row = { y: number; title: string; sub: string; icon: string; planned?: boolean };
+
+const BOX_X = 44;
+const BOX_W = 272;
+const BOX_H = 52;
+const CX = 180;
+
+const rows: Row[] = [
+	{ y: 14, title: '購入（約3年前）', sub: '両耳で約80万円', icon: 'bag' },
+	{ y: 96, title: 'オーバーホール（3年弱）', sub: '内部の湿気を取ってもらう', icon: 'wrench' },
+	{ y: 178, title: '今（3年以上）', sub: '問題なく使えている', icon: 'check' },
+	{ y: 274, title: 'あと3年', sub: '合計6年使いたい', icon: 'calendar', planned: true },
+];
+
+const ICONS: Record<string, string> = {
+	bag: 'M5 10h18l-2 16H7z M10 10V7a4 4 0 0 1 8 0v3',
+	wrench: 'M19 3a6 6 0 0 0-6 8L4 20a2.8 2.8 0 0 0 4 4l9-9a6 6 0 0 0 8-6l-4 2-3-3 2-4z',
+	check: 'M14 3a11 11 0 1 0 0 22a11 11 0 1 0 0-22z M9 14l4 4 7-8',
+	calendar: 'M3 6h22v19H3z M3 12h22 M9 3v6 M19 3v6',
+};
+
+const arrow = (y1: number, y2: number) => `M${CX} ${y1}q3 ${(y2 - y1) / 2} 0 ${y2 - y1} M${CX - 6} ${y2 - 7}l6 7 6-7`;
+
+const H = 414;
+---
+
+<figure class="r1t">
+	<svg viewBox={`0 0 360 ${H}`} role="img" aria-labelledby="r1t-title r1t-desc">
+		<title id="r1t-title">Real 1を使ってきた流れと、これから</title>
+		<desc id="r1t-desc">
+			約3年前に両耳約80万円で購入。3年弱でオーバーホールに出し、内部の湿気を取ってもらった。今は3年以上使っていて問題なく使えている。これから、あと3年使って合計6年にしたい。6年使えたら、1か月あたり約11,100円になる。
+		</desc>
+		<defs>
+			<filter id="r1t-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="9"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#r1t-sketch)">
+			{
+				rows.map((r) => (
+					<g class:list={['r1t-box', { 'r1t-box--planned': r.planned }]}>
+						<rect x={BOX_X} y={r.y} width={BOX_W} height={BOX_H} rx="10" />
+						<path class="r1t-icon" transform={`translate(${BOX_X + 14} ${r.y + 12})`} d={ICONS[r.icon]} />
+					</g>
+				))
+			}
+			<path class="r1t-arrow" d={arrow(70, 92)} />
+			<path class="r1t-arrow" d={arrow(152, 174)} />
+			<path class="r1t-arrow r1t-arrow--planned" d={arrow(234, 270)} />
+			<path class="r1t-rule" d="M70 378h220" />
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			rows.map((r) => (
+				<g>
+					<text class="r1t-title" x={BOX_X + 56} y={r.y + 22}>
+						{r.title}
+					</text>
+					<text class="r1t-sub" x={BOX_X + 56} y={r.y + 41}>
+						{r.sub}
+					</text>
+				</g>
+			))
+		}
+		<text class="r1t-note" x="180" y="366" text-anchor="middle">6年使えたら、1か月あたり約11,100円</text>
+		<text class="r1t-sub" x="180" y="400" text-anchor="middle">80万円 ÷ 72か月（修理費用などは別）</text>
+
+		<!-- 「これから」ラベル -->
+		<g class="r1t-tag">
+			<rect x="242" y="263" width="64" height="21" rx="10.5" />
+			<text x="274" y="274" text-anchor="middle" dominant-baseline="central">これから</text>
+		</g>
+	</svg>
+	<figcaption>購入してから今まで（実線）と、これから（点線）</figcaption>
+</figure>
+
+<style>
+	.r1t svg {
+		display: block;
+		width: 100%;
+		max-width: 30rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.r1t-box rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.r1t-box--planned rect {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-dasharray: 6 5;
+	}
+	.r1t-icon,
+	.r1t-arrow {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 1.8;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.r1t-arrow {
+		stroke: var(--c-line-strong);
+		stroke-width: 2.2;
+	}
+	.r1t-arrow--planned {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 5 5;
+	}
+	.r1t-rule {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 1.5;
+	}
+	.r1t-title,
+	.r1t-note {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.r1t-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.r1t-tag rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 1.2;
+	}
+	.r1t-tag text {
+		fill: var(--c-accent2);
+		font-size: 13px;
+		font-weight: 700;
+	}
+</style>

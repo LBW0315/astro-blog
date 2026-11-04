@@ -1,0 +1,210 @@
+---
+/*
+  記事「オーティコン Real 1を3年以上使ったレビュー」専用の図解
+  同じ雑音抑制が、ふだんの暮らしでは助かり、教室では困ることもあった（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字は HTML なのでかからない）。
+  各パネルの絵は「音のもと → 大きな音の波 → 補聴器 → 小さくなった音の波」の一本道。
+  色だけで区別しないように、次の組み合わせにしています。
+  - 助かった場面：青磁の実線の枠
+  - 困った場面：くすんだグレーの点線の枠
+*/
+const AID_BODY = 'M16 2c10 0 16 8 16 19c0 12-4 23-10 29c-4 4-10 2-11-3c-3-14-6-30-4-38c1-5 4-7 9-7z';
+const AID_WIRE = 'M10 6c-9 2-14 11-14 22c0 7 1 12 3 16';
+const AID_TIP = 'M-6 47c0-4 3-6 6-6s6 2 6 6c0 3-3 5-6 5s-6-2-6-5z';
+
+// 音の波（大きい3本・小さい1本）
+const WAVES_BIG = 'M92 46q10 19 0 38 M104 36q16 29 0 58 M116 26q22 39 0 78';
+const WAVES_SMALL = 'M200 56q6 9 0 18';
+
+const panels = [
+	{
+		side: 'ok',
+		label: 'ふだんの暮らし',
+		source: '紙をめくる音・ペンを落とす音',
+		result: '気になりにくくなった',
+		verdict: '助かる',
+		desc: '紙をめくる音やペンを落とす音が、補聴器を通ると小さくなり、気になりにくくなった',
+	},
+	{
+		side: 'ng',
+		label: '教員時代の教室',
+		source: '生徒同士の雑談',
+		result: '雑談まで小さく感じた',
+		verdict: '困る',
+		desc: '生徒同士の雑談も、補聴器を通ると小さくなったように感じた。教員にとっては大切な情報なので困った',
+	},
+];
+---
+
+<figure class="r1n">
+	<div class="r1n__panels">
+		{
+			panels.map((p) => (
+				<div class:list={['r1n-panel', `r1n-panel--${p.side}`]}>
+					<p class="r1n-label">{p.label}</p>
+					<svg viewBox="0 0 240 130" role="img" aria-label={`${p.label}：${p.desc}`}>
+						<defs>
+							<filter id={`r1n-${p.side}-sketch`} x="-5%" y="-5%" width="110%" height="110%">
+								<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="5" />
+								<feDisplacementMap in="SourceGraphic" scale="3" />
+							</filter>
+						</defs>
+						<g filter={`url(#r1n-${p.side}-sketch)`}>
+							{p.side === 'ok' ? (
+								<g class="r1n-source">
+									{/* 紙（角が折れた1枚）と、落ちたペン */}
+									<path d="M16 22h38l12 12v44h-50z M54 22v12h12" />
+									<path class="r1n-thin" d="M24 46h32 M24 56h32 M24 66h22" />
+									<g transform="translate(46 104) rotate(-18)">
+										<rect x="-30" y="-5" width="54" height="10" rx="5" />
+										<path d="M-30 -5L-42 0L-30 5Z" />
+									</g>
+								</g>
+							) : (
+								<g class="r1n-source">
+									{/* ふきだし2つ（雑談） */}
+									<path d="M10 22h44a8 8 0 0 1 8 8v16a8 8 0 0 1-8 8H30l-10 10v-10h-10a8 8 0 0 1-8-8V30a8 8 0 0 1 8-8z" />
+									<path d="M34 66h38a8 8 0 0 1 8 8v14a8 8 0 0 1-8 8h-6v10l-10-10H34a8 8 0 0 1-8-8V74a8 8 0 0 1 8-8z" />
+									<path class="r1n-dots" d="M22 38h.5 M32 38h.5 M42 38h.5 M44 81h.5 M54 81h.5 M64 81h.5" />
+								</g>
+							)}
+							<path class="r1n-wave" d={WAVES_BIG} />
+							<g class="r1n-aid" transform="translate(146 36)">
+								<path class="r1n-aid-body" d={AID_BODY} />
+								<path d={AID_WIRE} />
+								<path class="r1n-aid-tip" d={AID_TIP} />
+							</g>
+							<path class="r1n-wave r1n-wave--small" d={WAVES_SMALL} />
+						</g>
+					</svg>
+					<p class="r1n-source-text">{p.source}</p>
+					<p class="r1n-result">
+						<span>{p.result}</span>
+						<span class="r1n-verdict">→ {p.verdict}</span>
+					</p>
+				</div>
+			))
+		}
+	</div>
+	<figcaption>同じ雑音抑制でも、場面によって助かることも、困ることもあった（私の感じ方）</figcaption>
+</figure>
+
+<style>
+	.r1n__panels {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: var(--sp-3);
+	}
+	@media (max-width: 34rem) {
+		.r1n__panels {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+	.r1n-panel {
+		display: flex;
+		flex-direction: column;
+		padding: var(--sp-3);
+		background: var(--c-surface-raised);
+		border: 2px solid var(--c-accent);
+		border-radius: 14px;
+	}
+	.r1n-panel--ng {
+		border: 2px dashed var(--c-line-strong);
+	}
+	.r1n-label,
+	.r1n-result {
+		margin: 0;
+		font-family: var(--font-heading);
+		font-weight: 700;
+		text-align: center;
+		line-height: 1.5;
+	}
+	.r1n-label {
+		font-size: 1rem;
+		color: var(--c-accent);
+	}
+	.r1n-panel--ng .r1n-label {
+		color: var(--c-text-sub);
+	}
+	.r1n-panel svg {
+		display: block;
+		width: 100%;
+		max-width: 15rem;
+		height: auto;
+		margin: var(--sp-2) auto;
+	}
+	.r1n-source-text {
+		margin: 0;
+		font-size: 0.875rem;
+		color: var(--c-text-sub);
+		text-align: center;
+		line-height: 1.6;
+	}
+	.r1n-result {
+		flex: 1;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: flex-end;
+		gap: 0 0.5em;
+		margin-top: var(--sp-2);
+		font-size: 0.9375rem;
+		color: var(--c-text);
+	}
+	.r1n-result span {
+		display: inline-block;
+	}
+	.r1n-verdict {
+		color: var(--c-accent);
+	}
+	.r1n-panel--ng .r1n-verdict {
+		color: var(--c-accent2);
+	}
+	.r1n-source path,
+	.r1n-source rect {
+		fill: var(--c-bg);
+		stroke: var(--c-text);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.r1n-source .r1n-thin {
+		fill: none;
+		stroke: var(--c-text-sub);
+		stroke-width: 1.8;
+	}
+	.r1n-source .r1n-dots {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 5;
+	}
+	.r1n-wave {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+	}
+	.r1n-aid path {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.r1n-panel--ng .r1n-aid path {
+		stroke: var(--c-text-sub);
+	}
+	.r1n-aid .r1n-aid-body {
+		fill: var(--c-accent-wash);
+	}
+	.r1n-panel--ng .r1n-aid .r1n-aid-body {
+		fill: var(--c-bg);
+	}
+	.r1n-aid .r1n-aid-tip {
+		fill: var(--c-accent);
+	}
+	.r1n-panel--ng .r1n-aid .r1n-aid-tip {
+		fill: var(--c-text-sub);
+	}
+</style>

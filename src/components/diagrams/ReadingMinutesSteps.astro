@@ -1,0 +1,100 @@
+---
+/*
+  記事「本が読めないのは、根性のせいじゃなかった」専用の図解
+  5分から20分への階段（手描き風）
+
+  線と色の意味は、ほかの記事と同じにしています。
+  - 青磁の実線：できている段（毎日5分／調子がいい日は20分）
+  - 灰桜の点線＋「これから」：まだの段（毎日20分）
+*/
+const W = 360;
+const H = 252;
+---
+
+<figure class="rms">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="rms-title rms-desc">
+		<title id="rms-title">5分から20分への階段</title>
+		<desc id="rms-desc">
+			3段の階段。1段目は「毎日5分」で、いまできている。2段目は「調子がいい日は20分」で、これもときどきできている。3段目の「毎日20分」はまだできていない、これからの段。まずは1段目を続けることを大事にしている。
+		</desc>
+		<defs>
+			<filter id="reading-minutes-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="29"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#reading-minutes-sketch)">
+			<rect class="rms-done" x="16" y="172" width="104" height="56" rx="8"></rect>
+			<rect class="rms-done rms-done--light" x="128" y="118" width="104" height="110" rx="8"></rect>
+			<rect class="rms-next" x="240" y="64" width="104" height="164" rx="8"></rect>
+			<path class="rms-ground" d="M8 232H352"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="rms-note rms-note--done" x="68" y="160" text-anchor="middle">いま</text>
+		<text class="rms-box" x="68" y="196" text-anchor="middle">毎日</text>
+		<text class="rms-box" x="68" y="218" text-anchor="middle">5分</text>
+
+		<text class="rms-note rms-note--done" x="180" y="106" text-anchor="middle">ときどき</text>
+		<text class="rms-box" x="180" y="146" text-anchor="middle">調子が</text>
+		<text class="rms-box" x="180" y="168" text-anchor="middle">いい日は</text>
+		<text class="rms-box" x="180" y="190" text-anchor="middle">20分</text>
+
+		<text class="rms-note rms-note--next" x="292" y="52" text-anchor="middle">これから</text>
+		<text class="rms-box rms-box--next" x="292" y="92" text-anchor="middle">毎日</text>
+		<text class="rms-box rms-box--next" x="292" y="114" text-anchor="middle">20分</text>
+	</svg>
+	<figcaption>5分から20分への階段（実線はできている段、点線はこれからの段）</figcaption>
+</figure>
+
+<style>
+	.rms svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.rms-done {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.rms-done--light {
+		fill: var(--c-surface-raised);
+	}
+	.rms-next {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.rms-ground {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+		stroke-linecap: round;
+	}
+	.rms-box {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.rms-box--next {
+		fill: var(--c-accent2);
+	}
+	.rms-note {
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.rms-note--done {
+		fill: var(--c-accent);
+	}
+	.rms-note--next {
+		fill: var(--c-accent2);
+	}
+</style>

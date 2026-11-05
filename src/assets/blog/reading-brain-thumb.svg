@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「本が読めないのは、根性のせいじゃなかった ― 読書が苦手な私が5分から始めたこと」のカード用の絵（自作）
+    左のスマホから、矢印で右の開いた紙の本へ。画面で拾い読みする毎日から、紙の本を読む時間へ。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="6"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 300H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- スマホ（画面には拾い読みの短い線） -->
+    <g transform="rotate(-6 150 196)">
+      <rect x="96" y="92" width="112" height="196" rx="18" fill="#fffdfb"/>
+      <rect x="110" y="114" width="84" height="146" rx="6" fill="#f6eaea" stroke-width="3"/>
+      <path d="M122 134H182M122 152H166M122 170H138M122 188H138M122 206H138M122 224H138" stroke="#93877a" stroke-width="3.5"/>
+      <path d="M140 274H164" stroke-width="3"/>
+    </g>
+    <!-- 矢印 -->
+    <path d="M246 196H322M322 196l-14 -12M322 196l-14 12" stroke="#7e4548"/>
+    <!-- 開いた紙の本 -->
+    <path d="M350 126V280C392 268 440 272 472 290C504 272 552 268 594 280V126" fill="#2a6058" stroke="#2a6058"/>
+    <path d="M472 128C440 106 392 104 362 116V268C392 258 440 260 472 280Z" fill="#fffdfb"/>
+    <path d="M472 128C504 106 552 104 582 116V268C552 258 504 260 472 280Z" fill="#fffdfb"/>
+    <path d="M472 128V280" stroke-width="3.5"/>
+    <path d="M382 146C406 140 432 140 454 150M382 172C406 166 432 166 454 176M382 198C406 192 432 192 454 202M382 224C406 218 432 218 454 228M490 150C512 140 538 140 562 146M490 176C512 166 538 166 562 172M490 202C512 192 538 192 562 198M490 228C512 218 538 218 562 224" stroke="#93877a" stroke-width="3"/>
+  </g>
+</svg>

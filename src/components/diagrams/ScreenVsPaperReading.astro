@@ -1,0 +1,119 @@
+---
+/*
+  記事「本が読めないのは、根性のせいじゃなかった」専用の図解
+  画面での目の動き（F字に拾う）と、紙での目の動き（1行ずつ追う）の比較（手描き風）
+
+  スマホ幅で文字が小さくならないよう、2つのパネルを縦に積んでいます。
+  - 画面：灰桜の線（拾い読みのほう）
+  - 紙：青磁の線（深く読むほう）
+  色だけで区別しないよう、見出しと説明の文字も付けています。
+*/
+const W = 360;
+const H = 372;
+const lines = [0, 1, 2, 3, 4, 5, 6];
+---
+
+<figure class="svp">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="svp-title svp-desc">
+		<title id="svp-title">画面での目の動きと、紙での目の動き</title>
+		<desc id="svp-desc">
+			上は画面で拾い読みするとき。目は最初の数行を横に流したあと、左端を縦に下りていき、アルファベットのFの形になる。目立つ言葉を拾っているだけで、読んではいない。下は紙で読むとき。目は1行ずつ左から右へ順番に追っていく。
+		</desc>
+		<defs>
+			<filter id="screen-paper-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="17"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#screen-paper-sketch)">
+			<!-- 画面 -->
+			<rect class="svp-page" x="16" y="40" width="176" height="128" rx="10"></rect>
+			<g class="svp-text">
+				{lines.map((i) => <path d={`M32 ${60 + i * 15}H176`}></path>)}
+			</g>
+			<path class="svp-eye svp-eye--screen" d="M32 60H176 M32 90H132 M32 60V156 M24 146l8 10 8-10"></path>
+
+			<!-- 紙 -->
+			<rect class="svp-page" x="16" y="226" width="176" height="128" rx="6"></rect>
+			<g class="svp-text">
+				{lines.map((i) => <path d={`M32 ${246 + i * 15}H176`}></path>)}
+			</g>
+			<path
+				class="svp-eye svp-eye--paper"
+				d="M32 246H176M32 261H176M32 276H176M32 291H176M32 306H176M32 321H176M32 336H176 M166 330l10 6-10 6"
+			></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="svp-head svp-head--screen" x="16" y="26">画面で拾い読みするとき</text>
+		<text class="svp-note" x="206" y="84">最初の数行と</text>
+		<text class="svp-note" x="206" y="106">左端だけを</text>
+		<text class="svp-note svp-note--screen" x="206" y="128">拾っている</text>
+
+		<text class="svp-head svp-head--paper" x="16" y="212">紙で読むとき</text>
+		<text class="svp-note" x="206" y="270">1行ずつ</text>
+		<text class="svp-note" x="206" y="292">順番に</text>
+		<text class="svp-note svp-note--paper" x="206" y="314">追っている</text>
+	</svg>
+	<figcaption>画面で拾い読みするときのF字と、紙で1行ずつ追うとき（灰桜は画面、青磁は紙での目の動き）</figcaption>
+</figure>
+
+<style>
+	.svp svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.svp-page {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.svp-text path {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+		stroke-linecap: round;
+		opacity: 0.45;
+	}
+	.svp-eye {
+		fill: none;
+		stroke-width: 3.2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.svp-eye--screen {
+		stroke: var(--c-accent2);
+	}
+	.svp-eye--paper {
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.svp-head {
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.svp-head--screen {
+		fill: var(--c-accent2);
+	}
+	.svp-head--paper {
+		fill: var(--c-accent);
+	}
+	.svp-note {
+		fill: var(--c-text);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.svp-note--screen {
+		fill: var(--c-accent2);
+	}
+	.svp-note--paper {
+		fill: var(--c-accent);
+	}
+</style>

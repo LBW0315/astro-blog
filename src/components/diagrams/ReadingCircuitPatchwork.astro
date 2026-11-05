@@ -1,0 +1,100 @@
+---
+/*
+  記事「本が読めないのは、根性のせいじゃなかった」専用の図解
+  読書の回路は、もともとある働きを後からつなぎ合わせたもの（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  - もともとある働き（見る・聞く・考える）：青磁の実線
+  - 読書の回路：灰桜（後からつないだもので、使い方で形が変わるほう）
+*/
+const W = 360;
+const H = 292;
+---
+
+<figure class="rcp">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="rcp-title rcp-desc">
+		<title id="rcp-title">読書の回路は、もともとある働きの寄せ集め</title>
+		<desc id="rcp-desc">
+			上に、脳にもともとある「見る」「聞く」「考える」の3つの働きが並んでいる。そこから矢印が下に伸びて、1つの「読む回路」に集まっている。読む回路は生まれつきのものではなく、後からつなぎ合わせたもの。だから、使い方で形が変わる。
+		</desc>
+		<defs>
+			<filter id="reading-circuit-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="11"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#reading-circuit-sketch)">
+			<g class="rcp-base">
+				<rect x="16" y="40" width="96" height="48" rx="10"></rect>
+				<rect x="132" y="40" width="96" height="48" rx="10"></rect>
+				<rect x="248" y="40" width="96" height="48" rx="10"></rect>
+			</g>
+			<g class="rcp-arrow">
+				<path d="M64 92C70 122 126 136 160 150 M150 140l10 10-14 3"></path>
+				<path d="M180 92V146 M172 138l8 8 8-8"></path>
+				<path d="M296 92C290 122 234 136 200 150 M214 153l-14-3 10-10"></path>
+			</g>
+			<rect class="rcp-read" x="90" y="156" width="180" height="56" rx="12"></rect>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="rcp-note rcp-note--base" x="180" y="26" text-anchor="middle">脳にもともとある働き</text>
+		<text class="rcp-box" x="64" y="69" text-anchor="middle">見る</text>
+		<text class="rcp-box" x="180" y="69" text-anchor="middle">聞く</text>
+		<text class="rcp-box" x="296" y="69" text-anchor="middle">考える</text>
+		<text class="rcp-box rcp-box--read" x="180" y="190" text-anchor="middle">読む回路</text>
+		<text class="rcp-note rcp-note--read" x="180" y="242" text-anchor="middle">後からつなぎ合わせたもの</text>
+		<text class="rcp-note rcp-note--read" x="180" y="268" text-anchor="middle">だから、使い方で形が変わる</text>
+	</svg>
+	<figcaption>読書の回路は、もともとある働きを後からつないだもの（実線はもともとある働き、灰桜は読む回路）</figcaption>
+</figure>
+
+<style>
+	.rcp svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.rcp-base rect {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.rcp-read {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2.4;
+	}
+	.rcp-arrow path {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.rcp-box {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.rcp-box--read {
+		fill: var(--c-accent2);
+		font-size: 17px;
+	}
+	.rcp-note {
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.rcp-note--base {
+		fill: var(--c-accent);
+	}
+	.rcp-note--read {
+		fill: var(--c-accent2);
+	}
+</style>

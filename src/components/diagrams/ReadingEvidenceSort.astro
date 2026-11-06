@@ -1,0 +1,112 @@
+---
+/*
+  記事「読書に秘められた力とメリット」専用の図解
+  動画に出てきた読書の効果を、根拠の強さで3つに分ける（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないよう、箱ごとに見出しの文字と線の種類も変えています。
+  - 研究の裏づけがしっかり：青磁の実線
+  - 研究はあるが、言える範囲は限られる：灰色の実線
+  - まだ確かめられていない：灰桜の点線
+*/
+const W = 360;
+const H = 360;
+---
+
+<figure class="res">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="res-title res-desc">
+		<title id="res-title">読書の効果を、根拠の強さで3つに分ける</title>
+		<desc id="res-desc">
+			いちばん上に「動画に出てきた効果、20個以上」の箱がある。そこから下に矢印が伸びて、根拠の強さで3つの箱に分けている。1つ目は「研究の裏づけがしっかり」で、読む量と語彙の関係や、思い出すと記憶に残ることが入る。2つ目は「研究はあるが、言える範囲は限られる」で、共感、脳のつながり、長生きなどが入る。3つ目は「まだ確かめられていない」で、感情の制御や立ち直る力、ストレスが68%下がるという話などが入る。
+		</desc>
+		<defs>
+			<filter id="reading-evidence-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="37"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#reading-evidence-sketch)">
+			<rect class="res-all" x="40" y="12" width="280" height="48" rx="10"></rect>
+			<path class="res-arrow" d="M180 66V94 M172 86l8 8 8-8"></path>
+			<rect class="res-strong" x="16" y="102" width="328" height="72" rx="10"></rect>
+			<rect class="res-weak" x="16" y="186" width="328" height="72" rx="10"></rect>
+			<rect class="res-none" x="16" y="270" width="328" height="72" rx="10"></rect>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="res-head" x="180" y="42" text-anchor="middle">動画に出てきた効果、20個以上</text>
+		<text class="res-note" x="196" y="86">根拠の強さで分ける</text>
+
+		<text class="res-head res-head--strong" x="180" y="132" text-anchor="middle">研究の裏づけがしっかり</text>
+		<text class="res-item" x="180" y="158" text-anchor="middle">語彙との関係・思い出すと残る</text>
+
+		<text class="res-head" x="180" y="216" text-anchor="middle">研究はあるが、言える範囲は限られる</text>
+		<text class="res-item" x="180" y="242" text-anchor="middle">共感・脳のつながり・長生き</text>
+
+		<text class="res-head res-head--none" x="180" y="300" text-anchor="middle">まだ確かめられていない</text>
+		<text class="res-item" x="180" y="326" text-anchor="middle">感情の制御・立ち直る力</text>
+	</svg>
+	<figcaption>読書の効果を、根拠の強さで3つに分ける（青磁の実線ほど根拠が強く、灰桜の点線はまだ確かめられていないもの）</figcaption>
+</figure>
+
+<style>
+	.res svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.res-all {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.res-arrow {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.res-strong {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.res-weak {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.res-none {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.res-head {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.res-head--strong {
+		fill: var(--c-accent);
+	}
+	.res-head--none {
+		fill: var(--c-accent2);
+	}
+	.res-item {
+		fill: var(--c-text);
+		font-size: 15px;
+	}
+	.res-note {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

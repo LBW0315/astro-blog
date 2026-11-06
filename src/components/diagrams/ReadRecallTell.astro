@@ -1,0 +1,87 @@
+---
+/*
+  記事「読書に秘められた力とメリット」専用の図解
+  読む → ひと言にまとめる → 妻に話す、の流れ（手描き風）
+
+  どれも今やっていることなので、青磁の実線で描いています。
+  最後の「話す」だけ塗りを濃くして、ゴールが分かるようにしています。
+*/
+const W = 360;
+const H = 168;
+---
+
+<figure class="rrt">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="rrt-title rrt-desc">
+		<title id="rrt-title">読む、ひと言にまとめる、妻に話す</title>
+		<desc id="rrt-desc">
+			左から順に3つの箱が矢印でつながっている。1つ目は「読む」で、毎日5分。2つ目は「まとめる」で、読んだ内容をひと言にする。3つ目は「話す」で、妻に聞かれたら説明する。
+		</desc>
+		<defs>
+			<filter id="read-recall-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="43"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#read-recall-sketch)">
+			<rect class="rrt-box" x="8" y="24" width="96" height="56" rx="10"></rect>
+			<rect class="rrt-box" x="132" y="24" width="96" height="56" rx="10"></rect>
+			<rect class="rrt-box rrt-box--goal" x="256" y="24" width="96" height="56" rx="10"></rect>
+			<path class="rrt-arrow" d="M108 52H126 M119 45l7 7-7 7"></path>
+			<path class="rrt-arrow" d="M232 52H250 M243 45l7 7-7 7"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="rrt-label" x="56" y="58" text-anchor="middle">読む</text>
+		<text class="rrt-label" x="180" y="58" text-anchor="middle">まとめる</text>
+		<text class="rrt-label rrt-label--goal" x="304" y="58" text-anchor="middle">話す</text>
+
+		<text class="rrt-note" x="56" y="110" text-anchor="middle">毎日5分</text>
+		<text class="rrt-note" x="180" y="110" text-anchor="middle">ひと言に</text>
+		<text class="rrt-note" x="180" y="132" text-anchor="middle">する</text>
+		<text class="rrt-note" x="304" y="110" text-anchor="middle">妻に</text>
+		<text class="rrt-note" x="304" y="132" text-anchor="middle">聞かれたら</text>
+	</svg>
+	<figcaption>読む、ひと言にまとめる、妻に話す</figcaption>
+</figure>
+
+<style>
+	.rrt svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.rrt-box {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.rrt-box--goal {
+		fill: var(--c-accent-wash);
+	}
+	.rrt-arrow {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.rrt-label {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.rrt-label--goal {
+		fill: var(--c-accent);
+	}
+	.rrt-note {
+		fill: var(--c-text);
+		font-size: 15px;
+		font-weight: 700;
+	}
+</style>

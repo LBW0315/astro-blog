@@ -1,0 +1,110 @@
+---
+/*
+  記事「読む人と読まない人の差は、開いていく」専用の図解
+  読むほど楽になる循環と、読まないほどしんどくなる循環（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  色だけで区別しないよう、見出しの文字と箱の塗りも変えています。
+  - 読むほど楽になる循環：青磁の実線
+  - 読まないほどしんどくなる循環：灰色の実線
+*/
+const W = 360;
+const H = 352;
+---
+
+<figure class="rgl">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="rgl-title rgl-desc">
+		<title id="rgl-title">読むほど楽になる循環と、読まないほどしんどくなる循環</title>
+		<desc id="rgl-desc">
+			上は「読むほど楽になる」循環。楽に読める、もっと読む、知っている言葉が増える、難しい本も読める、そしてまた楽に読める、と矢印で回っている。下は「読まないほどしんどくなる」循環。読むのがしんどい、読まない、知っている言葉が増えない、もっと読めなくなる、そしてまた読むのがしんどい、と回っている。
+		</desc>
+		<defs>
+			<filter id="reading-gap-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="51"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#reading-gap-sketch)">
+			<!-- 読むほど楽になる -->
+			<rect class="rgl-good" x="16" y="36" width="150" height="44" rx="10"></rect>
+			<rect class="rgl-good" x="194" y="36" width="150" height="44" rx="10"></rect>
+			<rect class="rgl-good" x="194" y="112" width="150" height="44" rx="10"></rect>
+			<rect class="rgl-good" x="16" y="112" width="150" height="44" rx="10"></rect>
+			<path class="rgl-arrow rgl-arrow--good" d="M170 58H189 M183 52l6 6-6 6"></path>
+			<path class="rgl-arrow rgl-arrow--good" d="M269 84V107 M263 101l6 6 6-6"></path>
+			<path class="rgl-arrow rgl-arrow--good" d="M190 134H171 M177 128l-6 6 6 6"></path>
+			<path class="rgl-arrow rgl-arrow--good" d="M91 108V85 M85 91l6-6 6 6"></path>
+
+			<!-- 読まないほどしんどくなる -->
+			<rect class="rgl-bad" x="16" y="216" width="150" height="44" rx="10"></rect>
+			<rect class="rgl-bad" x="194" y="216" width="150" height="44" rx="10"></rect>
+			<rect class="rgl-bad" x="194" y="292" width="150" height="44" rx="10"></rect>
+			<rect class="rgl-bad" x="16" y="292" width="150" height="44" rx="10"></rect>
+			<path class="rgl-arrow" d="M170 238H189 M183 232l6 6-6 6"></path>
+			<path class="rgl-arrow" d="M269 264V287 M263 281l6 6 6-6"></path>
+			<path class="rgl-arrow" d="M190 314H171 M177 308l-6 6 6 6"></path>
+			<path class="rgl-arrow" d="M91 288V265 M85 271l6-6 6 6"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="rgl-head rgl-head--good" x="180" y="24" text-anchor="middle">読むほど楽になる</text>
+		<text class="rgl-item" x="91" y="63" text-anchor="middle">楽に読める</text>
+		<text class="rgl-item" x="269" y="63" text-anchor="middle">もっと読む</text>
+		<text class="rgl-item" x="269" y="139" text-anchor="middle">言葉が増える</text>
+		<text class="rgl-item" x="91" y="139" text-anchor="middle">難しい本も読める</text>
+
+		<text class="rgl-head" x="180" y="204" text-anchor="middle">読まないほどしんどくなる</text>
+		<text class="rgl-item" x="91" y="243" text-anchor="middle">読むのがしんどい</text>
+		<text class="rgl-item" x="269" y="243" text-anchor="middle">読まない</text>
+		<text class="rgl-item" x="269" y="319" text-anchor="middle">言葉が増えない</text>
+		<text class="rgl-item" x="91" y="319" text-anchor="middle">もっと読めない</text>
+	</svg>
+	<figcaption>読むほど楽になる循環（青磁）と、読まないほどしんどくなる循環（灰色）。回り方は同じで、行き先が逆になる</figcaption>
+</figure>
+
+<style>
+	.rgl svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.rgl-good {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.rgl-bad {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.rgl-arrow {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.rgl-arrow--good {
+		stroke: var(--c-accent);
+	}
+	.rgl-head {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.rgl-head--good {
+		fill: var(--c-accent);
+	}
+	.rgl-item {
+		fill: var(--c-text);
+		font-size: 15px;
+		font-weight: 700;
+	}
+</style>

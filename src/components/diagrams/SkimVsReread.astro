@@ -1,0 +1,116 @@
+---
+/*
+  記事「読む人と読まない人の差は、開いていく」専用の図解
+  今までの拾い読み（行を飛ばす）と、これからの読み方（分からなければ戻る）を比べる（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  - 今まで：灰色の実線の矢印で、2行目を飛ばして3行目へ
+  - これから：灰桜の点線の矢印と「これから」のラベルで、2行目の頭へ戻る
+*/
+const W = 360;
+const H = 336;
+---
+
+<figure class="svr">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="svr-title svr-desc">
+		<title id="svr-title">拾い読みと、戻りながら読む読み方</title>
+		<desc id="svr-desc">
+			上は今までの拾い読み。1行目の終わりから、2行目を飛ばして3行目の頭へ矢印が下りている。下はこれからの読み方。2行目の終わりから、分からなければ2行目の頭へ戻る矢印が描いてある。
+		</desc>
+		<defs>
+			<filter id="skim-reread-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="58"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#skim-reread-sketch)">
+			<!-- 今まで -->
+			<rect class="svr-page" x="8" y="34" width="344" height="128" rx="10"></rect>
+			<path class="svr-line" d="M82 64H228 M82 104H228 M82 144H228"></path>
+			<path class="svr-arrow" d="M226 74L92 132 M95 120l-3 12 12 1"></path>
+
+			<!-- これから -->
+			<rect class="svr-page svr-page--next" x="8" y="200" width="344" height="128" rx="10"></rect>
+			<path class="svr-line" d="M82 230H228 M82 270H228 M82 310H228"></path>
+			<path class="svr-arrow svr-arrow--next" d="M226 262C204 242 112 242 90 260 M90 248l0 12 12 0"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="svr-head" x="12" y="22">今まで：拾い読み</text>
+		<text class="svr-row" x="24" y="69">1行目</text>
+		<text class="svr-row svr-row--skipped" x="24" y="109">2行目</text>
+		<text class="svr-row" x="24" y="149">3行目</text>
+		<text class="svr-note" x="242" y="98">2行目を</text>
+		<text class="svr-note" x="242" y="118">飛ばす</text>
+
+		<text class="svr-head svr-head--next" x="12" y="188">これから：戻りながら読む</text>
+		<text class="svr-row" x="24" y="235">1行目</text>
+		<text class="svr-row" x="24" y="275">2行目</text>
+		<text class="svr-row" x="24" y="315">3行目</text>
+		<text class="svr-note" x="242" y="256">分からなければ</text>
+		<text class="svr-note" x="242" y="276">2行目に戻る</text>
+	</svg>
+	<figcaption>今までの拾い読み（灰色）と、これからの読書で取り入れる読み方（灰桜の点線）</figcaption>
+</figure>
+
+<style>
+	.svr svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.svr-page {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.svr-page--next {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 8 6;
+	}
+	.svr-line {
+		fill: none;
+		stroke: var(--c-text-sub);
+		stroke-width: 3;
+		stroke-linecap: round;
+		opacity: 0.6;
+	}
+	.svr-arrow {
+		fill: none;
+		stroke: var(--c-line-strong);
+		stroke-width: 2.6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.svr-arrow--next {
+		stroke: var(--c-accent2);
+		stroke-dasharray: 7 5;
+	}
+	.svr-head {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.svr-head--next {
+		fill: var(--c-accent2);
+	}
+	.svr-row {
+		fill: var(--c-text);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.svr-row--skipped {
+		fill: var(--c-text-sub);
+	}
+	.svr-note {
+		fill: var(--c-text);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

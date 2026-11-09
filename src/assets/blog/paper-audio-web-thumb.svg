@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「紙の本でしか得られないものはあるのか ― 紙・耳・Webを使い分けることにした」のカード用の絵（自作）
+    左から、開いた紙の本（青磁の表紙）、ヘッドホン、スマホを横に並べている。紙・耳・Webの3つの読み方。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="12"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 300H600" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 開いた紙の本 -->
+    <path d="M48 150V282C80 272 116 276 140 290C164 276 200 272 232 282V150" fill="#2a6058" stroke="#2a6058"/>
+    <path d="M140 152C116 134 80 132 58 142V272C80 264 116 266 140 282Z" fill="#fffdfb"/>
+    <path d="M140 152C164 134 200 132 222 142V272C200 264 164 266 140 282Z" fill="#fffdfb"/>
+    <path d="M140 152V282" stroke-width="3.5"/>
+    <path d="M74 170C92 165 110 165 126 172M74 194C92 189 110 189 126 196M74 218C92 213 110 213 126 220M154 172C170 165 188 165 206 170M154 196C170 189 188 189 206 194M154 220C170 213 188 213 206 218" stroke="#93877a" stroke-width="3"/>
+    <!-- ヘッドホン -->
+    <path d="M286 222C286 130 398 130 398 222" stroke-width="6"/>
+    <rect x="268" y="206" width="36" height="72" rx="14" fill="#e6f0ee" stroke="#2a6058"/>
+    <rect x="380" y="206" width="36" height="72" rx="14" fill="#e6f0ee" stroke="#2a6058"/>
+    <!-- スマホ -->
+    <rect x="470" y="124" width="100" height="168" rx="16" fill="#fffdfb"/>
+    <rect x="484" y="144" width="72" height="116" rx="4" fill="#e6f0ee" stroke="#2a6058" stroke-width="3"/>
+    <path d="M496 166H544M496 186H536M496 206H544M496 226H528" stroke="#93877a" stroke-width="3"/>
+    <path d="M508 276H532" stroke-width="3.5"/>
+  </g>
+</svg>

@@ -1,0 +1,116 @@
+---
+/*
+  記事「紙の本でしか得られないものはあるのか」専用の図解
+  小説は紙、ビジネス書は耳、資格学習はWeb、という使い分け（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  - 今やっていること（小説を紙で・資格学習をWebで）：青磁の実線
+  - これから始めること（ビジネス書を耳で）：灰桜の点線と「これから」のラベル
+*/
+const W = 360;
+const H = 288;
+---
+
+<figure class="rms">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="rms-title rms-desc">
+		<title id="rms-title">小説は紙、ビジネス書は耳、資格学習はWeb</title>
+		<desc id="rms-desc">
+			3つの行が縦に並んでいる。1行目は「小説」から矢印で「紙の本」へ。毎日5分から20分へ。2行目は「ビジネス書」から矢印で「耳で聞く」へ。家事や犬の散歩中に。これから始めること。3行目は「資格学習」から矢印で「Web」へ。問題を解いて確かめる。
+		</desc>
+		<defs>
+			<filter id="reading-mode-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="63"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#reading-mode-sketch)">
+			<rect class="rms-kind" x="16" y="16" width="112" height="64" rx="10"></rect>
+			<path class="rms-arrow" d="M134 48H164 M157 41l7 7-7 7"></path>
+			<rect class="rms-way" x="172" y="16" width="172" height="64" rx="10"></rect>
+
+			<rect class="rms-kind" x="16" y="112" width="112" height="64" rx="10"></rect>
+			<path class="rms-arrow" d="M134 144H164 M157 137l7 7-7 7"></path>
+			<rect class="rms-way rms-way--next" x="172" y="112" width="172" height="64" rx="10"></rect>
+
+			<rect class="rms-kind" x="16" y="208" width="112" height="64" rx="10"></rect>
+			<path class="rms-arrow" d="M134 240H164 M157 233l7 7-7 7"></path>
+			<rect class="rms-way" x="172" y="208" width="172" height="64" rx="10"></rect>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="rms-label" x="72" y="54" text-anchor="middle">小説</text>
+		<text class="rms-head" x="258" y="42" text-anchor="middle">紙の本</text>
+		<text class="rms-note" x="258" y="66" text-anchor="middle">毎日5分から20分へ</text>
+
+		<text class="rms-tag" x="344" y="104" text-anchor="end">これから</text>
+		<text class="rms-label" x="72" y="150" text-anchor="middle">ビジネス書</text>
+		<text class="rms-head rms-head--next" x="258" y="138" text-anchor="middle">耳で聞く</text>
+		<text class="rms-note" x="258" y="162" text-anchor="middle">家事や犬の散歩中に</text>
+
+		<text class="rms-label" x="72" y="246" text-anchor="middle">資格学習</text>
+		<text class="rms-head" x="258" y="234" text-anchor="middle">Web</text>
+		<text class="rms-note" x="258" y="258" text-anchor="middle">問題を解いて確かめる</text>
+	</svg>
+	<figcaption>小説は紙、ビジネス書は耳、資格学習はWeb（青磁の実線は今やっていること、灰桜の点線はこれから始めること）</figcaption>
+</figure>
+
+<style>
+	.rms svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.rms-kind {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.rms-way {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.rms-way--next {
+		fill: var(--c-accent2-wash);
+		stroke: var(--c-accent2);
+		stroke-width: 2;
+		stroke-dasharray: 8 6;
+	}
+	.rms-arrow {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.4;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.rms-label {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.rms-head {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.rms-head--next {
+		fill: var(--c-accent2);
+	}
+	.rms-note {
+		fill: var(--c-text);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.rms-tag {
+		fill: var(--c-accent2);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

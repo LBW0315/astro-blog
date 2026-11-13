@@ -1,0 +1,95 @@
+---
+/*
+  記事「ケトルベルをご存じだろうか？」専用の図解
+  30秒スイング＋30秒休むを1ラウンドにして、10ラウンド（10分）くり返すメニュー（手描き風）
+  スマホ幅でも文字が小さくならないよう、5ラウンドずつ2段に並べる
+  手描き風のゆらぎは、線と図形だけにかける（文字にはかけない）
+*/
+const CELL = 60; // 1ラウンド（1分）の幅
+const X0 = 30;
+const rows = [
+	{ y: 92, from: 1 },
+	{ y: 188, from: 6 },
+];
+---
+
+<figure class="kb-ten">
+	<svg viewBox="0 0 360 290" role="img" aria-labelledby="kb-ten-title kb-ten-desc">
+		<title id="kb-ten-title">30秒スイングと30秒休みを10ラウンドくり返す、10分のメニュー</title>
+		<desc id="kb-ten-desc">
+			1ラウンドは1分。前半の30秒はスイング、後半の30秒は休む。これを10ラウンドくり返すと10分になる。図では5ラウンドずつ2段に並べている。
+		</desc>
+		<defs>
+			<filter id="kb-ten-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="13"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<g filter="url(#kb-ten-sketch)">
+			<!-- 凡例 -->
+			<rect class="tm-work" x="30" y="18" width="26" height="20" rx="4" />
+			<rect class="tm-rest" x="190" y="18" width="26" height="20" rx="4" />
+			{
+				rows.map((r) =>
+					[0, 1, 2, 3, 4].map((i) => (
+						<g>
+							<rect class="tm-work" x={X0 + i * CELL} y={r.y} width={CELL / 2} height="44" rx="4" />
+							<rect class="tm-rest" x={X0 + i * CELL + CELL / 2} y={r.y} width={CELL / 2} height="44" rx="4" />
+						</g>
+					)),
+				)
+			}
+		</g>
+
+		<text class="tm-legend" x="64" y="33">30秒スイング</text>
+		<text class="tm-legend" x="224" y="33">30秒休む</text>
+		{
+			rows.map((r) =>
+				[0, 1, 2, 3, 4].map((i) => (
+					<text class="tm-round" x={X0 + i * CELL + CELL / 2} y={r.y - 10} text-anchor="middle">
+						{r.from + i}
+					</text>
+				)),
+			)
+		}
+		<text class="tm-total" x="180" y="274" text-anchor="middle">1分 × 10ラウンド ＝ 10分</text>
+	</svg>
+	<figcaption>数字はラウンド。30秒スイングして30秒休むを、10回くり返す</figcaption>
+</figure>
+
+<style>
+	.kb-ten svg {
+		display: block;
+		width: 100%;
+		max-width: 26rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.tm-work {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 1.6;
+	}
+	.tm-rest {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-line-strong);
+		stroke-width: 1.6;
+	}
+	.tm-legend {
+		fill: var(--c-text);
+		font-size: 15px;
+	}
+	.tm-round {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+		font-weight: 700;
+	}
+	.tm-total {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+</style>

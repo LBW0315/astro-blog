@@ -1,0 +1,83 @@
+---
+/*
+  記事「ケトルベルをご存じだろうか？」専用の図解
+  筋トレと有酸素運動の円が重なったところに、ケトルベルスイングがある（手描き風）
+  手描き風のゆらぎは、線と図形だけにかける（文字にはかけない）
+*/
+---
+
+<figure class="kb-sc">
+	<svg viewBox="0 0 360 250" role="img" aria-labelledby="kb-sc-title kb-sc-desc">
+		<title id="kb-sc-title">筋トレと有酸素運動が重なるところに、ケトルベルスイングがある</title>
+		<desc id="kb-sc-desc">
+			左の円は筋トレで、お尻・もも裏・体幹に力をつける。右の円は有酸素運動で、心拍が上がる。2つの円が重なった真ん中に、ケトルベルスイングがある。1つの動きで両方ができる。
+		</desc>
+		<defs>
+			<filter id="kb-sc-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="9"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<g filter="url(#kb-sc-sketch)">
+			<circle class="sc-left" cx="122" cy="125" r="104" />
+			<circle class="sc-right" cx="238" cy="125" r="104" />
+			<path class="sc-mid" d="M180 39A104 104 0 0 1 180 211A104 104 0 0 1 180 39Z" />
+		</g>
+
+		<text class="sc-name" x="70" y="112" text-anchor="middle">筋トレ</text>
+		<text class="sc-sub" x="70" y="136" text-anchor="middle">お尻・もも裏</text>
+		<text class="sc-sub" x="70" y="156" text-anchor="middle">体幹</text>
+
+		<text class="sc-name" x="290" y="112" text-anchor="middle">有酸素</text>
+		<text class="sc-sub" x="290" y="136" text-anchor="middle">心拍が</text>
+		<text class="sc-sub" x="290" y="156" text-anchor="middle">上がる</text>
+
+		<text class="sc-center" x="180" y="120" text-anchor="middle">スイング</text>
+		<text class="sc-center-sub" x="180" y="142" text-anchor="middle">両方</text>
+	</svg>
+	<figcaption>1つの動きで、筋トレと有酸素運動が1度にできる</figcaption>
+</figure>
+
+<style>
+	.kb-sc svg {
+		display: block;
+		width: 100%;
+		max-width: 24rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.sc-left,
+	.sc-right {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-text);
+		stroke-width: 2;
+	}
+	.sc-mid {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.6;
+	}
+	.sc-name {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.sc-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.sc-center {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.sc-center-sub {
+		fill: var(--c-accent);
+		font-size: 14px;
+		font-weight: 700;
+	}
+</style>

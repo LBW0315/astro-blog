@@ -1,0 +1,112 @@
+---
+/*
+  記事「ケトルベルをご存じだろうか？」専用の図解
+  運動着の3Dの人物が、ケトルベルスイングをくり返す動画を見せる
+
+  使い方（.mdx ファイルの中で）：
+    <KettlebellSwing />
+
+  動画は public/videos/kettlebell/ にある。動きの定義と作り方は scripts/kettlebell-swing/ を参照
+  速さは、一般的なスイングのペース（1回およそ1.7秒）
+
+  動画は画面に入ったときだけ読み込んで再生し、画面の外に出たら止める。
+  「動きを減らす」設定（prefers-reduced-motion）のときは、動かさずに代表の1コマだけを見せる。
+  図の下のボタンで、いつでも止めたり動かしたりできる。
+*/
+---
+<figure class="kb-swing">
+	<video
+		src="/videos/kettlebell/swing.mp4"
+		poster="/videos/kettlebell/swing.jpg"
+		width="540"
+		height="540"
+		muted
+		loop
+		playsinline
+		preload="none"
+		aria-label="ケトルベルスイングの動き。ななめ横から見た図。足を肩幅ほどに開き、両手でケトルベルのハンドルを握る。お尻を後ろへ引いて上半身を前に倒し、ケトルベルを脚の間から後ろへ通す。そこから腰を前へ押し出して立ち上がると、その勢いでケトルベルが胸から肩の高さまで振り上がる。落ちてくるのに合わせて、またお尻を後ろへ引く。"
+	></video>
+	<figcaption>
+		<span>ケトルベルスイング（ななめ横から見た図）</span>
+		<button class="kb-toggle" type="button" data-kb-toggle aria-pressed="false" hidden>
+			<span class="kb-toggle__stop">動きを止める</span>
+			<span class="kb-toggle__play">動かす</span>
+		</button>
+	</figcaption>
+</figure>
+
+<script>
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	// 再生してよい状態で、画面に入っている動画だけを動かす
+	const sync = (figure: HTMLElement) => {
+		const video = figure.querySelector('video')!;
+		if (figure.dataset.state === 'playing' && figure.dataset.visible === 'true') {
+			video.play().catch(() => {});
+		} else {
+			video.pause();
+		}
+	};
+
+	const watcher = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) {
+				const figure = entry.target as HTMLElement;
+				figure.dataset.visible = String(entry.isIntersecting);
+				sync(figure);
+			}
+		},
+		{ rootMargin: '100px' },
+	);
+
+	for (const button of document.querySelectorAll<HTMLButtonElement>('[data-kb-toggle]')) {
+		const figure = button.closest<HTMLElement>('.kb-swing')!;
+		const set = (playing: boolean) => {
+			figure.dataset.state = playing ? 'playing' : 'paused';
+			button.setAttribute('aria-pressed', String(!playing));
+			sync(figure);
+		};
+		set(!reduce);
+		button.hidden = false;
+		button.addEventListener('click', () => set(figure.dataset.state !== 'playing'));
+		watcher.observe(figure);
+	}
+</script>
+
+<style>
+	.kb-swing video {
+		display: block;
+		width: 100%;
+		max-width: 22rem;
+		height: auto;
+		margin-inline: auto;
+		border-radius: var(--radius-md, 14px);
+		background: #f2eee9;
+	}
+	.kb-swing figcaption {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: var(--sp-2) var(--sp-4);
+	}
+	.kb-toggle {
+		min-height: var(--tap);
+		padding: var(--sp-1) var(--sp-4);
+		border: 1px solid var(--c-line-strong);
+		border-radius: var(--radius-pill);
+		background: var(--c-surface-raised);
+		color: var(--c-accent);
+		font: inherit;
+		font-weight: 700;
+		cursor: pointer;
+	}
+	.kb-toggle:hover {
+		background: var(--c-accent-wash);
+		color: var(--c-accent-hover);
+	}
+	.kb-toggle[aria-pressed='false'] .kb-toggle__play,
+	.kb-toggle[aria-pressed='true'] .kb-toggle__stop {
+		display: none;
+	}
+</style>

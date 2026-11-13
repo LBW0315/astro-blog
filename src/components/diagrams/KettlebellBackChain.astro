@@ -1,0 +1,123 @@
+---
+/*
+  記事「ケトルベルをご存じだろうか？」専用の図解
+  体の背面（背中・お尻・もも裏）が1本の鎖のようにつながって働き、
+  それが「姿勢」「腰」「動きの軽さ」につながる（手描き風）
+  手描き風のゆらぎは、線と図形だけにかける（文字にはかけない）
+*/
+const parts = [
+	{ y: 44, name: '背中', sub: '背骨を支える' },
+	{ y: 128, name: 'お尻', sub: 'いちばん大きな筋肉' },
+	{ y: 212, name: 'もも裏', sub: '股関節を伸ばす' },
+];
+const results = [
+	{ y: 330, text: '姿勢が良くなる' },
+	{ y: 382, text: '腰の負担が減る' },
+	{ y: 434, text: '体が軽く動く' },
+];
+---
+
+<figure class="kb-chain">
+	<svg viewBox="0 0 360 486" role="img" aria-labelledby="kb-chain-title kb-chain-desc">
+		<title id="kb-chain-title">体の背面のつながりと、鍛えると変わること</title>
+		<desc id="kb-chain-desc">
+			体の背面にある背中、お尻、もも裏は、鎖のようにつながって働く。これを後部チェーンと呼ぶ。スイングでここを鍛えると、姿勢が良くなる、腰の負担が減る、体が軽く動く、の3つにつながる。
+		</desc>
+		<defs>
+			<filter id="kb-chain-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<g filter="url(#kb-chain-sketch)">
+			<rect class="ch-group" x="20" y="14" width="320" height="262" rx="16" />
+			<!-- 鎖の輪（箱の後ろに描いて、箱どうしをつなぐ） -->
+			{[100, 184].map((y) => <rect class="ch-link" x="171" y={y - 10} width="18" height="48" rx="9" />)}
+			{parts.map((p) => <rect class="ch-box" x="44" y={p.y} width="272" height="56" rx="12" />)}
+			<!-- 矢印 -->
+			<path class="ch-arrow" d="M180 280q3 12 0 24M173 297l7 8 7-8" />
+			{results.map((r) => <rect class="ch-result" x="60" y={r.y - 22} width="240" height="40" rx="10" />)}
+		</g>
+
+		<text class="ch-group-label" x="36" y="36">体の背面（後部チェーン）</text>
+		{
+			parts.map((p) => (
+				<g>
+					<text class="ch-name" x="64" y={p.y + 25}>
+						{p.name}
+					</text>
+					<text class="ch-sub" x="64" y={p.y + 45}>
+						{p.sub}
+					</text>
+				</g>
+			))
+		}
+		{
+			results.map((r) => (
+				<text class="ch-result-text" x="180" y={r.y + 3} text-anchor="middle" dominant-baseline="middle">
+					{r.text}
+				</text>
+			))
+		}
+	</svg>
+	<figcaption>スイングで鍛えるのは、体の背面のつながり</figcaption>
+</figure>
+
+<style>
+	.kb-chain svg {
+		display: block;
+		width: 100%;
+		max-width: 26rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.ch-group {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.ch-box,
+	.ch-result {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.ch-result {
+		stroke: var(--c-line-strong);
+	}
+	.ch-link {
+		fill: none;
+		stroke: var(--c-text);
+		stroke-width: 3;
+	}
+	.ch-arrow {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.6;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.ch-group-label {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.ch-name {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.ch-sub {
+		fill: var(--c-text-sub);
+		font-size: 14px;
+	}
+	.ch-result-text {
+		fill: var(--c-text);
+		font-size: 15px;
+		font-weight: 700;
+	}
+</style>

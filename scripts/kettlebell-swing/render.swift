@@ -295,15 +295,20 @@ func pose(_ f: [String: [Double]]) {
 	// ケトルベル：両手のこぶしの先にハンドルがあり、腕の延長線上にぶら下がる
 	let shoulderC = mul(add(P("shoulderL"), P("shoulderR")), 0.5)
 	let handC = mul(add(P("handL"), P("handR")), 0.5)
-	let d = normal(sub(handC, shoulderC))
-	let grip = add(handC, mul(d, 0.06))
+	var d = normal(sub(handC, shoulderC))
+	var reach: CGFloat = 0.06 + 0.17
+	if let bd = f["bellDir"] {
+		// 胸の前で抱える：ハンドルの両側を持つので、胴の中心は手のすぐ下
+		d = normal(SCNVector3(CGFloat(bd[0]), CGFloat(bd[1]), CGFloat(bd[2])))
+		reach = 0.13
+	}
 	let by = mul(d, -1) // ケトルベルの上方向（ハンドルの側）
 	let rr = f["right"]!
 	var bx = SCNVector3(CGFloat(rr[0]), CGFloat(rr[1]), CGFloat(rr[2]))
 	let dp = bx.x * by.x + bx.y * by.y + bx.z * by.z
 	bx = normal(sub(bx, mul(by, dp)))
 	let bz = SCNVector3(bx.y * by.z - bx.z * by.y, bx.z * by.x - bx.x * by.z, bx.x * by.y - bx.y * by.x)
-	let bc = add(grip, mul(d, 0.17)) // ハンドルの頂点から胴の中心まで 約17cm
+	let bc = add(handC, mul(d, reach)) // こぶしの先から胴の中心まで
 	bell.transform = SCNMatrix4(
 		m11: bx.x, m12: bx.y, m13: bx.z, m14: 0,
 		m21: by.x, m22: by.y, m23: by.z, m24: 0,

@@ -1,9 +1,9 @@
 /*
-  記事「ケトルベルをご存じだろうか？」の3D動画（ケトルベルスイング）の、動きの定義
+  記事「ケトルベルをご存じだろうか？」の3D動画（ケトルベルスイング・ゴブレットスクワット）の、動きの定義
   public/videos/kettlebell/ の動画はここから作る（作り直し方は export.mjs の先頭を参照）
 
   体の寸法・座標の決め方・関節の求め方は scripts/koho-exercise/moves.ts と同じ。
-  t は 0〜1 で1周。dur（1周の秒数）は、一般的なスイングのペース（1回およそ1.7秒）に合わせた
+  t は 0〜1 で1周。dur（1周の秒数）は、一般的なペース（スイングは1回およそ1.7秒、ゴブレットスクワットは1回およそ3秒）に合わせた
 */
 type V = [number, number, number]; // x：画面の右（正面から見たとき）／y：上／z：体の正面
 
@@ -64,6 +64,7 @@ interface Move {
 	key: number; // 「動きを減らす」設定のときに見せるコマ（24分の何番目か）
 	kneeOut?: number;
 	elbow?: V;
+	hold?: 'chest'; // ケトルベルを胸の前で抱える（ゴブレットスクワット）。省くと腕の延長線上にぶら下がる
 	pose: (t: number) => Key;
 }
 
@@ -113,6 +114,15 @@ const fall: Key = { ...both([5, 128, 50]), hip: [0, 98, 0], ...feet, lean: 4 };
 // 腕が体に近づいてから、お尻を引く
 const hinge: Key = { ...both([5, 114, 22]), hip: [0, 92, -10], ...feet, lean: 38 };
 
+/* ---------- ゴブレットスクワットの姿勢 ----------
+   ハンドルの両側を持ち、ケトルベルを胸の前で抱えたまま、真下にしゃがむ。
+   足は肩幅より少し広く、ひざはつま先と同じ向きに開く。上半身はなるべく立てたまま */
+const wideFeet = { fL: [-27, 0, 0] as V, fR: [27, 0, 0] as V };
+const chest = both([8, 151, 22]);
+const stand: Key = { ...chest, hip: [0, 98, 0], ...wideFeet, lean: 0 };
+const half: Key = { ...chest, hip: [0, 78, -7], ...wideFeet, lean: 14 };
+const deep: Key = { ...chest, hip: [0, 54, -10], ...wideFeet, lean: 22 };
+
 const MOVES: Move[] = [
 	{
 		name: 'swing',
@@ -122,6 +132,17 @@ const MOVES: Move[] = [
 		kneeOut: 0.25,
 		elbow: [0.2, -1, -0.3],
 		pose: seq([bottom, drive, snap, top, fall, hinge]),
+	},
+	{
+		name: 'goblet',
+		yaw: 55,
+		dur: 3,
+		key: 12,
+		kneeOut: 0.75,
+		elbow: [0.25, -1, 0.3],
+		hold: 'chest',
+		// 2秒ほどでしゃがみ、1秒ほどで立つ（立った姿勢で少し止まる）
+		pose: seq([stand, stand, half, deep, deep, half]),
 	},
 ];
 
@@ -169,6 +190,8 @@ function jointsOf(m: Move) {
 			hipL, hipR, kneeL, kneeR,
 			footL: pose.fL, footR: pose.fR, toeL: toeOf(pose.fL, -1), toeR: toeOf(pose.fR, 1),
 			origin: upper(pivot), right: upperDir([1, 0, 0]), up: upperDir([0, 1, 0]), fwd: upperDir([0, 0, 1]),
+			// 胸の前で抱えるときは、ケトルベルの胴が手の真下（上半身に沿った向き）にくる
+			...(m.hold === 'chest' ? { bellDir: norm(upperDir([0, -1, 0.12])) } : {}),
 		});
 	}
 	return { name: m.name, dur: m.dur, yaw: m.yaw, pitch: m.pitch ?? 8, key: m.key, frames };

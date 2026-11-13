@@ -9,7 +9,7 @@ category: tools
 import Callout from '../../components/Callout.astro';
 import KettlebellStrengthCardio from '../../components/diagrams/KettlebellStrengthCardio.astro';
 import KettlebellBackChain from '../../components/diagrams/KettlebellBackChain.astro';
-import KettlebellSwing from '../../components/diagrams/KettlebellSwing.astro';
+import KettlebellExercise from '../../components/diagrams/KettlebellExercise.astro';
 import KettlebellTenMinutes from '../../components/diagrams/KettlebellTenMinutes.astro';
 
 短時間。
@@ -35,12 +35,6 @@ import KettlebellTenMinutes from '../../components/diagrams/KettlebellTenMinutes
 <KettlebellStrengthCardio />
 
 筋トレをして、そのあとランニングをして・・・と別々にやる必要がありません。1つの動きで両方できるので、短い時間で済みます。
-
-アメリカのACE（American Council on Exercise）が2010年に行った調査では、ケトルベルの種目（スナッチ）を15秒動いて15秒休むやり方で20分続けたとき、酸素の消費から測った消費カロリーは平均で272kcalだったそうです。さらに、血中の乳酸の値から見積もった分を足すと、1分あたり約20kcalになるとしています（[ACEの記事](https://www.acefitness.org/education-and-resources/professional/expert-articles/2982/kettlebells-twice-the-results-in-half-the-time)より）。
-
-<Callout type="note" title="数字について">
-	「20分で400kcal」と紹介されることがありますが、これは1分あたり約20kcalを20分にかけ算した数字です。測った消費カロリーそのものは272kcalで、乳酸の分は見積もりです。調査に参加したのは10人で、スイングではなくスナッチという種目での結果です。
-</Callout>
 
 私の場合、1回の時間は**数セットに分けて合計5分程度**。5分もないときもあります笑
 
@@ -84,7 +78,7 @@ import KettlebellTenMinutes from '../../components/diagrams/KettlebellTenMinutes
 
 「スイングって、逆に腰を痛めそう」と思うかもしれません。でも、正しいフォームで行えば、むしろ**腰痛予防**になると話すトレーナーさんもいます。
 
-研究では、首・肩や腰に痛みを抱えやすい仕事をしている人を対象に、ケトルベルのトレーニングを週3回、8週間続けたものがあります。トレーニングをした人たちは、しなかった人たちと比べて、首・肩の痛みと腰の痛みが減り、腰（背中を反らす筋肉）の力も上がったと報告されています（Jay ほか、2011年、[PubMed](https://pubmed.ncbi.nlm.nih.gov/21107513/)）。
+研究では、首・肩や腰に痛みを抱えやすい仕事をしている人を対象に、ケトルベルのトレーニングを週3回、8週間続けたものがあります。トレーニングをした人たちは、しなかった人たちと比べて、首・肩の痛みと腰の痛みが減り、腰（背中を反らす筋肉）の力も上がったと報告されています。
 
 <Callout type="note">
 	この研究は40人を対象に、すでにある痛みが減ったかを調べたものです。腰痛を予防できるか、どんな腰痛にも効くかまで確かめられたわけではありません。いま痛みがある人は、始める前に医師に相談してください。
@@ -106,11 +100,11 @@ import KettlebellTenMinutes from '../../components/diagrams/KettlebellTenMinutes
 
 1回だけ大きな力を出す力ではなく、**大きな力を10回、20回と続けて出す力**がつきます。ある日本のトレーナーさんは、これを「パワー持久力」と呼んでいました。年齢を重ねると衰えやすい、素早い動きを支える力です。
 
-研究で確かめられているのは、まず「大きな力」と「瞬発力」のほうです。スイングのトレーニングと、ジャンプスクワットのトレーニングを、それぞれ週2回、6週間続けて比べた研究があります。トレーニングのあと、スクワットで持ち上げられる最大の重さは約10%、垂直跳びの高さは約20%上がり、スイングとジャンプスクワットの間で効果に大きな差はなかったそうです（Lake・Lauder、2012年、[論文の概要](https://www.bisp-surf.de/Record/PU201301000174)）。ジャンプの練習をしなくても、スイングで跳ぶ力が伸びる、というのは面白いところです。
+研究で確かめられているのは、まず「大きな力」と「瞬発力」のほうです。スイングのトレーニングと、ジャンプスクワットのトレーニングを、それぞれ週2回、6週間続けて比べた研究があります。トレーニングのあと、スクワットで持ち上げられる最大の重さは約10%、垂直跳びの高さは約20%上がり、スイングとジャンプスクワットの間で効果に大きな差はなかったそうです。ジャンプの練習をしなくても、スイングで跳ぶ力が伸びる、というのは面白いところです。
 
 ## 続けてみて、私が感じていること
 
-私は12kgのケトルベルを使っています。
+私は12kgのケトルベルを使っています。やっているのは、ケトルベルスイングとゴブレットスクワットです。ゴブレットスクワットは、ケトルベルを胸の前で両手で持って、しゃがんで立つ種目です。
 
 続けてみて感じていることは、3つです。
 
@@ -130,7 +124,7 @@ import KettlebellTenMinutes from '../../components/diagrams/KettlebellTenMinutes
 
 動きを、3Dの人物で動かしてみました。
 
-<KettlebellSwing />
+<KettlebellExercise move="swing" />
 
 <Callout type="note">
 	3Dの人物は、動きを単純にしたイメージです。足の幅やお尻を引く深さなど、細かいところは、実際に動いている動画で確認してください。図の下のボタンで動きを止められます。
@@ -158,8 +152,31 @@ import KettlebellTenMinutes from '../../components/diagrams/KettlebellTenMinutes
 
 最初はぎこちなく感じるのが普通です。体が慣れてくると、自然にできるようになっていきます。
 
-<Callout type="tip" title="ロシアンとアメリカン">
-	この記事の動画のように、胸から肩の高さまで振り上げるのが「ロシアンケトルベルスイング」。頭の上まで振り上げるのが「アメリカンケトルベルスイング」と呼ばれています。まずはロシアンから始めるのが良さそうです。
+## もう1つ：ゴブレットスクワット
+
+私がスイングと一緒にやっているのが、**ゴブレットスクワット**です。
+
+ケトルベルを胸の前で抱えて、しゃがんで立つ。それだけの種目です。
+
+<KettlebellExercise move="goblet" />
+
+<Callout type="note">
+	こちらも、動きを単純にしたイメージです。足の幅やしゃがむ深さは、無理のないところに合わせてください。
+</Callout>
+
+### やり方
+
+1. 足を肩幅より少し広く開き、つま先を少し外へ向ける
+2. ケトルベルのハンドルの両側を持って、胸の前で抱える
+3. 背中をまっすぐにしたまま、真下へしゃがむ。ひざは、つま先と同じ向きに開く
+4. 足の裏全体で床を押して立ち上がる。2に戻ってくり返す
+
+スイングは、お尻を後ろへ引いて、腰で振る動き。ゴブレットスクワットは、真下にしゃがんで、脚で立ち上がる動きです。
+
+ケトルベルを胸の前で持つので、上半身を立てたまましゃがみやすいのも良いところです。
+
+<Callout type="warning" title="しゃがむ深さ">
+	ひざや腰に痛みが出るときは、深くしゃがまなくて大丈夫です。浅いところから始めてください。
 </Callout>
 
 ## 10分でできるメニュー
@@ -209,5 +226,15 @@ import KettlebellTenMinutes from '../../components/diagrams/KettlebellTenMinutes
 省スペース。
 
 そして、筋トレと有酸素運動が1度にできて、お尻・もも裏・姿勢・腰にも効く。
+
+体を大きくしたいわけじゃなくて、引き締めたい。
+
+動きを速く、楽にしたい。
+
+そんな**実用重視**の人には、すごく良いと思います。
+
+私には、[棒トレ](/blog/2026-10-06-wulong-stick-training/)とケトルベルが合っています。
+
+どちらも、**1度始めれば、リズムに合わせて動き続けなければいけない**。そんな共通点があるからなのかな、と思っています。
 
 ケトルベルは、**究極のおすすめの筋トレグッズ**である！

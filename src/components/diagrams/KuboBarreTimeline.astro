@@ -1,0 +1,117 @@
+---
+/*
+  記事「久保建英がブラジル戦で見せたシャツの意味は？」専用の図解
+  11/8 バレネチェア選手の負傷 → 11/13 手術 → 11/14 久保選手のゴール → これから（復帰）の時系列（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  - 起きたこと：青磁の実線と丸
+  - 復帰：灰桜の点線と「これから」（時期は未発表）
+*/
+const W = 360;
+const H = 372;
+const steps = [
+	{ y: 34, date: '11月8日', place: 'スペイン', lines: ['バレのアシストで先制', '1分後に負傷して交代'] },
+	{ y: 124, date: '11月13日', place: 'マドリード', lines: ['バレが右太もも裏の手術', '手術は無事に終了'] },
+	{ y: 214, date: '11月14日', place: 'シンガポール', lines: ['久保選手がブラジル戦でゴール', 'シャツに「頑張れ、バレ！」'] },
+];
+---
+
+<figure class="kbt">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="kbt-title kbt-desc">
+		<title id="kbt-title">負傷から手術、ゴールまでの6日間</title>
+		<desc id="kbt-desc">
+			11月8日、スペイン。バレネチェア選手のアシストでソシエダが先制し、その1分後に負傷して交代。11月13日、マドリードで右太もも裏の手術を受け、無事に終了。11月14日、シンガポール。久保選手がブラジル戦でゴールを決め、シャツに「頑張れ、バレ！」のメッセージ。これから、バレネチェア選手の復帰。時期は発表されていない。
+		</desc>
+		<defs>
+			<filter id="kubo-barre-timeline-sketch" x="-10%" y="-5%" width="120%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="1114"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#kubo-barre-timeline-sketch)">
+			<path class="kbt-line" d="M32 34V214"></path>
+			<path class="kbt-line kbt-line--next" d="M32 222V296"></path>
+			{steps.map((s) => <circle class="kbt-dot" cx="32" cy={s.y} r="9" />)}
+			<circle class="kbt-dot kbt-dot--next" cx="32" cy="304" r="9"></circle>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		{
+			steps.map((s) => (
+				<>
+					<text class="kbt-date" x="56" y={s.y + 6}>
+						{s.date}
+						<tspan class="kbt-place" dx="8">
+							{s.place}
+						</tspan>
+					</text>
+					{s.lines.map((line, i) => (
+						<text class="kbt-text" x="56" y={s.y + 32 + i * 22}>
+							{line}
+						</text>
+					))}
+				</>
+			))
+		}
+		<text class="kbt-date kbt-date--next" x="56" y="310">これから</text>
+		<text class="kbt-text" x="56" y="336">バレの復帰</text>
+		<text class="kbt-text kbt-text--sub" x="56" y="358">時期はまだ発表されていない</text>
+	</svg>
+	<figcaption>負傷から手術、ゴールまでの6日間（青磁）。復帰はこれから（灰桜の点線）</figcaption>
+</figure>
+
+<style>
+	.kbt svg {
+		display: block;
+		width: 100%;
+		max-width: 26rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.kbt-line {
+		fill: none;
+		stroke: var(--c-accent);
+		stroke-width: 3;
+		stroke-linecap: round;
+	}
+	.kbt-line--next {
+		stroke: var(--c-accent2);
+		stroke-width: 2.4;
+		stroke-dasharray: 6 5;
+	}
+	.kbt-dot {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.kbt-dot--next {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent2);
+		stroke-width: 2.4;
+		stroke-dasharray: 4 3;
+	}
+	.kbt-date {
+		fill: var(--c-accent);
+		font-family: var(--font-heading);
+		font-size: 17px;
+		font-weight: 700;
+	}
+	.kbt-date--next {
+		fill: var(--c-accent2);
+	}
+	.kbt-place {
+		fill: var(--c-heading);
+		font-size: 15px;
+	}
+	.kbt-text {
+		fill: var(--c-text);
+		font-size: 15px;
+	}
+	.kbt-text--sub {
+		fill: var(--c-text-sub);
+		font-size: 15px;
+	}
+</style>

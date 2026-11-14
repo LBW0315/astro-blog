@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「久保建英がブラジル戦で見せたシャツの意味は？「頑張れ、バレ！」にまつわる話」のカード用の絵（自作）
+    左にサッカーボール、矢印をはさんで右に、手書きのメッセージ（文字ではなく走り書きの線）が入ったシャツ。
+    ゴールのあとに、シャツのメッセージを見せた流れ。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 300H584" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- サッカーボール -->
+    <circle cx="160" cy="232" r="62" fill="#fffdfb"/>
+    <path d="M160 210L180.9 225.2L172.9 249.8L147.1 249.8L139.1 225.2Z" fill="#5e564f"/>
+    <path d="M160 210V170M180.9 225.2L219 212.8M172.9 249.8L196.4 282.2M147.1 249.8L123.6 282.2M139.1 225.2L101 212.8" stroke-width="3.5"/>
+    <!-- 矢印 -->
+    <path d="M248 200H300M288 188L302 200L288 212" stroke="#7e4548"/>
+    <!-- シャツ -->
+    <path d="M398 62Q428 86 458 62L512 84L550 140L512 160L502 144V292H354V144L344 160L306 140L344 84Z" fill="#fffdfb" stroke="#2a6058"/>
+    <path d="M398 62Q428 86 458 62" stroke="#2a6058" stroke-width="3.5"/>
+    <!-- 手書きのメッセージ（走り書きの線） -->
+    <path d="M374 150c4-18 9-18 11 0c2-18 9-18 11 0c3 10 9 10 11-2c3-10 9-10 11 2c2 10 8 10 10 0M440 150c4-14 10-14 13 0c3-14 9-14 12 0c3-10 8-10 12 2" stroke-width="3.5"/>
+    <path d="M372 222c6-28 14-28 18 0c4-28 14-28 18 0c4-24 12-24 16 0c4-24 12-24 16 0c4-24 12-24 16 0" stroke="#2a6058" stroke-width="5"/>
+    <path d="M478 186v26M492 186v26" stroke="#2a6058" stroke-width="5"/>
+    <circle cx="478" cy="226" r="2.5" fill="#2a6058" stroke="#2a6058"/>
+    <circle cx="492" cy="226" r="2.5" fill="#2a6058" stroke="#2a6058"/>
+  </g>
+</svg>

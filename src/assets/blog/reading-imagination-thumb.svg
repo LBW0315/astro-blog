@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="1280" height="720">
+  <!--
+    記事「想像の余地があるから、ワクワクする ― 小説は紙の本、自己啓発本はオーディブルで続けてみた」のカード用の絵（自作）
+    左の開いた紙の本（青磁の表紙）から、灰桜の矢印で右の吹き出しへ。吹き出しの中には、点線で描きかけの山と太陽。
+    文章から、頭の中で景色を想像しているところ。
+    方眼ノートの上に、サイトのライトテーマと同じ色で、図解と同じ手描き風の線で描いています。
+  -->
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="15"/>
+      <feDisplacementMap in="SourceGraphic" scale="4"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="#f2eee9"/>
+  <path d="M32 0V360M64 0V360M96 0V360M128 0V360M160 0V360M192 0V360M224 0V360M256 0V360M288 0V360M320 0V360M352 0V360M384 0V360M416 0V360M448 0V360M480 0V360M512 0V360M544 0V360M576 0V360M608 0V360M0 20H640M0 52H640M0 84H640M0 116H640M0 148H640M0 180H640M0 212H640M0 244H640M0 276H640M0 308H640M0 340H640" fill="none" stroke="#e3dcd4" stroke-width="1" opacity="0.7"/>
+  <g filter="url(#s)" fill="none" stroke="#5e564f" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 300H600" stroke="#c9bfb4" stroke-width="4"/>
+    <!-- 開いた紙の本 -->
+    <path d="M56 160V282C88 272 124 276 148 290C172 276 208 272 240 282V160" fill="#2a6058" stroke="#2a6058"/>
+    <path d="M148 162C124 144 88 142 66 152V272C88 264 124 266 148 282Z" fill="#fffdfb"/>
+    <path d="M148 162C172 144 208 142 230 152V272C208 264 172 266 148 282Z" fill="#fffdfb"/>
+    <path d="M148 162V282" stroke-width="3.5"/>
+    <path d="M82 180C100 175 118 175 134 182M82 204C100 199 118 199 134 206M82 228C100 223 118 223 134 230M162 182C178 175 196 175 214 180M162 206C178 199 196 199 214 204M162 230C178 223 196 223 214 228" stroke="#93877a" stroke-width="3"/>
+    <!-- 矢印 -->
+    <path d="M262 186C290 166 318 160 346 162M346 162l-14 -10M346 162l-12 12" stroke="#7e4548"/>
+    <!-- 想像の吹き出し -->
+    <path d="M392 222C356 222 350 182 378 172C368 132 414 112 442 132C456 96 516 98 532 130C576 122 600 170 572 192C592 222 560 248 530 236C512 262 462 260 446 238C426 252 396 246 392 222Z" fill="#fffdfb"/>
+    <circle cx="384" cy="258" r="10" fill="#fffdfb" stroke-width="3.5"/>
+    <circle cx="366" cy="280" r="6" fill="#fffdfb" stroke-width="3"/>
+    <path d="M400 214L444 168L470 194L500 156L548 214" stroke="#7e4548" stroke-width="3.5" stroke-dasharray="9 8"/>
+    <circle cx="524" cy="150" r="12" stroke="#7e4548" stroke-width="3.5" stroke-dasharray="7 6"/>
+  </g>
+</svg>

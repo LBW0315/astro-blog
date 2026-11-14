@@ -1,0 +1,126 @@
+---
+/*
+  記事「想像の余地があるから、ワクワクする」専用の図解
+  映画・動画・ゲームは絵が全部描かれている。小説は文章だけで、残りを自分の想像で埋める（手描き風）
+
+  手描き風のゆらぎは SVG フィルターで、線と図形だけにかけています（文字にはかけない）。
+  - 映画・動画・ゲーム：青磁の実線で、絵が全部描かれた枠
+  - 文章だけの小説：文章の線だけがあり、絵は灰桜の点線（まだ描かれていない、想像で埋める部分）
+*/
+const W = 360;
+const H = 336;
+---
+
+<figure class="imr">
+	<svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="imr-title imr-desc">
+		<title id="imr-title">完成している映像と、想像で埋める小説</title>
+		<desc id="imr-desc">
+			上は映画・動画・ゲーム。枠の中に、山と太陽と家の絵が全部描かれていて、「完成している」「そこでストップ」と添えてある。下は文章だけの小説。枠の上のほうに文章の線が数本あるだけで、山と太陽と家は点線で薄く描かれ、「想像で埋める」「だからワクワク」と添えてある。
+		</desc>
+		<defs>
+			<filter id="imagination-room-sketch" x="-5%" y="-5%" width="110%" height="110%">
+				<feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="71"></feTurbulence>
+				<feDisplacementMap in="SourceGraphic" scale="3"></feDisplacementMap>
+			</filter>
+		</defs>
+
+		<!-- 線と図形（手描き風のゆらぎをかける） -->
+		<g filter="url(#imagination-room-sketch)">
+			<!-- 映画・動画・ゲーム：全部描かれている -->
+			<rect class="imr-frame" x="16" y="34" width="200" height="120" rx="8"></rect>
+			<path class="imr-fill" d="M24 146L76 86L110 120L144 78L208 146Z"></path>
+			<circle class="imr-sun" cx="182" cy="62" r="13"></circle>
+			<path class="imr-house" d="M48 146V124L62 112L76 124V146Z"></path>
+
+			<!-- 文章だけの小説：絵はまだない -->
+			<rect class="imr-frame imr-frame--text" x="16" y="202" width="200" height="120" rx="8"></rect>
+			<path class="imr-line" d="M32 220H200 M32 236H184"></path>
+			<path class="imr-dash" d="M24 314L76 254L110 288L144 246L208 314"></path>
+			<circle class="imr-dash" cx="182" cy="262" r="12"></circle>
+			<path class="imr-dash" d="M48 314V292L62 280L76 292V314"></path>
+		</g>
+
+		<!-- 文字（ゆらぎをかけない） -->
+		<text class="imr-head" x="16" y="22">映画・動画・ゲーム</text>
+		<text class="imr-note" x="230" y="88">完成している</text>
+		<text class="imr-note imr-note--sub" x="230" y="112">そこでストップ</text>
+
+		<text class="imr-head imr-head--text" x="16" y="190">文章だけの小説</text>
+		<text class="imr-note imr-note--text" x="230" y="256">想像で埋める</text>
+		<text class="imr-note imr-note--sub" x="230" y="280">だからワクワク</text>
+	</svg>
+	<figcaption>映画・動画・ゲームは、絵が全部描かれている（青磁）。小説は、絵を自分の想像で埋める（灰桜の点線）</figcaption>
+</figure>
+
+<style>
+	.imr svg {
+		display: block;
+		width: 100%;
+		max-width: 28rem;
+		height: auto;
+		margin-inline: auto;
+		font-family: var(--font-body);
+	}
+	.imr-frame {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+	}
+	.imr-frame--text {
+		stroke: var(--c-line-strong);
+		stroke-width: 2;
+	}
+	.imr-fill {
+		fill: var(--c-accent-wash);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+		stroke-linejoin: round;
+	}
+	.imr-sun {
+		fill: var(--c-accent);
+		stroke: var(--c-accent);
+		stroke-width: 2;
+	}
+	.imr-house {
+		fill: var(--c-surface-raised);
+		stroke: var(--c-accent);
+		stroke-width: 2.4;
+		stroke-linejoin: round;
+	}
+	.imr-line {
+		fill: none;
+		stroke: var(--c-text-sub);
+		stroke-width: 3;
+		stroke-linecap: round;
+		opacity: 0.7;
+	}
+	.imr-dash {
+		fill: none;
+		stroke: var(--c-accent2);
+		stroke-width: 2.2;
+		stroke-dasharray: 6 5;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+	.imr-head {
+		fill: var(--c-heading);
+		font-family: var(--font-heading);
+		font-size: 16px;
+		font-weight: 700;
+	}
+	.imr-head--text {
+		fill: var(--c-accent2);
+	}
+	.imr-note {
+		fill: var(--c-accent);
+		font-size: 15px;
+		font-weight: 700;
+	}
+	.imr-note--text {
+		fill: var(--c-accent2);
+	}
+	.imr-note--sub {
+		fill: var(--c-text);
+		font-size: 14px;
+	}
+</style>
